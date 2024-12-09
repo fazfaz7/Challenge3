@@ -6,12 +6,30 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Challenge3App: App {
+    
+    init() {
+           setupContainer()
+       }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
-        }
+            TabView {
+                Tab("My Pendings",systemImage: "folder.fill.badge.plus") {
+                    ContentView()
+                }
+                
+                Tab("My Collection", systemImage: "books.vertical.fill") {
+                    CollectionView()
+                }
+            }
+        }.modelContainer(for: [LearnElement.self, Category.self])
+    }
+    
+    func setupContainer() {
+        
     }
 }

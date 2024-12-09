@@ -10,27 +10,26 @@ import SwiftUI
 struct CollectionDetailView: View {
     @ObservedObject var phrase: LearnElement
     @Environment(\.modelContext) var modelContext
-    var body: some View {
     
+    var body: some View {
         
         VStack(alignment: .leading) {
-            
             HStack {
                 VStack(alignment: .leading) {
                     VStack(alignment: .leading) {
                         Text(phrase.learnType == .newPhrase ? "New Phrase" : "How to Say?...")
                             .foregroundStyle(.accent)
                             .font(.title3)
-                            
-
                         
-                            Text(phrase.userEntry)
-                                .fontWeight(.bold)
-                                .font(.largeTitle)
-                                .italic()
+                        
+                        
+                        Text(phrase.userEntry)
+                            .fontWeight(.bold)
+                            .font(.largeTitle)
+                            .italic()
                     }.padding(5)
-                   
-                            
+                    
+                    
                     
                     VStack(alignment: .leading) {
                         
@@ -38,7 +37,6 @@ struct CollectionDetailView: View {
                             .foregroundStyle(.accent)
                             .font(.title2)
                             .padding(.bottom,3)
-                        
                         
                         Text(phrase.explanation)
                             .font(.title3)
@@ -52,10 +50,10 @@ struct CollectionDetailView: View {
                 }
                 Spacer()
             }
-        
+            
             Spacer()
         }.padding(20)
-        .frame(width: 400)
+            .frame(width: 400)
     }
 }
 

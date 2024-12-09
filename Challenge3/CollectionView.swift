@@ -70,14 +70,14 @@ struct CollectionView: View {
                 }
                 .frame(width: Global.screenWidth*0.85)
                 
-                // Search Bar
+                
                 TextField("Search for a word or phrase", text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(width: Global.screenWidth*0.85)
                 
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Sort days in descending order (most recent first)
+                        
                         ForEach(groupedPhrasesByDay, id: \.date) { group in
                             Section(header: Text(formatDate(group.date))
                                 .font(.headline)
