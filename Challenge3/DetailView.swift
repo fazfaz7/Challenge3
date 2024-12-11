@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct DetailView: View {
     @ObservedObject var phrase: LearnElement
@@ -15,6 +16,7 @@ struct DetailView: View {
     @State var categorySelected: Category?
     @State private var animationsRunning = false
     @State var selectedCategory: Category? = nil
+    
     
     var body: some View {
         VStack(spacing: 15) {
@@ -44,6 +46,13 @@ struct DetailView: View {
                         
                         Button {
                             animationsRunning.toggle()
+                           
+                            /*let utterance = AVSpeechUtterance(string: phrase.userEntry)
+                            utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
+
+                            let synthesizer = AVSpeechSynthesizer()
+                            synthesizer.speak(utterance)
+                            */
                         } label: {
                             Image(systemName: "speaker.3")
                                 .foregroundStyle(.white)

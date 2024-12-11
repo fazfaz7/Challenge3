@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import NaturalLanguage
 
 struct ContentView: View {
     @State var showNewPhrase: Bool = false
@@ -24,6 +25,7 @@ struct ContentView: View {
         sort: \Category.dateAdded,
         animation: .default
     ) var myCategories: [Category]
+    
     
     var body: some View {
         NavigationStack {
@@ -261,9 +263,10 @@ struct NewPhraseView: View {
     @Binding var newType: Int
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    @State var showMessage: Bool = false
     
     var body: some View {
-        VStack(spacing: 25) {
+        VStack(spacing: 10) {
             HStack {
                 VStack(alignment: .leading)  {
                     
@@ -279,25 +282,39 @@ struct NewPhraseView: View {
                 Spacer()
             }
             
+            if showMessage {
+                Text("Make sure your word/phrase is in Italian!")
+                    .foregroundStyle(.red)
+                    .font(.callout)
+                    .fontWeight(.medium)
+            }
+            
             TextEditor(text: $newPhraseText)
                 .frame(height: 60) // Adjust the height as needed
                 .padding(8)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
             
+            
             Button {
                 
-                let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "")
-                
-                withAnimation {
-                    DispatchQueue.main.asyncAfter(deadline: .now()+0.4
-                    ) {
-                        modelContext.insert(newElement)
+                if language(of: newPhraseText) == "it" {
+                    
+                    let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "")
+                    
+                    withAnimation {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.4
+                        ) {
+                            modelContext.insert(newElement)
+                        }
+                        
                     }
                     
+    
+                    newPhraseText = ""
+                    showNewPhrase = false
+                } else {
+                    showMessage = true
                 }
-                
-                newPhraseText = ""
-                showNewPhrase = false
             } label: {
                 HStack {
                     Text("Add to Pendings ")
@@ -314,5 +331,13 @@ struct NewPhraseView: View {
             }.disabled(newPhraseText.isEmpty)
             
         }.padding()
+    }
+    
+    func language(of text: String) -> String {
+        if let language = NLLanguageRecognizer.dominantLanguage(for: text) {
+            return language.rawValue
+        } else {
+            return "Could not identify dominant language"
+        }
     }
 }
