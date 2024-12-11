@@ -41,7 +41,7 @@ class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate, @preconcurrenc
         if let voiceId = voiceIdentifier, let selectedVoice = AVSpeechSynthesisVoice(identifier: voiceId) {
             utterance.voice = selectedVoice
         } else {
-            let defaultLanguage = Locale.current.language.languageCode?.identifier ?? "en-US"
+            let defaultLanguage = Locale.current.language.languageCode?.identifier ?? "it-IT"
             utterance.voice = AVSpeechSynthesisVoice(language: defaultLanguage)
         }
         

@@ -264,20 +264,48 @@ struct NewPhraseView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @State var showMessage: Bool = false
+    @State private var speechRecognizer = SpeechRecognizer()
     
     var body: some View {
         VStack(spacing: 10) {
             HStack {
                 VStack(alignment: .leading)  {
+                    HStack {
+                        Text(newType == 1 ? "Add New Phrase" : "How to say?")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Button {
+                            if speechRecognizer.audioEngine.isRunning {
+                                speechRecognizer.stopListening()
+                                newPhraseText = speechRecognizer.recognizedText
+                            } else {
+                                speechRecognizer.startListening()
+                            }
+                        } label: {
+                            Image(systemName: speechRecognizer.startedListening ? "mic": "mic")
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                            
+                                .symbolEffect(.bounce, value: speechRecognizer.startedListening)
+                                .symbolEffect(.variableColor, isActive: speechRecognizer.startedListening)
+                            
+                                .background {
+                                    Circle().frame(width: 35, height: 35
+                                    )
+                                }
+                                .padding()
+                        }
+                        
+                    }
                     
-                    Text(newType == 1 ? "Add New Phrase" : "How to say?")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                    Text(newType == 1 ? "Heard a phrase you don't understand? Have a word you're unsure about? Save it here for later!" : "You want to know how to say a specific word or phrase in your new language? Save it here for later!")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        Text(newType == 1 ? "Heard a phrase you don't understand? Have a word you're unsure about? Save it here for later!" : "You want to know how to say a specific word or phrase in your new language? Save it here for later!")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        
+
+                    
                 }
-                
                 
                 Spacer()
             }
@@ -294,7 +322,7 @@ struct NewPhraseView: View {
                 .padding(8)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
             
-            
+            HStack {
             Button {
                 
                 if language(of: newPhraseText) == "it" {
@@ -327,8 +355,12 @@ struct NewPhraseView: View {
                 .foregroundStyle(.white)
                 .padding(10)
                 .background(RoundedRectangle(cornerRadius: 10).fill(newPhraseText == "" ? Color.gray : Color.accentColor))
+                .disabled(newPhraseText.isEmpty)
                 
-            }.disabled(newPhraseText.isEmpty)
+
+            }
+                
+            }
             
         }.padding()
     }
