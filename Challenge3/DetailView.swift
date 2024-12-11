@@ -16,7 +16,7 @@ struct DetailView: View {
     @State var categorySelected: Category?
     @State private var animationsRunning = false
     @State var selectedCategory: Category? = nil
-    
+    @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
     
     var body: some View {
         VStack(spacing: 15) {
@@ -30,9 +30,6 @@ struct DetailView: View {
                         .font(.title)
                         .fontWeight(.semibold)
                         .italic()
-                    
-                    
-                    
                 }
                 
                 Spacer()
@@ -46,13 +43,8 @@ struct DetailView: View {
                         
                         Button {
                             animationsRunning.toggle()
+                            viewModel.speak()
                            
-                            /*let utterance = AVSpeechUtterance(string: phrase.userEntry)
-                            utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
-
-                            let synthesizer = AVSpeechSynthesizer()
-                            synthesizer.speak(utterance)
-                            */
                         } label: {
                             Image(systemName: "speaker.3")
                                 .foregroundStyle(.white)
@@ -142,6 +134,9 @@ struct DetailView: View {
                 SelectCategoryView(selectedCategory: $selectedCategory)
                     .presentationDetents([.fraction(0.85)])
                 
+            }
+            .onAppear {
+                viewModel.inputText = phrase.userEntry
             }
     }
 }
