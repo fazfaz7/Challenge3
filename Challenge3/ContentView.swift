@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import NaturalLanguage
+import WidgetKit
 
 struct ContentView: View {
     @State var showNewPhrase: Bool = false
@@ -330,14 +331,11 @@ struct NewPhraseView: View {
                     let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "")
                     
                     withAnimation {
-                        DispatchQueue.main.asyncAfter(deadline: .now()+0.4
-                        ) {
+
                             modelContext.insert(newElement)
-                        }
-                        
                     }
                     
-    
+                    WidgetCenter.shared.reloadAllTimelines()
                     newPhraseText = ""
                     showNewPhrase = false
                 } else {
