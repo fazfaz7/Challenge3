@@ -17,6 +17,6 @@ A simple iOS app that helps users capture, organize, and track words or phrases 
 
 
 ## Installation
-1. Clone this repository: `git clone https://github.com/fazfaz7/Challenge3`>
+1. Clone this repository: <`git clone https://github.com/fazfaz7/Challenge3`>
 2. Open the project in Xcode.
 3. Run the app on a simulator or connected device.
