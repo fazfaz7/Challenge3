@@ -1,6 +1,6 @@
-# Lyngo - Challenge 3
+# Lyngo - Challenge 3 ![App Screenshot](AppIcon.png)
 
-![App Screenshot](AppIcon.png)
+
 
 
 ## Description
