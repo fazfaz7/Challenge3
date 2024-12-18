@@ -1,6 +1,6 @@
 # Lyngo - Challenge 3 
 
-<img src="AppIcon.png" width="200">
+<img src="AppIcon.png" width="130">
 
 ## Description
 A simple iOS app that helps users capture, organize, and track words or phrases they encounter while learning a new language, making daily vocabulary growth effortless. 
