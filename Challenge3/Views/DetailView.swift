@@ -48,7 +48,6 @@ struct DetailView: View {
                                     .foregroundStyle(.accent)
                                 
                                 Button {
-                            
                                     showTranslation = true
                                 } label: {
                                     Image(systemName: "translate")
