@@ -84,7 +84,7 @@ struct SelectCategoryView: View {
                         .shadow(radius: 1)
                 }
             
-        }.padding(.vertical)
+        }.padding()
             .sheet(isPresented: $showAddCategoryModal) {
                 AddCategoryView()
                     .presentationDetents([.fraction(0.3)])
@@ -92,10 +92,6 @@ struct SelectCategoryView: View {
     }
 }
 
-#Preview {
-    //AddCategoryView()
-    //SelectCategoryView(selectedCategory: .constant(nil))
-}
 
 struct AddCategoryView: View {
     @State var categoryName: String = ""
@@ -161,7 +157,9 @@ struct AddCategoryView: View {
                     .shadow(radius: 1)
             }
         }
+        
         .frame(width: Global.screenWidth*0.85)
+        .padding()
         .onChange(of: emojiText) { oldValue, newValue in
             if let firstChar = newValue.first, firstChar.isEmoji {
                 emojiText = String(firstChar)

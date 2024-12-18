@@ -45,31 +45,36 @@ struct SimpleEntry: TimelineEntry {
 struct Challenge3WidgetExtensionEntryView : View {
     var entry: Provider.Entry
     @Environment(\.modelContext) var modelContext
-    @Query var testPhrases: [LearnElement]
+    //@Query(filter: #Predicate { $0.isCompleted == true }) var testPhrases: [LearnElement]
+    @Query(
+        filter: #Predicate { $0.isCompleted == true },
+        sort: \LearnElement.dateAdded,
+        order: .reverse,
+        animation: .default
+    ) var testPhrases: [LearnElement]
 
     var body: some View {
 
-            VStack {
+        VStack(spacing: 5) {
                 
-                VStack{
-                    Text("Last phrase discovered:")
-                        .font(.title3)
-                        .padding(.bottom,5)
-                    
-                    Text(testPhrases.last!.userEntry)
-                        .font(.title)
-                        .fontWeight(.semibold)
-                        .italic()
-                    
-                    /*
-                     ForEach(testPhrases, id: \.self) { phrase in
-                     Text(phrase.userEntry)
-                     
-                     }
-                     */
+            if let myphrase = testPhrases.randomElement() {
+                Text("\(myphrase.userEntry)")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .italic()
+                    .foregroundStyle(.white)
+                
+                HStack {
+                    Text(myphrase.explanation)
+                        .font(.callout)
+                        .foregroundStyle(.white)
                 }
+            }
+                
             }.containerBackground(for: .widget){
-                Color.bluebello
+
+                LinearGradient(colors: [.darkaccent,.accent], startPoint: .top, endPoint: .bottom)
+                    
             }
         
         

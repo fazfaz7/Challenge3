@@ -46,7 +46,7 @@ struct ContentView: View {
                         
                     }.frame(width: Global.screenWidth*0.67, height: Global.screenHeight*0.08)
                     
-                    
+                    Spacer()
                     ZStack {
                         Circle()
                             .fill(  .accent.mix(with: .white, by: 0.8))
@@ -67,14 +67,14 @@ struct ContentView: View {
                             .fontWeight(.medium)
                             .foregroundStyle(.accent)
                         
-                    }.frame(width: Global.screenWidth*0.18)
+                    }.frame(width: 70)
                         .onTapGesture {
                             for category in myCategories {
                                 print(category.name)
                             }
                         }
                     
-                }
+                }.frame(maxWidth: Global.screenWidth*0.85)
                 
                 HStack(spacing: 12) {
                     
@@ -91,6 +91,7 @@ struct ContentView: View {
                             .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.accent).opacity(0.8).shadow(radius:1))
                     }
+                    .accessibilityLabel("New Phrase. Add a New Phrase that you do not understand the meaning.")
                     
                     
                     Button {
@@ -106,7 +107,7 @@ struct ContentView: View {
                             .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.accent)
                                 .opacity(0.8).shadow(radius:1))
-                    }
+                    }.accessibilityLabel("How to say? Add a phrase or word in your native language to learn how to say it in your new language.")
                     
                 }.padding(.vertical)
                 
@@ -132,7 +133,7 @@ struct ContentView: View {
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                         
-                        Text("Consider adding new phrases to your collection. Go out or something! ")
+                        Text("Consider adding new phrases to your collection. There's always something new to learn! ")
                             .font(.callout)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -143,6 +144,7 @@ struct ContentView: View {
                 } else {
                     ScrollView {
                         VStack(spacing: 15) {
+                            
                             ForEach(testPhrases, id: \.self) { phrase in
                                 
                                 WordElementView(phrase: phrase, isCollection: false)
@@ -158,7 +160,7 @@ struct ContentView: View {
             .sheet(isPresented: $showNewPhrase) {
                 NewPhraseView(newPhraseText: $newPhraseText, showNewPhrase: $showNewPhrase, phrases: $phrases, newType: $newType)
                 
-                    .presentationDetents([.fraction(0.4)])
+                    .presentationDetents([.fraction(0.45)])
             }
             
             Spacer()
@@ -212,7 +214,7 @@ struct WordElementView: View {
             }
             HStack {
                 Text(phrase.userEntry)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .padding(.horizontal,8)
                 Spacer()
                 
@@ -226,32 +228,36 @@ struct WordElementView: View {
                     }
                     
                     
-                    Button {
-                        withAnimation {
-                            modelContext.delete(phrase)
-                            do {
-                                try modelContext.save() // Ensure the changes are saved
-                            } catch {
-                                print("Error deleting element: \(error)")
-                            }
+     
+                }
+                Button {
+                    withAnimation {
+                        modelContext.delete(phrase)
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            print("Error deleting element: \(error)")
                         }
-                    } label: {
-                        Image(systemName: "trash.fill")
-                            .font(.title3)
-                            .foregroundStyle(.red)
-                            .opacity(0.6)
-                            .padding(.horizontal,4)
                     }
+                } label: {
+                    Image(systemName: "trash.fill")
+                        .font(.title3)
+                        .foregroundStyle(.red)
+                        .opacity(0.6)
+                        .padding(.horizontal,4)
                 }
                 
             }
             .padding()
             .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)).shadow(radius:1))
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary
+                .opacity(0.1)).shadow(radius:1))
+            .foregroundStyle(.primary)
         }
         .padding()
         .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray.opacity(0.1)).shadow(radius:1))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary.opacity(0.1)).shadow(radius:1))
+        .foregroundStyle(.primary)
     }
 }
 
@@ -285,24 +291,26 @@ struct NewPhraseView: View {
                             }
                         } label: {
                             Image(systemName: speechRecognizer.startedListening ? "mic": "mic")
-                                .font(.system(size: 18))
+                                .font(.system(size: 16))
                                 .foregroundColor(.white)
                             
                                 .symbolEffect(.bounce, value: speechRecognizer.startedListening)
                                 .symbolEffect(.variableColor, isActive: speechRecognizer.startedListening)
                             
                                 .background {
-                                    Circle().frame(width: 35, height: 35
+                                    Circle().frame(width: 30, height: 30
                                     )
                                 }
-                                .padding()
-                        }
+                                .padding(.horizontal)
+                        }.accessibilityLabel("Record a phrase. You can say or read aloud what you want to save")
+                            .accessibilityHint("Double tap to start recording.")
                         
                     }
                     
                         Text(newType == 1 ? "Heard a phrase you don't understand? Have a word you're unsure about? Save it here for later!" : "You want to know how to say a specific word or phrase in your new language? Save it here for later!")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                            .padding(.vertical,3)
                         
 
                     
@@ -319,14 +327,14 @@ struct NewPhraseView: View {
             }
             
             TextEditor(text: $newPhraseText)
-                .frame(height: 60) // Adjust the height as needed
-                .padding(8)
+                .frame(height: 70)
+                .padding(10)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
             
             HStack {
             Button {
                 
-                if language(of: newPhraseText) == "it" {
+                if ((language(of: newPhraseText) == "it" && newType == 1) || newType == 2) {
                     
                     let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "")
                     
@@ -358,7 +366,7 @@ struct NewPhraseView: View {
 
             }
                 
-            }
+            }.padding(.top,10)
             
         }.padding()
     }

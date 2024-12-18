@@ -26,6 +26,7 @@ struct CollectionView: View {
     
     @State private var searchText = ""
     @State private var selectedType: PhraseType = .all
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
@@ -87,8 +88,11 @@ struct CollectionView: View {
                                 ForEach(group.phrases, id: \.self) { phrase in
                                     NavigationLink {
                                         CollectionDetailView(phrase: phrase)
+                                        
                                     } label: {
                                         WordElementView(phrase: phrase, isCollection: true)
+                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                            
                                     }
                                 }
                             }
