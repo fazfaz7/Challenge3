@@ -6,13 +6,12 @@ A simple iOS app that helps users capture, organize, and track words or phrases 
 ## Screenshots
 
 ## Features
-* 📋 Capture Phrases: Quickly save words or phrases you encounter in your daily routine to discover the meaning later when you have time.
-* 🎙️ Voice Input: Add phrases effortlessly using just your voice.
-* 🗂️ Organize by Categories: Sort and group your entries for easier review.
-* 🕒 Track Progress: Keep a record of what you have learned, ordered by date.
-* 🔍 Add Explanations: Use the Translation API to add explanations automatically or manually.
-* 📖 Review Anytime: Access a collection of your learned words and phrases for continuous learning.
-* 🛠️ Widget: Display words from your collection directly on your home screen for quick reminders.
+* 📋 **Capture Phrases**: Quickly save words or phrases you encounter in your daily routine to discover the meaning later when you have time.
+* 🎙️ **Voice Input**: Add phrases effortlessly using just your voice.
+* 🗂️ **Organize by Categories**: Sort and group your entries for easier review.
+* 📖 **Track Progress**: Keep a record of what you have learned, ordered by date.
+* 🔍 **Add Explanations**: Use the Translation API to add explanations automatically or manually.
+* 🛠️ **Widget**: Display words from your collection directly on your home screen for quick reminders.
 
 
 ## Installation
