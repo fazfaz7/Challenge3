@@ -7,6 +7,9 @@ A simple iOS app that helps users capture, organize, and track words or phrases 
 
 ## Screenshots
 
+<img src="SS1.PNG" width="70">
+<img src="SS2.PNG" width="70">
+
 ## Features
 * 📋 **Capture Phrases**: Quickly save words or phrases you encounter in your daily routine to discover the meaning later when you have time.
 * 🎙️ **Voice Input**: Add phrases effortlessly using just your voice.
