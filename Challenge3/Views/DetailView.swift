@@ -15,7 +15,6 @@ struct DetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @State var showCategoryView: Bool = false
-    @State var categorySelected: Category?
     @State private var animationsRunning = false
     @State var selectedCategory: Category? = nil
     @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
@@ -128,8 +127,7 @@ struct DetailView: View {
                         Spacer()
                         Button {
                             
-   
-                                phrase.category = categorySelected
+                            phrase.category = selectedCategory
                                 phrase.isCompleted = true
                                 try? modelContext.save()
                             WidgetCenter.shared.reloadAllTimelines()

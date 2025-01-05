@@ -44,9 +44,11 @@ struct CollectionDetailView: View {
                         
                     }.padding(5)
                     
-                    if let myCategory = phrase.category {
-                        Text(myCategory.emoji)
+                    if let category = phrase.category {
+                        Text(phrase.category!.emoji)
                     }
+                    
+                    
                 }
                 Spacer()
             }
