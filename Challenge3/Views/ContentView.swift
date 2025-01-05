@@ -34,7 +34,7 @@ struct ContentView: View {
                 HStack {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("Hey Adrian")
+                            Text("Hey Amigo")
                                 .font(.largeTitle)
                                 .fontWeight(.regular)
                             Text("Italian Learner")
@@ -47,32 +47,7 @@ struct ContentView: View {
                     }.frame(width: Global.screenWidth*0.67, height: Global.screenHeight*0.08)
                     
                     Spacer()
-                    ZStack {
-                        Circle()
-                            .fill(  .accent.mix(with: .white, by: 0.8))
-                        
-                            .overlay {
-                                Circle()
-                                    .foregroundStyle(.accent)
-                                    .scaleEffect(0.40)
-                                    .overlay {
-                                        Text("10")
-                                            .foregroundStyle(.white)
-                                            .font(.callout)
-                                    }
-                                    .offset(x: 25, y: -30)
-                            }
-                        Image(systemName: "flame.fill")
-                            .font(.largeTitle)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.accent)
-                        
-                    }.frame(width: 70)
-                        .onTapGesture {
-                            for category in myCategories {
-                                print(category.name)
-                            }
-                        }
+                    
                     
                 }.frame(maxWidth: Global.screenWidth*0.85)
                 
@@ -160,13 +135,13 @@ struct ContentView: View {
             .sheet(isPresented: $showNewPhrase) {
                 NewPhraseView(newPhraseText: $newPhraseText, showNewPhrase: $showNewPhrase, phrases: $phrases, newType: $newType)
                 
-                    .presentationDetents([.fraction(0.45)])
+                    .presentationDetents([.fraction(0.35)])
             }
             
             Spacer()
         }.onAppear {
             
-            let fetchRequest = FetchDescriptor<Category>() // Fetch all `Category` objects
+            let fetchRequest = FetchDescriptor<Category>()
             do {
                 let existingCategories = try modelContext.fetch(fetchRequest)
                 let existingCategoryNames = Set(existingCategories.map { $0.name }) // Collect existing category names
@@ -206,7 +181,7 @@ struct WordElementView: View {
         ZStack {
             HStack {
                 Rectangle()
-                    .fill(.accent).opacity(phrase.learnType == .howToSay ? 0.5 : 0.2)
+                    .fill(phrase.learnType == .howToSay ? .blue : .purple).opacity(0.7)
                     .clipShape(.rect(topLeadingRadius: 10, bottomLeadingRadius: 10))
                     .frame(width: 10)
                 
@@ -277,40 +252,14 @@ struct NewPhraseView: View {
         VStack(spacing: 10) {
             HStack {
                 VStack(alignment: .leading)  {
-                    HStack {
                         Text(newType == 1 ? "Add New Phrase" : "How to say?")
                             .font(.title2)
                             .fontWeight(.semibold)
-                        
-                        Button {
-                            if speechRecognizer.audioEngine.isRunning {
-                                speechRecognizer.stopListening()
-                                newPhraseText = speechRecognizer.recognizedText
-                            } else {
-                                speechRecognizer.startListening()
-                            }
-                        } label: {
-                            Image(systemName: speechRecognizer.startedListening ? "mic": "mic")
-                                .font(.system(size: 16))
-                                .foregroundColor(.white)
-                            
-                                .symbolEffect(.bounce, value: speechRecognizer.startedListening)
-                                .symbolEffect(.variableColor, isActive: speechRecognizer.startedListening)
-                            
-                                .background {
-                                    Circle().frame(width: 30, height: 30
-                                    )
-                                }
-                                .padding(.horizontal)
-                        }.accessibilityLabel("Record a phrase. You can say or read aloud what you want to save")
-                            .accessibilityHint("Double tap to start recording.")
-                        
-                    }
                     
                         Text(newType == 1 ? "Heard a phrase you don't understand? Have a word you're unsure about? Save it here for later!" : "You want to know how to say a specific word or phrase in your new language? Save it here for later!")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                            .padding(.vertical,3)
+                
                         
 
                     
@@ -333,9 +282,6 @@ struct NewPhraseView: View {
             
             HStack {
             Button {
-                
-                if ((language(of: newPhraseText) == "it" && newType == 1) || newType == 2) {
-                    
                     let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "")
                     
                     withAnimation {
@@ -346,9 +292,7 @@ struct NewPhraseView: View {
                     WidgetCenter.shared.reloadAllTimelines()
                     newPhraseText = ""
                     showNewPhrase = false
-                } else {
-                    showMessage = true
-                }
+
             } label: {
                 HStack {
                     Text("Add to Pendings ")
@@ -371,11 +315,5 @@ struct NewPhraseView: View {
         }.padding()
     }
     
-    func language(of text: String) -> String {
-        if let language = NLLanguageRecognizer.dominantLanguage(for: text) {
-            return language.rawValue
-        } else {
-            return "Could not identify dominant language"
-        }
-    }
+
 }

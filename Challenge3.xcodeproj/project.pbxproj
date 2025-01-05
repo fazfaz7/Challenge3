@@ -55,7 +55,7 @@
 		6275C2202D0A0D1300AB8951 /* Exceptions for "Challenge3" folder in "Challenge3WidgetExtensionExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				LearnElement.swift,
+				Model/LearnElement.swift,
 			);
 			target = 6275C2042D0A0CAF00AB8951 /* Challenge3WidgetExtensionExtension */;
 		};

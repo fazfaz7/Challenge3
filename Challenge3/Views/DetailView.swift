@@ -83,7 +83,7 @@ struct DetailView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 20){
-                    Text("Adrian, write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!")
+                    Text("Amigo, write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
