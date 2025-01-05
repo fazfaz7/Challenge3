@@ -26,6 +26,8 @@ struct ContentView: View {
         sort: \Category.dateAdded,
         animation: .default
     ) var myCategories: [Category]
+    @State var newPhrasesExpanded: Bool = false
+    @State var howToSayExpanded: Bool = false
     
     
     var body: some View {
@@ -94,6 +96,7 @@ struct ContentView: View {
                     }
                     Spacer()
                 }.frame(width: Global.screenWidth*0.85)
+                    .padding(.bottom,5)
                 
                 if testPhrases.isEmpty {
                     VStack(alignment: .center, spacing: 10) {
@@ -117,17 +120,96 @@ struct ContentView: View {
                     }.padding()
                     
                 } else {
+                    
+                    if !howToSayExpanded {
+                    
+                    HStack {
+                        VStack {
+                            Text("New Phrases")
+                                .font(.title3)
+                                .fontWeight(.regular
+                                )
+                                .foregroundStyle(.accent)
+                        }
+                        
+                        
+                        
+                        Spacer()
+                        Button {
+                            withAnimation {
+                                newPhrasesExpanded.toggle()
+                            }
+                        } label: {
+                            
+                            if newPhrasesExpanded {
+                                Image(systemName: "rectangle.compress.vertical")
+                                    .foregroundStyle(.accent)
+                            } else {
+                                Image(systemName: "rectangle.expand.vertical")
+                                    .foregroundStyle(.accent)
+                            }
+                            
+                        }
+                    }.frame(width: Global.screenWidth*0.85)
                     ScrollView {
                         VStack(spacing: 15) {
                             
                             ForEach(testPhrases, id: \.self) { phrase in
                                 
-                                WordElementView(phrase: phrase, isCollection: false)
+                                if phrase.learnType == .newPhrase {
+                                    WordElementView(phrase: phrase, isCollection: false)
+                                }
+                                
                                 
                             }
                             
                         }
                         
+                    }.frame(height: newPhrasesExpanded ? Global.screenHeight*0.45 : Global.screenHeight*0.19)
+                    
+                }
+                    
+                    if !newPhrasesExpanded {
+                    HStack {
+                        VStack {
+                            Text("How To Say...")
+                                .font(.title3)
+                                .fontWeight(.regular
+                                )
+                                .foregroundStyle(.accent)
+                        }
+                        Spacer()
+                        Button {
+                            withAnimation {
+                                howToSayExpanded.toggle()
+                            }
+                        } label: {
+                            if howToSayExpanded {
+                                Image(systemName: "rectangle.compress.vertical")
+                                    .foregroundStyle(.accent)
+                            } else {
+                                Image(systemName: "rectangle.expand.vertical")
+                                    .foregroundStyle(.accent)
+                            }
+                        }
+                    }.frame(width: Global.screenWidth*0.85)
+                    
+                    
+                        ScrollView {
+                            VStack(spacing: 15) {
+                                
+                                ForEach(testPhrases, id: \.self) { phrase in
+                                    
+                                    if phrase.learnType == .howToSay {
+                                        WordElementView(phrase: phrase, isCollection: false)
+                                    }
+                                    
+                                    
+                                }
+                                
+                            }
+                            
+                        }.frame(height: howToSayExpanded ? Global.screenHeight*0.45 : Global.screenHeight*0.19)
                     }
                 }
                 
@@ -181,7 +263,7 @@ struct WordElementView: View {
         ZStack {
             HStack {
                 Rectangle()
-                    .fill(phrase.learnType == .howToSay ? .blue : .purple).opacity(0.7)
+                    .fill(phrase.learnType == .howToSay ? .accent : .accent).opacity(0.7)
                     .clipShape(.rect(topLeadingRadius: 10, bottomLeadingRadius: 10))
                     .frame(width: 10)
                 
@@ -246,7 +328,6 @@ struct NewPhraseView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @State var showMessage: Bool = false
-    @State private var speechRecognizer = SpeechRecognizer()
     
     var body: some View {
         VStack(spacing: 10) {
