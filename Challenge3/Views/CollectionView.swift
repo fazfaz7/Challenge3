@@ -2,13 +2,11 @@ import SwiftUI
 import SwiftData
 
 enum PhraseType: String, CaseIterable {
-    case all = "All"
     case howToSay = "How to Say"
     case newPhrase = "New Phrase"
     
     var description: String {
         switch self {
-        case .all: return "All"
         case .howToSay: return "How to Say"
         case .newPhrase: return "New Phrase"
         }
@@ -25,13 +23,13 @@ struct CollectionView: View {
     ) var testPhrases: [LearnElement]
     
     @State private var searchText = ""
-    @State private var selectedType: PhraseType = .all
+    @State private var selectedType: PhraseType = .newPhrase
     @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
             let matchesSearch = searchText.isEmpty || phrase.userEntry.localizedCaseInsensitiveContains(searchText)
-            let matchesType = selectedType == .all ||
+            let matchesType =
             (selectedType == .howToSay && phrase.learnType == .howToSay) ||
             (selectedType == .newPhrase && phrase.learnType == .newPhrase)
             return matchesSearch && matchesType
@@ -59,6 +57,7 @@ struct CollectionView: View {
                     Spacer()
                     
                     // Inline Filter Picker
+                    
                     Picker("Filter", selection: $selectedType) {
                         ForEach(PhraseType.allCases, id: \.self) { type in
                             Text(type.description).tag(type)
