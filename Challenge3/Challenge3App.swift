@@ -16,6 +16,7 @@ struct Challenge3App: App {
        }
 
     var body: some Scene {
+        
         WindowGroup {
             TabView {
                 Tab("My Pendings",systemImage: "folder.fill.badge.plus") {

@@ -40,13 +40,29 @@ struct CollectionDetailView: View {
                         
                         Text(phrase.explanation)
                             .font(.title3)
-                            .foregroundStyle(.secondary)
                         
                     }.padding(5)
                     
-                    if let category = phrase.category {
-                        Text(phrase.category!.emoji)
-                    }
+                    
+                    VStack(alignment: .leading) {
+                        
+                        Text("Category")
+                            .foregroundStyle(.accent)
+                            .font(.title2)
+                            .padding(.bottom,3)
+                        
+                        HStack {
+                            
+                            if let category = phrase.category {
+                                Text(category.emoji)
+                                Text(category.name)
+                            }
+                        }
+                        .font(.title3)
+                        
+                    }.padding(5)
+                    
+                   
                     
                     
                 }

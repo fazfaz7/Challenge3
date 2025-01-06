@@ -19,6 +19,8 @@ struct DetailView: View {
     @State var selectedCategory: Category? = nil
     @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
     @State var showTranslation = false
+    @AppStorage("userName") private var userName: String = "No name set"
+
     
     var body: some View {
         ScrollView {
@@ -57,24 +59,6 @@ struct DetailView: View {
                                 
                             }                    .fixedSize(horizontal: false, vertical: true)
                             
-                            ZStack {
-                                Circle()
-                                    .frame(width: 48)
-                                    
-                                    .foregroundStyle(.accent)
-                                
-                                Button {
-                                    animationsRunning.toggle()
-                                    viewModel.speak()
-                                    
-                                } label: {
-                                    Image(systemName: "speaker.3")
-                                        .foregroundStyle(.white)
-                                        .symbolEffect(.variableColor.iterative, options: .repeating, value: animationsRunning)
-                                    
-                                }
-                                
-                            }                    .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                     
@@ -82,7 +66,7 @@ struct DetailView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 20){
-                    Text("Amigo, write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!")
+                    Text("\(userName), write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -98,7 +82,7 @@ struct DetailView: View {
                     VStack(alignment:.leading) {
                         Text("Category")
                             .font(.title3)
-                            .foregroundStyle(.black)
+                            .foregroundStyle(.primary)
                             .fontWeight(.medium)
                         Button {
                             showCategoryView.toggle()

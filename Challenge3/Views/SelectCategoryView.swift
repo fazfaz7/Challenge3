@@ -41,11 +41,12 @@ struct SelectCategoryView: View {
                                         .stroke(selectedCategory == category ? Color.accentColor : Color.gray.opacity(0.5), lineWidth: 4)
                                 }
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                                .onTapGesture {
-                                    withAnimation {
-                                        selectedCategory = category
-                                    }
-                                }
+                                .contentShape(RoundedRectangle(cornerRadius: 10))  
+                                        .onTapGesture {
+                                            withAnimation {
+                                                selectedCategory = category
+                                            }
+                                        }
                             
                             
                         }

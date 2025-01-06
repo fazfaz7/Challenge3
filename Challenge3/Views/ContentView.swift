@@ -28,7 +28,10 @@ struct ContentView: View {
     ) var myCategories: [Category]
     @State var newPhrasesExpanded: Bool = false
     @State var howToSayExpanded: Bool = false
-    
+    @AppStorage("userName") private var userName: String = "No name set"
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
+    @State private var isPresenting = true
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationStack {
@@ -36,10 +39,10 @@ struct ContentView: View {
                 HStack {
                     HStack {
                         VStack(alignment: .leading) {
-                            Text("Hey Amigo")
+                            Text("Hey \(userName)")
                                 .font(.largeTitle)
                                 .fontWeight(.regular)
-                            Text("Italian Learner")
+                            Text("\(selectedLanguage.dropLast(2)) Learner")
                                 .font(.title3)
                                 .foregroundStyle(.accent)
                             
@@ -121,7 +124,7 @@ struct ContentView: View {
                     
                 } else {
                     
-                    if !howToSayExpanded {
+                    if !howToSayExpanded && !testPhrases.filter({ $0.learnType == .newPhrase }).isEmpty {
                     
                     HStack {
                         VStack {
@@ -169,7 +172,7 @@ struct ContentView: View {
                     
                 }
                     
-                    if !newPhrasesExpanded {
+                    if !newPhrasesExpanded && !testPhrases.filter({ $0.learnType == .howToSay }).isEmpty{
                     HStack {
                         VStack {
                             Text("How To Say...")
@@ -247,7 +250,25 @@ struct ContentView: View {
             
             
         }
+        .onAppear {
+                        // Check if both userName and selectedLanguage are set
+                        if userName == "No name set" || selectedLanguage == "No language selected" {
+                            isPresenting = true // Show the welcome screen
+                        } else {
+                            isPresenting = false // Skip the welcome screen if both are set
+                        }
+                    }
+        .fullScreenCover(isPresented: $isPresenting, onDismiss: didDismiss) {
+            WelcomeView()
+        }
+
     }
+    
+    func didDismiss() {
+        dismiss()
+        }
+    
+    
 }
 
 #Preview {
@@ -269,52 +290,48 @@ struct WordElementView: View {
                 
                 Spacer()
             }
-            HStack {
-                Text(phrase.userEntry)
-                    .foregroundStyle(.primary)
-                    .padding(.horizontal,8)
-                Spacer()
-                
+            
+            
+            NavigationLink {
                 if !isCollection {
-                    NavigationLink {
-                        DetailView(phrase: phrase)
-                    } label: {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title2)
-                            .foregroundStyle(.accent)
-                    }
+                    DetailView(phrase: phrase)
+                } else {
+                    CollectionDetailView(phrase: phrase)
+                }
+            } label: {
+                HStack {
+                    Text(phrase.userEntry)
+                        .foregroundStyle(.primary)
+                        .padding(.horizontal,8)
+                    Spacer()
                     
                     
-     
                 }
-                Button {
-                    withAnimation {
-                        modelContext.delete(phrase)
-                        do {
-                            try modelContext.save()
-                        } catch {
-                            print("Error deleting element: \(error)")
-                        }
-                    }
-                } label: {
-                    Image(systemName: "trash.fill")
-                        .font(.title3)
-                        .foregroundStyle(.red)
-                        .opacity(0.6)
-                        .padding(.horizontal,4)
-                }
-                
+                .padding()
+                .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
+                .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary
+                    .opacity(0.1)).shadow(radius:1))
+                .foregroundStyle(.primary)
             }
-            .padding()
-            .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
-            .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary
-                .opacity(0.1)).shadow(radius:1))
-            .foregroundStyle(.primary)
         }
         .padding()
         .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
         .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary.opacity(0.1)).shadow(radius:1))
         .foregroundStyle(.primary)
+        .contextMenu {
+            Button {
+                withAnimation {
+                    modelContext.delete(phrase)
+                    do {
+                        try modelContext.save()
+                    } catch {
+                        print("Error deleting element: \(error)")
+                    }
+                }
+            } label: {
+                Label("Delete pending", systemImage: "trash.fill")
+            }
+        }
     }
 }
 
