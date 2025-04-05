@@ -35,7 +35,7 @@ struct CollectionDetailView: View {
                         
                         Text("Explanation/Meaning")
                             .foregroundStyle(.accent)
-                            .font(.title2)
+                            .font(.title3)
                             .padding(.bottom,3)
                         
                         Text(phrase.explanation)
@@ -48,7 +48,7 @@ struct CollectionDetailView: View {
                         
                         Text("Category")
                             .foregroundStyle(.accent)
-                            .font(.title2)
+                            .font(.title3)
                             .padding(.bottom,3)
                         
                         HStack {

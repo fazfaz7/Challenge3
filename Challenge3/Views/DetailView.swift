@@ -20,6 +20,7 @@ struct DetailView: View {
     @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
     @State var showTranslation = false
     @AppStorage("userName") private var userName: String = "No name set"
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     
     var body: some View {
@@ -35,6 +36,8 @@ struct DetailView: View {
                             .font(.title)
                             .fontWeight(.semibold)
                             .italic()
+                            .lineLimit(3)
+                            .minimumScaleFactor(0.7)
                     }                    .fixedSize(horizontal: false, vertical: true)
                     
                     Spacer()
@@ -93,7 +96,7 @@ struct DetailView: View {
                                     Text(selectedCategory.emoji)
                                         .font(.title3)
                                     Text(selectedCategory.name)
-                                        .foregroundStyle(.black)
+                                        .foregroundStyle(colorScheme == .dark ? .white : .black )
                                 } else {
                                     Text("None")
                                         .foregroundStyle(.gray)
@@ -119,7 +122,7 @@ struct DetailView: View {
                             dismiss()
                         } label: {
                             HStack {
-                                Text("Complete pending")
+                                Text("Finish pending")
                                 Image(systemName: "checkmark")
                             }
                             .padding(15)
@@ -156,7 +159,7 @@ struct DetailView: View {
 
 
 #Preview {
-    DetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "In bocca al lupo", explanation: ""))
+    DetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Non voglio essere un loco pazzesco e solitario pure io", explanation: ""))
 }
 
 

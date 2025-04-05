@@ -26,6 +26,12 @@ struct ContentView: View {
         sort: \Category.dateAdded,
         animation: .default
     ) var myCategories: [Category]
+    @Query(
+        filter: #Predicate { $0.isCompleted == true },
+        sort: \LearnElement.dateAdded,
+        order: .reverse,
+        animation: .default
+    ) var collectionPhrases: [LearnElement]
     @State var newPhrasesExpanded: Bool = false
     @State var howToSayExpanded: Bool = false
     @AppStorage("userName") private var userName: String = "No name set"
@@ -42,6 +48,7 @@ struct ContentView: View {
                             Text("Hey \(userName)")
                                 .font(.largeTitle)
                                 .fontWeight(.regular)
+                                .minimumScaleFactor(0.85)
                             Text("\(selectedLanguage.dropLast(2)) Learner")
                                 .font(.title3)
                                 .foregroundStyle(.accent)
@@ -49,10 +56,20 @@ struct ContentView: View {
                         }
                         Spacer()
                         
+                        
+                        
+
+                        
                     }.frame(width: Global.screenWidth*0.67, height: Global.screenHeight*0.08)
                     
                     Spacer()
                     
+                    Button {
+                        isPresenting = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundStyle(.accent)
+                    }
                     
                 }.frame(maxWidth: Global.screenWidth*0.85)
                 
@@ -91,12 +108,18 @@ struct ContentView: View {
                     
                 }.padding(.vertical)
                 
-                HStack {
+                HStack(spacing: 20) {
                     VStack {
                         Text("My Pendings")
                             .font(.title)
                             .fontWeight(.medium)
                     }
+                    
+                    Text("\(testPhrases.count)")
+                        .padding(9)
+                        .background(Circle().fill(.gray.opacity(0.6)))
+                        .font(.caption)
+                        .foregroundStyle(.white)
                     Spacer()
                 }.frame(width: Global.screenWidth*0.85)
                     .padding(.bottom,5)
@@ -220,7 +243,7 @@ struct ContentView: View {
             .sheet(isPresented: $showNewPhrase) {
                 NewPhraseView(newPhraseText: $newPhraseText, showNewPhrase: $showNewPhrase, phrases: $phrases, newType: $newType)
                 
-                    .presentationDetents([.fraction(0.35)])
+                    .presentationDetents([.fraction(0.38)])
             }
             
             Spacer()
@@ -329,7 +352,8 @@ struct WordElementView: View {
                     }
                 }
             } label: {
-                Label("Delete pending", systemImage: "trash.fill")
+                
+                Label(isCollection ? "Delete from collection" : "Delete pending", systemImage: "trash.fill")
             }
         }
     }
@@ -345,14 +369,36 @@ struct NewPhraseView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @State var showMessage: Bool = false
+    let maxCharacters = 50
     
     var body: some View {
         VStack(spacing: 10) {
             HStack {
                 VStack(alignment: .leading)  {
+                    
+                    HStack(spacing: 15) {
                         Text(newType == 1 ? "Add New Phrase" : "How to say?")
                             .font(.title2)
                             .fontWeight(.semibold)
+                        
+                        ZStack {
+                            Circle()
+                                .stroke(lineWidth: 3)
+                                .opacity(0.5)
+                                .foregroundColor(.gray)
+                                .frame(width: 12)
+                            
+                            Circle()
+                                
+                                    .trim(from: 0.0, to: CGFloat(min(Double(newPhraseText.count) / Double(maxCharacters), 1.0)))
+                                    .stroke(
+                                        AngularGradient(gradient: Gradient(colors: [.accent, .accent]), center: .center),
+                                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                                    )
+                                    .rotationEffect(Angle(degrees: -90))
+                                    .frame(width: 12)
+                        }
+                    }
                     
                         Text(newType == 1 ? "Heard a phrase you don't understand? Have a word you're unsure about? Save it here for later!" : "You want to know how to say a specific word or phrase in your new language? Save it here for later!")
                             .font(.subheadline)
@@ -373,7 +419,18 @@ struct NewPhraseView: View {
                     .fontWeight(.medium)
             }
             
-            TextEditor(text: $newPhraseText)
+            TextEditor(text: Binding(
+                get: { newPhraseText },
+                set: { newValue in
+                    // Trim to max length
+                    if newValue.count <= maxCharacters {
+                        newPhraseText = newValue
+                    } else {
+                        newPhraseText = String(newValue.prefix(maxCharacters))
+                        // Optional: give haptic or visual feedback
+                    }
+                }
+            ))
                 .frame(height: 70)
                 .padding(10)
                 .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))

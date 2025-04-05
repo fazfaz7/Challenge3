@@ -156,6 +156,7 @@ struct AddCategoryView: View {
                     .frame(width: Global.screenWidth*0.85, height: 55)
                     .background(RoundedRectangle(cornerRadius: 10).fill(.accent))
                     .shadow(radius: 1)
+                
             }
         }
         

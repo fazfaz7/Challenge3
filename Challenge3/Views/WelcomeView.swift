@@ -14,6 +14,10 @@ struct WelcomeView: View {
     @State var showAll: Bool = false
     @Environment(\.dismiss) var dismiss
     @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
+    var isFormComplete: Bool {
+        !userName.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
     
     var body: some View {
         VStack(spacing: 30) {
@@ -45,9 +49,10 @@ struct WelcomeView: View {
                     }.frame(width: Global.screenWidth*0.85)
                     
                     TextField("Enter your nickname", text: $userName)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.primary)
                         .frame(width: Global.screenWidth*0.85)
                         .textFieldStyle(.roundedBorder)
+                    
                     
                     
                 }
@@ -78,10 +83,10 @@ struct WelcomeView: View {
                         }.padding(12)
                             .font(.title3)
                             .frame(width: Global.screenWidth*0.85, height: 55)
-                            .background(RoundedRectangle(cornerRadius: 10).fill(.accent))
+                            .background(RoundedRectangle(cornerRadius: 10).fill(isFormComplete ? Color.accentColor : Color.gray))
                             .shadow(radius: 1)
                             .padding(.vertical)
-                    }
+                    }.disabled(!isFormComplete)
                 }
             }
         }.onAppear {
