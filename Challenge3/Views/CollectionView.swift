@@ -13,6 +13,11 @@ enum PhraseType: String, CaseIterable {
     }
 }
 
+enum CollectionOrder: String, CaseIterable {
+    case alphabetical = "Alphabetical"
+    case byDate = "By Date"
+}
+
 struct CollectionView: View {
     @Environment(\.modelContext) var modelContext
     @Query(
@@ -25,6 +30,9 @@ struct CollectionView: View {
     @State private var searchText = ""
     @State private var selectedType: PhraseType = .newPhrase
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @State private var selectedOrder: CollectionOrder = .alphabetical
+    @State private var showingFilterOptions = false
+
 
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
@@ -36,25 +44,30 @@ struct CollectionView: View {
         }
     }
     
-    var groupedPhrasesByDay: [(date: Date, phrases: [LearnElement])] {
-        Dictionary(grouping: filteredPhrases) { phrase in
-            // Strip time to group only by day
-            Calendar.current.startOfDay(for: phrase.dateAdded)
+    var groupedPhrases: [(title: String, phrases: [LearnElement])] {
+        switch selectedOrder {
+        case .alphabetical:
+            return Dictionary(grouping: filteredPhrases) { phrase in
+                String(phrase.userEntry.prefix(1)).uppercased()
+            }
+            .mapValues { phrases in
+                phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
+            }
+            .sorted { $0.key < $1.key }
+            .map { (title: $0.key, phrases: $0.value) }
+            
+        case .byDate:
+            return Dictionary(grouping: filteredPhrases) { phrase in
+                Calendar.current.startOfDay(for: phrase.dateAdded)
+            }
+            .mapValues { phrases in
+                phrases.sorted { $0.dateAdded > $1.dateAdded }
+            }
+            .sorted { $0.key > $1.key }
+            .map { (title: formatDate($0.key), phrases: $0.value) }
         }
-        .sorted { $0.key > $1.key } // Sort by Date in descending order
-        .map { (date: $0.key, phrases: $0.value) } // Convert to an array of tuples
     }
-    
-    var groupedPhrasesByLetter: [(letter: String, phrases: [LearnElement])] {
-        Dictionary(grouping: filteredPhrases) { phrase in
-            String(phrase.userEntry.prefix(1)).uppercased()
-        }
-        .mapValues { phrases in
-            phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
-        }
-        .sorted { $0.key < $1.key }
-        .map { (letter: $0.key, phrases: $0.value) }
-    }
+
 
 
     
@@ -70,15 +83,14 @@ struct CollectionView: View {
                     
                     // Inline Filter Picker
                     
-                    Picker("Filter", selection: $selectedType) {
-                        ForEach(PhraseType.allCases, id: \.self) { type in
-                            Text(type.description).tag(type)
-                        }
+                    Button {
+                        showingFilterOptions = true
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.accentColor)
                     }
-                    .pickerStyle(MenuPickerStyle())  // Compact style with menu dropdown
                     .padding(.horizontal, 5)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(8)
                 }
                 .frame(width: Global.screenWidth*0.85)
                 
@@ -90,16 +102,15 @@ struct CollectionView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         
-                        ForEach(groupedPhrasesByLetter, id: \.letter) { group in
+                        ForEach(groupedPhrases, id: \.title) { group in
                             Section(header:
                                 HStack {
-                                    Text(group.letter)
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
+                                    Text(group.title)
+                                    .font(selectedOrder == .alphabetical ? .title2 : .title3)
+                                        .fontWeight(.semibold)
                                         .foregroundColor(.accentColor)
                                     Spacer()
                                 }
-                                    
                                 .padding(.top, 10)
                             ) {
                                 ForEach(group.phrases, id: \.self) { phrase in
@@ -114,6 +125,7 @@ struct CollectionView: View {
                             .frame(width: Global.screenWidth*0.85)
                         }
 
+
                         
                     }
                     .padding(.horizontal)
@@ -121,6 +133,13 @@ struct CollectionView: View {
             }
             .padding(.top)
         }
+        
+        .confirmationDialog("Choose Order", isPresented: $showingFilterOptions, titleVisibility: .visible) {
+            Button("Alphabetical") { selectedOrder = .alphabetical }
+            Button("By Date") { selectedOrder = .byDate }
+            Button("Cancel", role: .cancel) { }
+        }
+
     }
     
     func formatDate(_ date: Date) -> String {
