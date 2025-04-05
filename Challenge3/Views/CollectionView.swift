@@ -44,6 +44,18 @@ struct CollectionView: View {
         .sorted { $0.key > $1.key } // Sort by Date in descending order
         .map { (date: $0.key, phrases: $0.value) } // Convert to an array of tuples
     }
+    
+    var groupedPhrasesByLetter: [(letter: String, phrases: [LearnElement])] {
+        Dictionary(grouping: filteredPhrases) { phrase in
+            String(phrase.userEntry.prefix(1)).uppercased()
+        }
+        .mapValues { phrases in
+            phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
+        }
+        .sorted { $0.key < $1.key }
+        .map { (letter: $0.key, phrases: $0.value) }
+    }
+
 
     
     var body: some View {
@@ -78,24 +90,30 @@ struct CollectionView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         
-                        ForEach(groupedPhrasesByDay, id: \.date) { group in
-                            Section(header: Text(formatDate(group.date))
-                                .font(.headline)
-                                .foregroundColor(.accentColor)
+                        ForEach(groupedPhrasesByLetter, id: \.letter) { group in
+                            Section(header:
+                                HStack {
+                                    Text(group.letter)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                        .foregroundColor(.accentColor)
+                                    Spacer()
+                                }
+                                    
                                 .padding(.top, 10)
                             ) {
                                 ForEach(group.phrases, id: \.self) { phrase in
                                     NavigationLink {
                                         CollectionDetailView(phrase: phrase)
-                                        
                                     } label: {
                                         WordElementView(phrase: phrase, isCollection: true)
                                             .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                            
                                     }
                                 }
                             }
+                            .frame(width: Global.screenWidth*0.85)
                         }
+
                         
                     }
                     .padding(.horizontal)
