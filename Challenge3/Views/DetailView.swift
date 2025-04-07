@@ -159,7 +159,7 @@ struct DetailView: View {
 
 
 #Preview {
-    DetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Non voglio essere un loco pazzesco e solitario pure io", explanation: ""))
+    DetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Famm nu tagl che m ", explanation: ""))
 }
 
 

@@ -37,6 +37,7 @@ struct ContentView: View {
     @AppStorage("userName") private var userName: String = "No name set"
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     @State private var isPresenting = true
+    @State private var isPresentingInfo = false
     @Environment(\.dismiss) var dismiss
     
     
@@ -66,10 +67,19 @@ struct ContentView: View {
                     Spacer()
                     
                     Button {
+                        isPresentingInfo = true
+                    } label: {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundStyle(.accent)
+                            .font(.title3)
+                    }
+                    
+                    Button {
                         isPresenting = true
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .foregroundStyle(.accent)
+                            .font(.title3)
                     }
                     
                 }.frame(maxWidth: Global.screenWidth*0.85)
@@ -145,6 +155,7 @@ struct ContentView: View {
                         
                         Spacer()
                     }.padding()
+                        .frame(maxWidth: Global.screenWidth*0.85)
                     
                 } else {
                     
@@ -284,6 +295,9 @@ struct ContentView: View {
                     }
         .fullScreenCover(isPresented: $isPresenting, onDismiss: didDismiss) {
             WelcomeView()
+        }
+        .sheet(isPresented: $isPresentingInfo) {
+            AboutView()
         }
 
     }

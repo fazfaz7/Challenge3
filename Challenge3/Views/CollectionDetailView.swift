@@ -12,66 +12,72 @@ struct CollectionDetailView: View {
     @Environment(\.modelContext) var modelContext
     
     var body: some View {
-        
-        VStack(alignment: .leading) {
-            HStack {
-                VStack(alignment: .leading) {
-                    VStack(alignment: .leading) {
-                        Text(phrase.learnType == .newPhrase ? "New Phrase" : "How to Say?...")
-                            .foregroundStyle(.accent)
-                            .font(.title3)
-                        
-                        
-                        
-                        Text(phrase.userEntry)
-                            .fontWeight(.bold)
-                            .font(.largeTitle)
-                            .italic()
-                    }.padding(5)
-                    
-                    
-                    
-                    VStack(alignment: .leading) {
-                        
-                        Text("Explanation/Meaning")
-                            .foregroundStyle(.accent)
-                            .font(.title3)
-                            .padding(.bottom,3)
-                        
-                        Text(phrase.explanation)
-                            .font(.title3)
-                        
-                    }.padding(5)
-                    
-                    
-                    VStack(alignment: .leading) {
-                        
-                        Text("Category")
-                            .foregroundStyle(.accent)
-                            .font(.title3)
-                            .padding(.bottom,3)
-                        
-                        HStack {
+        ZStack {
+            Color.gray.opacity(0.15).ignoresSafeArea()
+                    VStack(alignment: .center) {
+
+                        VStack(spacing: 20) {
+                            VStack {
+                                Text("New Phrase")
+                                    .padding(.horizontal,10)
+                                    .padding(.vertical,5)
+                                    .background(RoundedRectangle(cornerRadius: 20).fill(.accent))
+                                    .foregroundStyle(.white)
+                                    .font(.callout)
+                                    .fontWeight(.medium)
+                                
+                                Text(phrase.userEntry)
+                                    .font(.largeTitle)
+                                    .fontWeight(.semibold)
+                           
+                            Divider()
+                                .padding(.horizontal,20)
+                            }
+                            VStack {
+                                Text("Explanation/Meaning")
+                                    .foregroundStyle(.accent)
+                                    .padding(.bottom,3)
+                                    .fontWeight(.medium)
+                                Text(phrase.explanation)
+                                    
+                                
+                            }.font(.title3)
                             
                             if let category = phrase.category {
-                                Text(category.emoji)
-                                Text(category.name)
+                            Divider()
+                                .padding(.horizontal,20)
+                            
+                                VStack {
+                                    Text("Category")
+                                        .foregroundStyle(.accent)
+                                        .padding(.bottom,3)
+                                        .fontWeight(.medium)
+                                    
+                                    HStack {
+                                        
+                                        
+                                        Text(category.emoji)
+                                        Text(category.name)
+                                        
+                                    }
+                                }.font(.title3)
+                                
                             }
                         }
-                        .font(.title3)
+                        .padding(20)
+                        .frame(width: Global.screenWidth*0.80)
+                        .background(RoundedRectangle(cornerRadius: 20).fill(.white).shadow(radius: 0.5))
                         
-                    }.padding(5)
+                        
+                        
+                    }
                     
-                   
                     
                     
-                }
-                Spacer()
-            }
-            
-            Spacer()
-        }.padding(20)
-            .frame(width: 400)
+                    
+
+        }
+        
     }
 }
 
