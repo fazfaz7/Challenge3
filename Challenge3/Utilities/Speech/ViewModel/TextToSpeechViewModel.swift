@@ -5,6 +5,7 @@
 //  Created by Jesus Cruz Suárez on 14/10/24.
 //
 
+/*
 import Foundation
 
 final class TextToSpeechViewModel: ObservableObject {
@@ -49,3 +50,4 @@ final class TextToSpeechViewModel: ObservableObject {
         }
     }
 }
+*/

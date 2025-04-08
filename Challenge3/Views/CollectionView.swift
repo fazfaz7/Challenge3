@@ -16,6 +16,7 @@ enum PhraseType: String, CaseIterable {
 enum CollectionOrder: String, CaseIterable {
     case alphabetical = "Alphabetical"
     case byDate = "By Date"
+    case byCategory = "By Category"
 }
 
 struct CollectionView: View {
@@ -32,7 +33,7 @@ struct CollectionView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State private var selectedOrder: CollectionOrder = .alphabetical
     @State private var showingFilterOptions = false
-
+    @State private var expandedCategories: Set<String> = []
 
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
@@ -65,7 +66,33 @@ struct CollectionView: View {
             }
             .sorted { $0.key > $1.key }
             .map { (title: formatDate($0.key), phrases: $0.value) }
+            
+        case .byCategory:
+            return Dictionary(grouping: filteredPhrases) { phrase in
+                if let category = phrase.category {
+                    "\(category.name) \(category.emoji) "
+                } else {
+                    "No Category"
+                }
+            }
+            .mapValues { phrases in
+                phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
+            }
+            .sorted { lhs, rhs in
+                if lhs.key == "No Category" { return false }
+                if rhs.key == "No Category" { return true }
+                return lhs.key < rhs.key
+            }
+
+            .map { (title: $0.key, phrases: $0.value) }
+
+
         }
+        
+       
+
+        
+        
     }
 
 
@@ -105,20 +132,43 @@ struct CollectionView: View {
                         ForEach(groupedPhrases, id: \.title) { group in
                             Section(header:
                                 HStack {
-                                    Text(group.title)
-                                    .font(selectedOrder == .alphabetical ? .title2 : .title3)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.accentColor)
+                                    if selectedOrder == .byCategory {
+                                        Button {
+                                            if expandedCategories.contains(group.title) {
+                                                expandedCategories.remove(group.title)
+                                            } else {
+                                                expandedCategories.insert(group.title)
+                                            }
+                                        } label: {
+                                            HStack {
+                                                Image(systemName: expandedCategories.contains(group.title) ? "chevron.down.circle.fill" : "chevron.right.circle.fill")
+                                                    .foregroundColor(.accentColor)
+                                                Text(group.title)
+                                                    .font(selectedOrder == .alphabetical ? .title2 : .title3)
+                                                    .fontWeight(.semibold)
+                                                    .foregroundColor(.accentColor)
+                                            }
+                                        }
+                                    } else {
+                                        HStack {
+                                            Text(group.title)
+                                                .font(selectedOrder == .alphabetical ? .title2 : .title3)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(.accentColor)
+                                        }
+                                    }
                                     Spacer()
                                 }
                                 .padding(.top, 10)
                             ) {
-                                ForEach(group.phrases, id: \.self) { phrase in
-                                    NavigationLink {
-                                        CollectionDetailView(phrase: phrase)
-                                    } label: {
-                                        WordElementView(phrase: phrase, isCollection: true)
-                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                if selectedOrder != .byCategory || expandedCategories.contains(group.title) {
+                                    ForEach(group.phrases, id: \.self) { phrase in
+                                        NavigationLink {
+                                            CollectionDetailView(phrase: phrase)
+                                        } label: {
+                                            WordElementView(phrase: phrase, isCollection: true)
+                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                        }
                                     }
                                 }
                             }
@@ -126,9 +176,11 @@ struct CollectionView: View {
                         }
 
 
+
                         
                     }
                     .padding(.horizontal)
+                    .animation(.easeInOut(duration: 0.40), value: expandedCategories)
                 }
             }
             .padding(.top)
@@ -137,6 +189,7 @@ struct CollectionView: View {
         .confirmationDialog("Choose Order", isPresented: $showingFilterOptions, titleVisibility: .visible) {
             Button("Alphabetical") { selectedOrder = .alphabetical }
             Button("By Date") { selectedOrder = .byDate }
+            Button("By Category") {selectedOrder = .byCategory}
             Button("Cancel", role: .cancel) { }
         }
 

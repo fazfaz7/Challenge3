@@ -11,6 +11,10 @@ struct CollectionDetailView: View {
     @ObservedObject var phrase: LearnElement
     @Environment(\.modelContext) var modelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
+    @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
+    
+
     
     var body: some View {
         ZStack {
@@ -19,13 +23,36 @@ struct CollectionDetailView: View {
 
                         VStack(spacing: 20) {
                             VStack {
-                                Text("New Phrase")
-                                    .padding(.horizontal,10)
-                                    .padding(.vertical,5)
-                                    .background(RoundedRectangle(cornerRadius: 20).fill(.accent))
-                                    .foregroundStyle(.white)
-                                    .font(.callout)
-                                    .fontWeight(.medium)
+                                
+                                HStack {
+                                    Image(systemName: "pencil")
+                                        .font(.callout)
+                                    Spacer()
+                                    Button {
+                                        viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
+                                    } label: {
+                                        Image(systemName: "speaker.wave.3.fill")
+                                            .font(.callout)
+                                        
+                                    }
+                                }
+                                
+                                HStack {
+                                    
+                                    Spacer()
+                                    Text("New Phrase")
+                                        .padding(.horizontal,10)
+                                        .padding(.vertical,5)
+                                        .background(RoundedRectangle(cornerRadius: 20).fill(.accent))
+                                        .foregroundStyle(.white)
+                                        .font(.callout)
+                                        .fontWeight(.medium)
+                                    
+                                    Spacer()
+                                    
+                                    
+                                    
+                                }
                                 
                                 Text(phrase.userEntry)
                                     .font(.largeTitle)
@@ -69,9 +96,11 @@ struct CollectionDetailView: View {
                             }
                         }
                         .padding(20)
+                        .padding(.vertical,5)
                         .frame(width: Global.screenWidth*0.80)
                         .background(RoundedRectangle(cornerRadius: 20).fill(colorScheme == .dark ? Color.secondary.opacity(0.1)  : .white).shadow(radius: 0.5))
                         .frame(maxHeight: Global.screenHeight*0.50)
+                        
                         
                         
                         

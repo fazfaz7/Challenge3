@@ -5,6 +5,7 @@
 //  Created by Jesus Cruz Suárez on 14/10/24.
 //
 
+/*
 import AVFAudio
 import Foundation
 
@@ -104,3 +105,4 @@ class TextToSpeechService: NSObject, AVSpeechSynthesizerDelegate, @preconcurrenc
         }
     }
 }
+*/

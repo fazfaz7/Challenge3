@@ -21,6 +21,7 @@ struct DetailView: View {
     @State var showTranslation = false
     @AppStorage("userName") private var userName: String = "No name set"
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
 
     
     var body: some View {
@@ -48,7 +49,7 @@ struct DetailView: View {
                         HStack {
                             ZStack {
                                 Circle()
-                                    .frame(width: 48)
+                                    .frame(width: 42)
                                     .foregroundStyle(.accent)
                                 
                                 Button {
@@ -56,7 +57,27 @@ struct DetailView: View {
                                 } label: {
                                     Image(systemName: "translate")
                                         .foregroundStyle(.white)
+                                        .font(.callout)
 
+                                    
+                                }
+                                
+                            }                    .fixedSize(horizontal: false, vertical: true)
+                            
+                            ZStack {
+                                Circle()
+                                    .frame(width: 42)
+                                    .foregroundStyle(.accent)
+                                
+                                Button {
+                                    viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
+                               
+
+                                } label: {
+                                    Image(systemName: "speaker.3.fill")
+                                                                   .foregroundStyle(.white)
+                                                                   .font(.callout)
+                                                                  
                                     
                                 }
                                 
@@ -146,9 +167,6 @@ struct DetailView: View {
                         .presentationDetents([.fraction(0.85)])
                     
                 }
-                .onAppear {
-                    viewModel.inputText = phrase.userEntry
-                }
                 .translationPresentation(isPresented: $showTranslation, text: phrase.userEntry) { translatedText in
                     
                     phrase.explanation = translatedText
@@ -182,3 +200,45 @@ struct ChooseCategoryView: View {
         }
     }
 }
+
+
+class TextToSpeechService {
+    private let synthesizer = AVSpeechSynthesizer()
+
+    func speak(text: String, language: String) {
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.rate = 0.5
+        utterance.pitchMultiplier = 1.0
+        
+        if language.contains("Italian") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
+        } else if language.contains("Spanish") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+        } else if language.contains("French") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "fr-FR")
+        } else if language.contains("German") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "de-DE")
+        } else {
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        }
+
+        synthesizer.speak(utterance)
+    }
+}
+
+
+class TextToSpeechViewModel: ObservableObject {
+    private let textToSpeechService: TextToSpeechService
+
+    init(textToSpeechService: TextToSpeechService) {
+        self.textToSpeechService = textToSpeechService
+    }
+
+    func speak(text: String, language: String) {
+        textToSpeechService.speak(text: text, language: language)
+    }
+}
+
+
+
+
