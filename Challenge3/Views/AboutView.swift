@@ -9,10 +9,9 @@ import SwiftUI
 
 struct AboutView: View {
     var body: some View {
-        ZStack {
-            Color.gray.opacity(0.15).ignoresSafeArea()
+        
 
-            VStack(spacing: 30) {
+            VStack(spacing: 20) {
                 Spacer()
                 VStack(spacing: 20) {
                     Image("LyngoIcon")
@@ -59,12 +58,12 @@ struct AboutView: View {
                 }
                 .padding(20)
                 .padding(.vertical,5)
-                .frame(width: Global.screenWidth*0.80)
-                .background(RoundedRectangle(cornerRadius: 28).fill(.white).shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4))
+                .frame(width: Global.screenWidth*0.90)
+                //.background(RoundedRectangle(cornerRadius: 28).fill(.white).shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4))
                 Spacer()
                 Text("Version 1.0 © 2025 WordNest")
             }
-        }
+        
     }
 }
 

@@ -10,6 +10,7 @@ import SwiftUI
 struct CollectionDetailView: View {
     @ObservedObject var phrase: LearnElement
     @Environment(\.modelContext) var modelContext
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     
     var body: some View {
         ZStack {
@@ -29,6 +30,8 @@ struct CollectionDetailView: View {
                                 Text(phrase.userEntry)
                                     .font(.largeTitle)
                                     .fontWeight(.semibold)
+                                    .multilineTextAlignment(.center)
+                                    .minimumScaleFactor(0.8)
                            
                             Divider()
                                 .padding(.horizontal,20)
@@ -39,6 +42,7 @@ struct CollectionDetailView: View {
                                     .padding(.bottom,3)
                                     .fontWeight(.medium)
                                 Text(phrase.explanation)
+                                    .multilineTextAlignment(.center)
                                     
                                 
                             }.font(.title3)
@@ -66,7 +70,8 @@ struct CollectionDetailView: View {
                         }
                         .padding(20)
                         .frame(width: Global.screenWidth*0.80)
-                        .background(RoundedRectangle(cornerRadius: 20).fill(.white).shadow(radius: 0.5))
+                        .background(RoundedRectangle(cornerRadius: 20).fill(colorScheme == .dark ? Color.secondary.opacity(0.1)  : .white).shadow(radius: 0.5))
+                        .frame(maxHeight: Global.screenHeight*0.50)
                         
                         
                         
@@ -82,5 +87,5 @@ struct CollectionDetailView: View {
 }
 
 #Preview {
-    CollectionDetailView(phrase: LearnElement(learnType: .newPhrase ,userEntry: "Tuttavia", explanation: "Pero"))
+    CollectionDetailView(phrase: LearnElement(learnType: .newPhrase ,userEntry: "Ancora non so cosa sto facendo qua. ma ti voglio aiutare semopre", explanation: "Pero, locura! Nosotros nunca sabemos que está sucediendo por aca lol"))
 }
