@@ -29,7 +29,7 @@ struct WelcomeView: View {
             VStack {
                 HStack {
 
-                    Text("Lyngo")
+                    Text("WordNest")
                         .font(.title)
                         .fontWeight(.bold)
                     

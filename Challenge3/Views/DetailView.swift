@@ -22,6 +22,7 @@ struct DetailView: View {
     @AppStorage("userName") private var userName: String = "No name set"
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
+    @State var temporaryPhrase: String = ""
 
     
     var body: some View {
@@ -104,6 +105,8 @@ struct DetailView: View {
                     
                     
                     VStack(alignment:.leading) {
+                        
+                        
                         Text("Category")
                             .font(.title3)
                             .foregroundStyle(.primary)
@@ -130,11 +133,16 @@ struct DetailView: View {
                             }.padding()
                                 .frame(width: Global.screenWidth*0.85, height:50).background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.15)))
                         }
-                    }
+                    }.padding(.vertical)
                     HStack {
                         Spacer()
                         Button {
                             
+                            if phrase.learnType == .howToSay {
+                                temporaryPhrase = phrase.explanation
+                                phrase.explanation = phrase.userEntry
+                                phrase.userEntry = temporaryPhrase
+                            }
                             phrase.category = selectedCategory
                                 phrase.isCompleted = true
                                 try? modelContext.save()

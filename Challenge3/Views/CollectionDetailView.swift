@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CollectionDetailView: View {
     @ObservedObject var phrase: LearnElement
@@ -13,7 +14,8 @@ struct CollectionDetailView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
-    
+    @State private var isEditing = false
+
 
     
     var body: some View {
@@ -25,8 +27,12 @@ struct CollectionDetailView: View {
                             VStack {
                                 
                                 HStack {
-                                    Image(systemName: "pencil")
-                                        .font(.callout)
+                                    Button {
+                                        isEditing = true
+                                    } label: {
+                                        Image(systemName: "pencil")
+                                            .font(.title3)
+                                    }
                                     Spacer()
                                     Button {
                                         viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
@@ -99,7 +105,7 @@ struct CollectionDetailView: View {
                         .padding(.vertical,5)
                         .frame(width: Global.screenWidth*0.80)
                         .background(RoundedRectangle(cornerRadius: 20).fill(colorScheme == .dark ? Color.secondary.opacity(0.1)  : .white).shadow(radius: 0.5))
-                        .frame(maxHeight: Global.screenHeight*0.50)
+                        .frame(maxHeight: Global.screenHeight*0.55)
                         
                         
                         
@@ -110,11 +116,79 @@ struct CollectionDetailView: View {
                     
                     
 
+        }.sheet(isPresented: $isEditing) {
+            EditPhraseView(phrase: phrase)
         }
+
         
     }
 }
 
 #Preview {
     CollectionDetailView(phrase: LearnElement(learnType: .newPhrase ,userEntry: "Ancora non so cosa sto facendo qua. ma ti voglio aiutare semopre", explanation: "Pero, locura! Nosotros nunca sabemos que está sucediendo por aca lol"))
+}
+
+
+
+struct EditPhraseView: View {
+    @ObservedObject var phrase: LearnElement
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
+    
+    @Query(sort: \Category.dateAdded) var categories: [Category]
+    
+    @State private var editedEntry: String = ""
+    @State private var editedExplanation: String = ""
+    @State private var selectedCategory: Category?
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section(header: Text("Phrase")) {
+                    TextField("Enter phrase", text: $editedEntry)
+                }
+                
+                Section(header: Text("Explanation")) {
+                    TextField("Enter explanation", text: $editedExplanation)
+                }
+                
+                Section(header: Text("Category")) {
+                    Picker("Select Category", selection: $selectedCategory) {
+                        ForEach(categories, id: \.self) { category in
+                            HStack {
+                                //Text(category.emoji)
+                                Text("\(category.emoji) \(category.name)")
+                            }.tag(Optional(category))
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Edit Phrase")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        phrase.userEntry = editedEntry
+                        phrase.explanation = editedExplanation
+                        phrase.category = selectedCategory
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            print("Error saving changes: \(error)")
+                        }
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+            .onAppear {
+                editedEntry = phrase.userEntry
+                editedExplanation = phrase.explanation
+                selectedCategory = phrase.category
+            }
+        }
+    }
 }

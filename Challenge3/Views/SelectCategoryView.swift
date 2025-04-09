@@ -117,6 +117,7 @@ struct AddCategoryView: View {
                             .overlay {
                                 EmojiTextFieldWrapper(text: $emojiText, font: UIFont.systemFont(ofSize: 30))
                                     .padding(30)
+                                
                             }
                         
                     
@@ -136,28 +137,29 @@ struct AddCategoryView: View {
             }
             
             Button {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    withAnimation{
-                        if !categoryName.isEmpty && !emojiText.isEmpty {
-                            modelContext.insert(Category(name: categoryName, emoji: emojiText))
+                if !categoryName.isEmpty && !emojiText.isEmpty {
+                    withAnimation {
+                        let newCategory = Category(name: categoryName, emoji: emojiText)
+                        modelContext.insert(newCategory)
                         try? modelContext.save()
-                        }
                     }
+                    dismiss() // Solo si todo fue correcto
                 }
-                dismiss()
             } label: {
                 HStack {
                     Text("Add category")
                         .foregroundStyle(.white)
                     Image(systemName: "plus")
                         .foregroundStyle(.white)
-                }.padding(12)
-                    .font(.title3)
-                    .frame(width: Global.screenWidth*0.85, height: 55)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(.accent))
-                    .shadow(radius: 1)
-                
+                }
+                .padding(12)
+                .font(.title3)
+                .frame(width: Global.screenWidth*0.85, height: 55)
+                .background(RoundedRectangle(cornerRadius: 10).fill((categoryName.isEmpty || emojiText.isEmpty) ? .gray : .accent))
+                .shadow(radius: 1)
             }
+            .disabled(categoryName.isEmpty || emojiText.isEmpty)
+
         }
         
         .frame(width: Global.screenWidth*0.85)

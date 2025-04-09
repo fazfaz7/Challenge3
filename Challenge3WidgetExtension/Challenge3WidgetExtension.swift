@@ -63,6 +63,7 @@ struct Challenge3WidgetExtensionEntryView : View {
                     .fontWeight(.bold)
                     .italic()
                     .foregroundStyle(.white)
+                    .minimumScaleFactor(0.75)
                 
                 HStack {
                     Text(myphrase.explanation)

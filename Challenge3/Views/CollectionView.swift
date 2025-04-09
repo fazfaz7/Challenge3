@@ -34,6 +34,7 @@ struct CollectionView: View {
     @State private var selectedOrder: CollectionOrder = .alphabetical
     @State private var showingFilterOptions = false
     @State private var expandedCategories: Set<String> = []
+    
 
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
@@ -41,7 +42,7 @@ struct CollectionView: View {
             let matchesType =
             (selectedType == .howToSay && phrase.learnType == .howToSay) ||
             (selectedType == .newPhrase && phrase.learnType == .newPhrase)
-            return matchesSearch && matchesType
+            return matchesSearch //&& matchesType
         }
     }
     

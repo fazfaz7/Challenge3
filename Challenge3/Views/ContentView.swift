@@ -38,8 +38,8 @@ struct ContentView: View {
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     @State private var isPresenting = true
     @State private var isPresentingInfo = false
+    @State private var isPresentingSettings = false
     @Environment(\.dismiss) var dismiss
-    
     
     var body: some View {
         NavigationStack {
@@ -75,7 +75,7 @@ struct ContentView: View {
                     }
                     
                     Button {
-                        isPresenting = true
+                        isPresentingSettings = true
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .foregroundStyle(.accent)
@@ -299,6 +299,9 @@ struct ContentView: View {
         .sheet(isPresented: $isPresentingInfo) {
             AboutView()
         }
+        .sheet(isPresented: $isPresentingSettings) {
+            SectionSettingsView()
+        }
 
     }
     
@@ -486,4 +489,40 @@ struct NewPhraseView: View {
     }
     
 
+}
+
+
+struct SectionSettingsView: View {
+    @AppStorage("userName") var userName: String = ""
+    @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
+    @Environment(\.dismiss) var dismiss
+    
+    let languages = ["Italian 🇮🇹", "Spanish 🇪🇸", "German 🇩🇪", "French 🇫🇷"]
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section(header: Text("Nickname")) {
+                    TextField("Enter your nickname", text: $userName)
+                }
+                
+                Section(header: Text("Language you're learning")) {
+                    Picker("Select Language", selection: $selectedLanguage) {
+                        ForEach(languages, id: \.self) { lang in
+                            Text(lang)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+            }
+            .navigationTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
 }
