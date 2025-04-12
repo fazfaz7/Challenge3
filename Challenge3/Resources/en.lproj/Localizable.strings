@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  Challenge3
+
+  Created by Adrian Emmanuel Faz Mercado on 10/04/25.
+  
+*/
+
+"New phrase" = "New phrase";
+"How to say?" = "How to say?";
+"pending_message" = "%@, write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!";
+

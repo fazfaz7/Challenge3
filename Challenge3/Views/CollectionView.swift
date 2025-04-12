@@ -185,6 +185,7 @@ struct CollectionView: View {
                 }
             }
             .padding(.top)
+            
         }
         
         .confirmationDialog("Choose Order", isPresented: $showingFilterOptions, titleVisibility: .visible) {

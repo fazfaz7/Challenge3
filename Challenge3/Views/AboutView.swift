@@ -20,7 +20,7 @@ struct AboutView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .frame(width: 100)
                     
-                    Text("About WordNest")
+                    Text("About ItMeans")
                         .font(.title)
                         .fontWeight(.bold)
                 }
@@ -28,12 +28,12 @@ struct AboutView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("What is WordNest?")
+                        Text("What is ItMeans?")
                             .foregroundStyle(.accent)
                             .fontWeight(.semibold)
                             .font(.title3)
                         
-                        Text("WordNest is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language.")
+                        Text("ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language.")
                             .font(.callout)
                             .multilineTextAlignment(.leading)
                     }
@@ -61,7 +61,7 @@ struct AboutView: View {
                 .frame(width: Global.screenWidth*0.90)
                 //.background(RoundedRectangle(cornerRadius: 28).fill(.white).shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4))
                 Spacer()
-                Text("Version 1.0 © 2025 WordNest")
+                Text("Version 1.0 © 2025 ItMeans")
             }
         
     }

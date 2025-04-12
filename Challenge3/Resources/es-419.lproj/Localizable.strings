@@ -1,0 +1,33 @@
+/* 
+  Localizable.strings
+  Challenge3
+
+  Created by Adrian Emmanuel Faz Mercado on 10/04/25.
+  
+*/
+
+"New phrase" = "Nueva frase";
+"New Phrase" = "Nueva Frase";
+"How to say?" = "¿Cómo decir?";
+"My Pendings" = "Mis Pendientes";
+"No pendings!" = "No tienes pendientes!";
+"Consider adding new phrases to your collection. There's always something new to learn!" = "Prueba agregando nuevas frases o palabras a tu colección. ¡Siempre hay algo nuevo que aprender!";
+"My Collection" = "Mi Colección";
+"Search for a word or phrase" = "Busca una palabra o frase";
+"Explanation/Meaning" = "Explicación/Significado";
+"Category" = "Categoría";
+"New Phrases" = "Frases Nuevas";
+", write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!" = ", Escribe la explicación de la frase o palabra aquí y termina tu pendiente! Resuelve tu duda y guardalo!";
+"Settings" = "Configuración";
+"Language you're learning" = "Idioma que estás aprendiendo";
+"Select language" = "Elegir idioma";
+"Finish pending" = "Completar pendiente";
+"Choose order" = "Elegir orden";
+"Alphabetical" = "Alfabéticamente";
+"By Date" = "Por Fecha";
+"By Category" = "Por Categoría";
+"Phrase" = "Frase";
+"Explanation" = "Explicación";
+"Select Category" = "Elegir categoría";
+"pending_message" = "%@, escribe la explicación de la frase o palabra aquí y completa tu pendiente. ¡Aclara tu duda y guárdalo!";
+

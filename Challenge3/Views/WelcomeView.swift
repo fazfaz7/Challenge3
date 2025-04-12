@@ -10,7 +10,7 @@ import SwiftUI
 struct WelcomeView: View {
     @AppStorage("userName") var userName: String = ""
     @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
-    let languages = ["Italian 🇮🇹", "Spanish 🇪🇸", "German 🇩🇪", "French 🇫🇷"]
+    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
     @State var showAll: Bool = false
     @Environment(\.dismiss) var dismiss
     @AppStorage("isFirstLaunch") var isFirstLaunch: Bool = true
@@ -29,7 +29,7 @@ struct WelcomeView: View {
             VStack {
                 HStack {
 
-                    Text("WordNest")
+                    Text("ItMeans")
                         .font(.title)
                         .fontWeight(.bold)
                     

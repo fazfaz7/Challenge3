@@ -91,10 +91,11 @@ struct DetailView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 20){
-                    Text("\(userName), write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!")
+                    Text(String(format: NSLocalizedString("pending_message", comment: ""), userName))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
+
                     
                 
                     
@@ -155,9 +156,9 @@ struct DetailView: View {
                                 Image(systemName: "checkmark")
                             }
                             .padding(15)
-                            .background(RoundedRectangle(cornerRadius: 10).fill(Color.accentColor))
+                            .background(RoundedRectangle(cornerRadius: 10).fill(phrase.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray.opacity(0.6) : Color.accentColor))
                             .foregroundStyle(.white)
-                        }
+                        }.disabled(phrase.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         Spacer()
                     }
                     
@@ -179,6 +180,8 @@ struct DetailView: View {
                     
                     phrase.explanation = translatedText
                 }
+        } .onTapGesture {
+            hideKeyboard()
         }
     }
 }
@@ -210,6 +213,8 @@ struct ChooseCategoryView: View {
 }
 
 
+import AVFoundation
+
 class TextToSpeechService {
     private let synthesizer = AVSpeechSynthesizer()
 
@@ -217,17 +222,27 @@ class TextToSpeechService {
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = 0.5
         utterance.pitchMultiplier = 1.0
-        
+
         if language.contains("Italian") {
             utterance.voice = AVSpeechSynthesisVoice(language: "it-IT")
         } else if language.contains("Spanish") {
-            utterance.voice = AVSpeechSynthesisVoice(language: "es-MX")
+            utterance.voice = AVSpeechSynthesisVoice(language: "es-MX") // or "es-ES" for Spain
         } else if language.contains("French") {
             utterance.voice = AVSpeechSynthesisVoice(language: "fr-FR")
         } else if language.contains("German") {
             utterance.voice = AVSpeechSynthesisVoice(language: "de-DE")
+        } else if language.contains("Chinese") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "zh-CN") // Mandarin (China)
+        } else if language.contains("Japanese") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        } else if language.contains("Portuguese") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "pt-PT") // Portugal, or "pt-BR" for Brazil
+        } else if language.contains("Turkish") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "tr-TR")
+        } else if language.contains("English") {
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-GB") // British English
         } else {
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-US") // Default fallback
         }
 
         synthesizer.speak(utterance)

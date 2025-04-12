@@ -93,7 +93,7 @@ struct ContentView: View {
                         VStack(spacing: 5) {
                             Image(systemName: "book.fill")
                                 .font(.title)
-                            Text("New phrase")
+                            Text(LocalizedStringKey("New expression"))
                             
                         }.foregroundStyle(.white)
                             .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
@@ -121,7 +121,7 @@ struct ContentView: View {
                 
                 HStack(spacing: 20) {
                     VStack {
-                        Text("My Pendings")
+                        Text("Pending tasks")
                             .font(.title)
                             .fontWeight(.medium)
                     }
@@ -257,6 +257,9 @@ struct ContentView: View {
                 
                     .presentationDetents([.fraction(0.38)])
             }
+            .onTapGesture {
+                       hideKeyboard()
+                   }
             
             Spacer()
         }.onAppear {
@@ -497,7 +500,8 @@ struct SectionSettingsView: View {
     @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
     @Environment(\.dismiss) var dismiss
     
-    let languages = ["Italian 🇮🇹", "Spanish 🇪🇸", "German 🇩🇪", "French 🇫🇷"]
+    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
+
     
     var body: some View {
         NavigationStack {
@@ -524,5 +528,13 @@ struct SectionSettingsView: View {
                 }
             }
         }
+    }
+}
+
+
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }

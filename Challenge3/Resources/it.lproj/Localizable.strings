@@ -1,0 +1,12 @@
+/* 
+  Localizable.strings
+  Challenge3
+
+  Created by Adrian Emmanuel Faz Mercado on 10/04/25.
+  
+*/
+
+"New phrase" = "Nuova frase";
+"How to say?" = "Come si dice?";
+"pending_message" = "%@, scrivi la spiegazione della frase o parola qui e completa il tuo elemento in sospeso! Chiarisci il tuo dubbio e salvalo!";
+
