@@ -39,6 +39,8 @@ struct ContentView: View {
     @State private var isPresenting = true
     @State private var isPresentingInfo = false
     @State private var isPresentingSettings = false
+    @State private var selectedSegment = 0
+    @AppStorage("hasInsertedDefaultCategories") private var hasInsertedDefaultCategories: Bool = false
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -59,8 +61,6 @@ struct ContentView: View {
                         Spacer()
                         
                         
-                        
-
                         
                     }.frame(width: Global.screenWidth*0.67, height: Global.screenHeight*0.08)
                     
@@ -93,7 +93,7 @@ struct ContentView: View {
                         VStack(spacing: 5) {
                             Image(systemName: "book.fill")
                                 .font(.title)
-                            Text(LocalizedStringKey("New expression"))
+                            Text(LocalizedStringKey("New Expression"))
                             
                         }.foregroundStyle(.white)
                             .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
@@ -109,7 +109,7 @@ struct ContentView: View {
                         VStack(spacing: 5) {
                             Image(systemName: "rectangle.and.pencil.and.ellipsis")
                                 .font(.title)
-                            Text("How to say?")
+                            Text("How to say...?")
                             
                         }.foregroundStyle(.white)
                             .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
@@ -121,134 +121,130 @@ struct ContentView: View {
                 
                 HStack(spacing: 20) {
                     VStack {
-                        Text("Pending tasks")
+                        Text("Pending to review")
                             .font(.title)
                             .fontWeight(.medium)
                     }
                     
                     Text("\(testPhrases.count)")
-                        .padding(9)
+                        .padding(8)
                         .background(Circle().fill(.gray.opacity(0.6)))
-                        .font(.caption)
+                        .font(.caption2)
                         .foregroundStyle(.white)
                     Spacer()
                 }.frame(width: Global.screenWidth*0.85)
-                    .padding(.bottom,5)
                 
-                if testPhrases.isEmpty {
-                    VStack(alignment: .center, spacing: 10) {
-                        Spacer()
-                        Image(systemName: "tray")
-                            .font(.largeTitle)
-                            .foregroundStyle(.secondary)
-                        
-                        Text("No pendings!")
-                            .fontWeight(.semibold)
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                        
-                        Text("Consider adding new phrases to your collection. There's always something new to learn! ")
-                            .font(.callout)
-                            .foregroundStyle(.secondary)
-                            .multilineTextAlignment(.center)
-                        
-                        Spacer()
-                    }.padding()
+                Picker("", selection: $selectedSegment) {
+                    Text("Expressions").tag(0)
+                    Text("How to say...?").tag(1)
+                }
+                .pickerStyle(.segmented)
+                .padding(.bottom)
+                .frame(maxWidth: Global.screenWidth*0.85)
+                    
+                
+                if selectedSegment == 0  {
+                    let newExpressions = testPhrases.filter {$0.learnType == .newPhrase}
+                    
+                    if newExpressions.isEmpty {
+                        VStack(alignment: .center, spacing: 10) {
+                            Spacer()
+                            Image(systemName: "tray")
+                                .font(.largeTitle)
+                                .foregroundStyle(.secondary)
+                            
+                            Text("No expressions to review!")
+                                .fontWeight(.semibold)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                            
+                            Text("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                            
+                            Spacer()
+                        }.padding()
+                            .frame(maxWidth: Global.screenWidth*0.85)
+                    } else {
+                        VStack {
+
+                                                ScrollView {
+                                                    VStack(spacing: 15) {
+                            
+                                                    
+                                                            ForEach(testPhrases, id: \.self) { phrase in
+                                                                if phrase.learnType == .newPhrase {
+                                                                    WordElementView(phrase: phrase, isCollection: false)
+                                                                }
+                                                        
+                                                        
+                                                            
+                                                        }
+                                                    }
+                            
+                                                }
+                            
+                            
+                            
+                        }
                         .frame(maxWidth: Global.screenWidth*0.85)
+                    }
+
                     
                 } else {
                     
-                    if !howToSayExpanded && !testPhrases.filter({ $0.learnType == .newPhrase }).isEmpty {
+                    let newExpressions = testPhrases.filter {$0.learnType == .howToSay}
                     
-                    HStack {
+                    if newExpressions.isEmpty {
+                        VStack(alignment: .center, spacing: 10) {
+                            Spacer()
+                            Image(systemName: "tray")
+                                .font(.largeTitle)
+                                .foregroundStyle(.secondary)
+                            
+                            Text("No translation doubts yet!")
+                                .fontWeight(.semibold)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                            
+                            Text("Want to know how to say something in the language you're learning? Save it here!")
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                            
+                            Spacer()
+                        }.padding()
+                            .frame(maxWidth: Global.screenWidth*0.85)
+                    } else {
                         VStack {
-                            Text("New Phrases")
-                                .font(.title3)
-                                .fontWeight(.regular
-                                )
-                                .foregroundStyle(.accent)
-                        }
-                        
-                        
-                        
-                        Spacer()
-                        Button {
-                            withAnimation {
-                                newPhrasesExpanded.toggle()
-                            }
-                        } label: {
+
+                                                ScrollView {
+                                                    VStack(spacing: 15) {
                             
-                            if newPhrasesExpanded {
-                                Image(systemName: "rectangle.compress.vertical")
-                                    .foregroundStyle(.accent)
-                            } else {
-                                Image(systemName: "rectangle.expand.vertical")
-                                    .foregroundStyle(.accent)
-                            }
+                                                    
+                                                            ForEach(testPhrases, id: \.self) { phrase in
+                                                                if phrase.learnType == .howToSay {
+                                                                    WordElementView(phrase: phrase, isCollection: false)
+                                                                }
+                                                        
+                                                        
+                                                            
+                                                        }
+                                                    }
+                            
+                                                }
+                            
+                            
                             
                         }
-                    }.frame(width: Global.screenWidth*0.85)
-                    ScrollView {
-                        VStack(spacing: 15) {
-                            
-                            ForEach(testPhrases, id: \.self) { phrase in
-                                
-                                if phrase.learnType == .newPhrase {
-                                    WordElementView(phrase: phrase, isCollection: false)
-                                }
-                                
-                                
-                            }
-                            
-                        }
-                        
-                    }.frame(height: newPhrasesExpanded ? Global.screenHeight*0.45 : Global.screenHeight*0.19)
-                    
-                }
-                    
-                    if !newPhrasesExpanded && !testPhrases.filter({ $0.learnType == .howToSay }).isEmpty{
-                    HStack {
-                        VStack {
-                            Text("How To Say...")
-                                .font(.title3)
-                                .fontWeight(.regular
-                                )
-                                .foregroundStyle(.accent)
-                        }
-                        Spacer()
-                        Button {
-                            withAnimation {
-                                howToSayExpanded.toggle()
-                            }
-                        } label: {
-                            if howToSayExpanded {
-                                Image(systemName: "rectangle.compress.vertical")
-                                    .foregroundStyle(.accent)
-                            } else {
-                                Image(systemName: "rectangle.expand.vertical")
-                                    .foregroundStyle(.accent)
-                            }
-                        }
-                    }.frame(width: Global.screenWidth*0.85)
-                    
-                    
-                        ScrollView {
-                            VStack(spacing: 15) {
-                                
-                                ForEach(testPhrases, id: \.self) { phrase in
-                                    
-                                    if phrase.learnType == .howToSay {
-                                        WordElementView(phrase: phrase, isCollection: false)
-                                    }
-                                    
-                                    
-                                }
-                                
-                            }
-                            
-                        }.frame(height: howToSayExpanded ? Global.screenHeight*0.45 : Global.screenHeight*0.19)
+                        .frame(maxWidth: Global.screenWidth*0.85)
                     }
+                    
+
+                    
                 }
                 
             }
@@ -263,6 +259,8 @@ struct ContentView: View {
             
             Spacer()
         }.onAppear {
+            
+            guard !hasInsertedDefaultCategories else { return }
             
             let fetchRequest = FetchDescriptor<Category>()
             do {
@@ -280,6 +278,8 @@ struct ContentView: View {
                 if !categoriesToInsert.isEmpty {
                     try modelContext.save()
                 }
+                
+                hasInsertedDefaultCategories = true // ✅ Dopo aver salvat
             } catch {
                 print("Error fetching or saving categories: \(error)")
             }
@@ -349,7 +349,6 @@ struct WordElementView: View {
                         .padding(.horizontal,8)
                     Spacer()
                     
-                    
                 }
                 .padding()
                 .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
@@ -398,7 +397,7 @@ struct NewPhraseView: View {
                 VStack(alignment: .leading)  {
                     
                     HStack(spacing: 15) {
-                        Text(newType == 1 ? "Add New Phrase" : "How to say?")
+                        Text(newType == 1 ? "Add New Expression" : "How to say...?")
                             .font(.title2)
                             .fontWeight(.semibold)
                         
@@ -421,13 +420,10 @@ struct NewPhraseView: View {
                         }
                     }
                     
-                        Text(newType == 1 ? "Heard a phrase you don't understand? Have a word you're unsure about? Save it here for later!" : "You want to know how to say a specific word or phrase in your new language? Save it here for later!")
+                        Text(newType == 1 ? "Found a word or phrase you don’t understand? Save it here to review later." : "Want to know how to say something in the language you're learning? Save it here!")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                
-                        
 
-                    
                 }
                 
                 Spacer()
@@ -448,7 +444,7 @@ struct NewPhraseView: View {
                         newPhraseText = newValue
                     } else {
                         newPhraseText = String(newValue.prefix(maxCharacters))
-                        // Optional: give haptic or visual feedback
+                        
                     }
                 }
             ))
@@ -471,7 +467,7 @@ struct NewPhraseView: View {
 
             } label: {
                 HStack {
-                    Text("Add to Pendings ")
+                    Text("Add ")
                         .font(.headline)
                         .fontWeight(.semibold)
                     
@@ -481,10 +477,10 @@ struct NewPhraseView: View {
                 .foregroundStyle(.white)
                 .padding(10)
                 .background(RoundedRectangle(cornerRadius: 10).fill(newPhraseText == "" ? Color.gray : Color.accentColor))
-                .disabled(newPhraseText.isEmpty)
+                
                 
 
-            }
+            }.disabled(newPhraseText.isEmpty)
                 
             }.padding(.top,10)
             
@@ -513,7 +509,7 @@ struct SectionSettingsView: View {
                 Section(header: Text("Language you're learning")) {
                     Picker("Select Language", selection: $selectedLanguage) {
                         ForEach(languages, id: \.self) { lang in
-                            Text(lang)
+                            Text(LocalizedStringKey(lang))
                         }
                     }
                     .pickerStyle(.menu)

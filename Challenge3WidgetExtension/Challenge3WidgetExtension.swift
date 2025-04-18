@@ -90,6 +90,7 @@ struct Challenge3WidgetExtension: Widget {
             Challenge3WidgetExtensionEntryView(entry: entry)
                 .modelContainer(for: [LearnElement.self, Category.self])
         }
+        .supportedFamilies([.systemMedium])
     }
 }
 

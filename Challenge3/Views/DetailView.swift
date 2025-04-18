@@ -31,7 +31,7 @@ struct DetailView: View {
                 HStack {
                     VStack(alignment: .leading) {
                         
-                        Text(phrase.learnType == .newPhrase ? "New phrase" : "How to say...?")
+                        Text(phrase.learnType == .newPhrase ? "New expression" : "How to say...?")
                             .foregroundStyle(.accent)
                             .fontWeight(.medium)
                         Text(phrase.userEntry)
@@ -45,7 +45,6 @@ struct DetailView: View {
                     Spacer()
                     
                     
-                    if phrase.learnType == .newPhrase {
                         
                         HStack {
                             ZStack {
@@ -64,7 +63,7 @@ struct DetailView: View {
                                 }
                                 
                             }                    .fixedSize(horizontal: false, vertical: true)
-                            
+                            if phrase.learnType == .newPhrase {
                             ZStack {
                                 Circle()
                                     .frame(width: 42)

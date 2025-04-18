@@ -6,7 +6,18 @@
   
 */
 
-"New phrase" = "New phrase";
-"How to say?" = "How to say?";
+"New Expression" = "Expresión Nueva";
+"How to say...?" = "¿Cómo se dice?";
+"Pending to review" = "Mis pendientes";
+"Expressions" = "Expresiones";
+"How to Say" = "¿Cómo se dice?";
+"No expressions to review" = "¡No hay expresiones pendientes!";
+"Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day." = "Guarda las palabras y frases que descubras y construye tu vocabulario a partir de lo que vives, ves y escuchas.";
+"No translation doubts yet!" = "¡Aún no tienes dudas guardadas!";
+"Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "¿Hay algo que quieres decir en el idioma que estás aprendiendo pero no sabes cómo? Usa “¿Cómo se dice?” para guardarlo en tu idioma y revisarlo más tarde.";
+"To Review" = "Mis Pendientes";
+"My Collection" = "Mi Colección";
+"Add New Expression";
 "pending_message" = "%@, write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!";
-
+"Found a word or phrase you don’t understand? Save it here to review later." = "¿Encontraste una palabra o frase que no entiendes? Guárdala aquí y revísala después.";
+"Want to know how to say something in the language you're learning? Save it here!" = "¿Quieres saber cómo decir algo en el idioma que estás aprendiendo? Escríbelo aquí para revisarlo luego.";

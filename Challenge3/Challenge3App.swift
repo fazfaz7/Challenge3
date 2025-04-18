@@ -19,7 +19,7 @@ struct Challenge3App: App {
         
         WindowGroup {
             TabView {
-                Tab("My Pendings",systemImage: "folder.fill.badge.plus") {
+                Tab("To Review",systemImage: "folder.fill.badge.plus") {
                     ContentView()
                 }
                 

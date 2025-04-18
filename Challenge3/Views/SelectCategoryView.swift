@@ -17,6 +17,8 @@ struct SelectCategoryView: View {
         sort: \Category.dateAdded,
         animation: .default
     ) var myCategories: [Category]
+    @State private var showDeleteAlert = false
+    @State private var categoryToDelete: Category? = nil
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -47,6 +49,45 @@ struct SelectCategoryView: View {
                                                 selectedCategory = category
                                             }
                                         }
+                            .contextMenu {
+                                Button {
+                                    categoryToDelete = category
+                                    showDeleteAlert = true
+                                } label: {
+                                    Label("Delete Category", systemImage: "trash.fill")
+                                }
+                            }
+                            .alert("Delete Category", isPresented: $showDeleteAlert) {
+                                Button("Delete", role: .destructive) {
+                                    if let categoryToDelete = categoryToDelete {
+                                        withAnimation {
+                                            do {
+                                                let descriptor = FetchDescriptor<LearnElement>()
+                                                let allElements = try modelContext.fetch(descriptor)
+
+                                                for element in allElements where element.category?.id == categoryToDelete.id {
+                                                    element.category = nil
+                                                }
+
+                                                modelContext.delete(categoryToDelete)
+                                                try modelContext.save()
+                                            } catch {
+                                                print("Error: \(error)")
+                                            }
+                                        }
+                                    }
+                                }
+                                Button("Cancel", role: .cancel) {
+                                    categoryToDelete = nil
+                                }
+                            } message: {
+                                if let categoryToDelete = categoryToDelete {
+                                    Text("All words in '\(categoryToDelete.name)' will become uncategorized. This cannot be undone.")
+                                } else {
+                                    Text("Unknown category.")
+                                }
+                            }
+
                             
                             
                         }
