@@ -7,6 +7,7 @@
 */
 
 "New Expression" = "Expresión Nueva";
+"New expression" = "Expresión Nueva";
 "How to say...?" = "¿Cómo decir...?";
 "Pending to review" = "Mis pendientes";
 "Expressions" = "Expresiones";
@@ -31,12 +32,12 @@
 "Settings" = "Configuración";
 "Language you're learning" = "Idioma que estás aprendiendo";
 "Select Language" = "Elegir Idioma";
-"Finish pending" = "Completar pendiente";
-"Choose order" = "Elegir orden";
+"Mark complete" = "Completar pendiente";
+"Choose Order" = "Elegir orden";
 "Alphabetical" = "Alfabéticamente";
 "By Date" = "Por Fecha";
 "By Category" = "Por Categoría";
-"Phrase" = "Frase";
+"Expression" = "Expresión";
 "Explanation" = "Explicación";
 "Select Category" = "Elegir categoría";
 "pending_message" = "%@, escribe la explicación de la frase o palabra aquí y completa tu pendiente. ¡Aclara tu duda y guárdalo!";
@@ -49,6 +50,7 @@
 "Portuguese 🇵🇹" = "Portugués 🇵🇹";
 "Spanish 🇪🇸" = "Español 🇪🇸";
 "Turkish 🇹🇷" = "Turco 🇹🇷";
+
 
 
 

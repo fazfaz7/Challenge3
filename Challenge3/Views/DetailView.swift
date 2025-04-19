@@ -151,7 +151,7 @@ struct DetailView: View {
                             dismiss()
                         } label: {
                             HStack {
-                                Text("Finish pending")
+                                Text("Mark complete")
                                 Image(systemName: "checkmark")
                             }
                             .padding(15)

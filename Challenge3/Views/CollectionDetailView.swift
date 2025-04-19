@@ -46,7 +46,7 @@ struct CollectionDetailView: View {
                                 HStack {
                                     
                                     Spacer()
-                                    Text("New Phrase")
+                                    Text("New Expression")
                                         .padding(.horizontal,10)
                                         .padding(.vertical,5)
                                         .background(RoundedRectangle(cornerRadius: 20).fill(.accent))
@@ -144,7 +144,7 @@ struct EditPhraseView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Phrase")) {
+                Section(header: Text("Expression")) {
                     TextField("Enter phrase", text: $editedEntry)
                 }
                 
