@@ -90,7 +90,7 @@ struct DetailView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 20){
-                    Text(String(format: NSLocalizedString("pending_message", comment: ""), userName))
+                    Text(String(format: NSLocalizedString(phrase.learnType == .newPhrase ?  "pending_message" : "other_message", comment: ""), userName))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)

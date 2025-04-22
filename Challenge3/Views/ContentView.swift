@@ -121,7 +121,7 @@ struct ContentView: View {
                 
                 HStack(spacing: 20) {
                     VStack {
-                        Text("Pending to review")
+                        Text("To Review")
                             .font(.title)
                             .fontWeight(.medium)
                     }

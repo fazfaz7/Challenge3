@@ -90,10 +90,21 @@ struct CollectionView: View {
 
         }
         
+
+
+        
        
 
         
         
+    }
+    
+    var isLibraryCompletelyEmpty: Bool {
+        testPhrases.isEmpty
+    }
+
+    var isFilteredEmpty: Bool {
+        !testPhrases.isEmpty && filteredPhrases.isEmpty
     }
 
 
@@ -127,12 +138,63 @@ struct CollectionView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(width: Global.screenWidth*0.85)
                 
-                ScrollView {
-                    VStack(spacing: 20) {
+               
                         
-                        ForEach(groupedPhrases, id: \.title) { group in
-                            Section(header:
-                                HStack {
+                        if isLibraryCompletelyEmpty {
+                            Spacer()
+                            VStack(alignment: .center, spacing: 10) {
+                                Spacer()
+                                Image(systemName: "books.vertical")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(.secondary)
+                                
+                                Text("Your collection is empty")
+                                    .fontWeight(.semibold)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                
+                                Spacer()
+                            }.padding()
+                                .frame(maxWidth: Global.screenWidth*0.85)
+                           Spacer()
+                        } else if isFilteredEmpty {
+                            VStack(alignment: .center, spacing: 10) {
+                                Spacer()
+                                
+                                Image(systemName: "magnifyingglass.circle")
+                                    .font(.largeTitle)
+                                    .foregroundStyle(.secondary)
+                                
+                                Text("No results found")
+                                    .fontWeight(.semibold)
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("Try searching for something else!")
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .frame(maxWidth: Global.screenWidth * 0.85)
+
+                        } else {
+                            
+                            ScrollView {
+                                VStack(spacing: 20) {
+                            
+                            ForEach(groupedPhrases, id: \.title) { group in
+                                Section(header:
+                                            HStack {
                                     if selectedOrder == .byCategory {
                                         Button {
                                             if expandedCategories.contains(group.title) {
@@ -160,23 +222,23 @@ struct CollectionView: View {
                                     }
                                     Spacer()
                                 }
-                                .padding(.top, 10)
-                            ) {
-                                if selectedOrder != .byCategory || expandedCategories.contains(group.title) {
-                                    ForEach(group.phrases, id: \.self) { phrase in
-                                        NavigationLink {
-                                            CollectionDetailView(phrase: phrase)
-                                        } label: {
-                                            WordElementView(phrase: phrase, isCollection: true)
-                                                .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                    .padding(.top, 10)
+                                ) {
+                                    if selectedOrder != .byCategory || expandedCategories.contains(group.title) {
+                                        ForEach(group.phrases, id: \.self) { phrase in
+                                            NavigationLink {
+                                                CollectionDetailView(phrase: phrase)
+                                            } label: {
+                                                WordElementView(phrase: phrase, isCollection: true)
+                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                            }
                                         }
                                     }
                                 }
+                                .frame(width: Global.screenWidth*0.85)
                             }
-                            .frame(width: Global.screenWidth*0.85)
+                            
                         }
-
-
 
                         
                     }

@@ -8,7 +8,7 @@
 
 "New Expression" = "New Expression";
 "How to say...?" = "How to say...?";
-"Pending to review" = "Pending to review";
+"To review" = "To review";
 "Expressions" = "Expressions";
 "How to say" = "How to say";
 "No expressions to review!" = "No expressions to review!";
@@ -17,7 +17,8 @@
 "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later.";
 "To Review" = "To Review";
 "My Collection" = "My Collection";
-"pending_message" = "%@, write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!";
+"pending_message" = "%@, time to find out what it means! Write a small explanation or translation, then mark it complete.";
+"other_message" = "%@, time to figure out how to say this! Look it up in the language you're learning and mark it complete.";
 "Found a word or phrase you don’t understand? Save it here to review later." = "Found a word or phrase you don’t understand? Save it here to review later.";
 "Want to know how to say something in the language you're learning? Save it here!" = "Want to know how to say something in the language you're learning? Save it here!";
 "Add New Expression" = "Add New Expression";
@@ -25,7 +26,6 @@
 "Explanation/Meaning" = "Explanation/Meaning";
 "Category" = "Category";
 "New Phrases" = "New Phrases";
-", write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!" = ", write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!";
 "Settings" = "Settings";
 "Language you're learning" = "Language you're learning";
 "Select Language" = "Select Language";
@@ -46,3 +46,7 @@
 "Portuguese 🇵🇹" = "Portuguese 🇵🇹";
 "Spanish 🇪🇸" = "Spanish 🇪🇸";
 "Turkish 🇹🇷" = "Turkish 🇹🇷";
+
+"No results found" = "No results found";
+"Your collection is empty" = "Your collection is empty";
+"Try searching for something else!" = "Try searching for something else!";

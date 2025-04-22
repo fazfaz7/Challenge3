@@ -8,16 +8,16 @@
 
 "New Expression" = "Nuova espressione";
 "How to say...?" = "Come si dice...?";
-"Pending to review" = "Da controllare";
+"To review" = "Da completare";
 "Expressions" = "Espressioni";
 "How to say" = "Come si dice";
 "No expressions to review!" = "Nessuna espressione da controllare!";
 "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day." = "Salva le parole e le frasi che scopri e costruisci il tuo vocabolario con ciò che vivi, vedi e ascolti ogni giorno.";
 "No translation doubts yet!" = "Non hai ancora dubbi salvati!";
 "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "Vuoi dire qualcosa nella lingua che stai imparando ma non sai come? Usa “Come si dice?” per salvarlo nella tua lingua e controllarlo in seguito.";
-"To Review" = "Da controllare";
+"To Review" = "Da completare";
 "My Collection" = "La mia collezione";
-"pending_message" = "%@, scrivi qui la spiegazione della parola o frase e completa il tuo dubbio! Chiariscilo e salvalo!";
+"pending_message" = "%@, scopri cosa significa! Scrivi una breve spiegazione o traduzione, poi segna come completato.";
 "Found a word or phrase you don’t understand? Save it here to review later." = "Hai trovato una parola o una frase che non capisci? Salvala qui per controllarla più tardi.";
 "Want to know how to say something in the language you're learning? Save it here!" = "Vuoi sapere come dire qualcosa nella lingua che stai imparando? Salvalo qui!";
 "Add New Expression" = "Aggiungi nuova espressione";
@@ -25,7 +25,6 @@
 "Explanation/Meaning" = "Spiegazione/Significato";
 "Category" = "Categoria";
 "New Phrases" = "Nuove frasi";
-", write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!" = ", scrivi qui la spiegazione della frase o parola e completa il tuo dubbio! Chiariscilo e salvalo!";
 "Settings" = "Impostazioni";
 "Language you're learning" = "Lingua che stai imparando";
 "Select Language" = "Seleziona lingua";
@@ -35,6 +34,7 @@
 "By Date" = "Per data";
 "By Category" = "Per categoria";
 "Expression" = "Espressione";
+"New Expression" = "Nuova Espressione";
 "Explanation" = "Spiegazione";
 "Select Category" = "Seleziona categoria";
 "Chinese 🇨🇳" = "Cinese 🇨🇳";
@@ -46,4 +46,8 @@
 "Portuguese 🇵🇹" = "Portoghese 🇵🇹";
 "Spanish 🇪🇸" = "Spagnolo 🇪🇸";
 "Turkish 🇹🇷" = "Turco 🇹🇷";
+
+"No results found" = "Nessun risultato trovato";
+"Try searching for something else!" = "Prova a cercare qualcos’altro!";
+"Your collection is empty" = "La tua collezione è vuota";
 
