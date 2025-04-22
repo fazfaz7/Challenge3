@@ -53,7 +53,7 @@ struct ContentView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.regular)
                                 .minimumScaleFactor(0.85)
-                            Text("\(selectedLanguage.dropLast(2)) Learner")
+                            Text(LanguageHelper.getLocalizedLearnerTitle(for: selectedLanguage))
                                 .font(.title3)
                                 .foregroundStyle(.accent)
                             

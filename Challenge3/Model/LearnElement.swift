@@ -55,3 +55,53 @@ var categories: [Category] = [
     Category(name: "Shopping", emoji: "🛍️"),
     Category(name: "Slang", emoji: "😂")
 ]
+
+
+
+enum AppLocale: String {
+    case english = "en"
+    case spanish = "es"
+    case italian = "it"
+    
+    static var current: AppLocale {
+        switch Locale.current.language.languageCode?.identifier {
+        case "es": return .spanish
+        case "it": return .italian
+        default: return .english
+        }
+    }
+}
+
+struct LanguageHelper {
+    
+    static func getLocalizedLanguageName(_ language: String) -> String {
+        let rawName = language.components(separatedBy: " ").dropLast().joined(separator: " ") // Removes the emoji
+
+        let localizedNames: [String: [AppLocale: String]] = [
+            "Italian": [.english: "Italian", .spanish: "italiano", .italian: "italiano"],
+            "Spanish": [.english: "Spanish", .spanish: "español", .italian: "spagnolo"],
+            "English": [.english: "English", .spanish: "inglés", .italian: "inglese"],
+            "French": [.english: "French", .spanish: "francés", .italian: "francese"],
+            "German": [.english: "German", .spanish: "alemán", .italian: "tedesco"],
+            "Portuguese": [.english: "Portuguese", .spanish: "portugués", .italian: "portoghese"],
+            "Chinese": [.english: "Chinese", .spanish: "chino", .italian: "cinese"],
+            "Japanese": [.english: "Japanese", .spanish: "japonés", .italian: "giapponese"],
+            "Turkish": [.english: "Turkish", .spanish: "turco", .italian: "turco"]
+        ]
+        
+        return localizedNames[rawName]?[AppLocale.current] ?? rawName
+    }
+    
+    static func getLocalizedLearnerTitle(for language: String) -> String {
+        let localizedLang = getLocalizedLanguageName(language)
+        
+        switch AppLocale.current {
+        case .english:
+            return "\(localizedLang) Learner"
+        case .spanish:
+            return "Aprendiz de \(localizedLang)"
+        case .italian:
+            return "\(localizedLang)"
+        }
+    }
+}
