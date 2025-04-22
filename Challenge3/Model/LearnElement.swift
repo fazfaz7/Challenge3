@@ -101,7 +101,7 @@ struct LanguageHelper {
         case .spanish:
             return "Aprendiz de \(localizedLang)"
         case .italian:
-            return "\(localizedLang)"
+            return "\(localizedLang)".capitalized
         }
     }
 }
