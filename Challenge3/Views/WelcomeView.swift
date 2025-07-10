@@ -17,26 +17,30 @@ struct WelcomeView: View {
     var isFormComplete: Bool {
         !userName.trimmingCharacters(in: .whitespaces).isEmpty
     }
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
 
-    
     var body: some View {
         VStack(spacing: 30) {
-            Image("LyngoIcon")
+            VStack {
+            Image("MyIcon")
                 .resizable()
                 .scaledToFit()
                 .clipShape(RoundedRectangle(cornerRadius: 20))
-                .frame(width: 150)
-            VStack {
+                .frame(width: 100)
+                .padding(.top)
+            
                 HStack {
 
-                    Text("ItMeans")
+                    Text("Welcome to \n ItMeans!")
                         .font(.title)
+                        .foregroundStyle(.black)
                         .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .minimumScaleFactor(0.85)
                     
                 }
                 
-                Text("Never stop learning!")
-                    .italic()
+
             }
             
             if showAll {
@@ -46,14 +50,14 @@ struct WelcomeView: View {
                             .fontWeight(.semibold)
                             .foregroundStyle(.accent)
                         Spacer()
-                    }.frame(width: Global.screenWidth*0.85)
+                    }.frame(width: Global.screenWidth*0.70)
                     
-                    TextField("Enter your nickname", text: $userName)
-                        .foregroundStyle(.primary)
-                        .frame(width: Global.screenWidth*0.85)
-                        .textFieldStyle(.roundedBorder)
-                    
-                    
+                    TextField("", text: $userName, prompt: Text("Enter your nickname").foregroundStyle(.gray))
+                        .foregroundStyle(.black)
+                        .padding(5)
+                        .frame(width: Global.screenWidth*0.70)
+                        .background(RoundedRectangle(cornerRadius: 10).fill(.white))
+                        
                     
                 }
                 
@@ -62,32 +66,35 @@ struct WelcomeView: View {
                         Text("Which language are you learning?")
                             .fontWeight(.semibold)
                             .foregroundStyle(.accent)
+                            .minimumScaleFactor(0.85)
                         Spacer()
-                    }.frame(width: Global.screenWidth*0.85)
+                    }.frame(width: Global.screenWidth*0.70)
                     
                     Picker("Language", selection: $selectedLanguage) {
                         ForEach(languages, id: \.self) {
                             Text($0)
                                 .font(.title3)
+                                .foregroundStyle(.black)
                         }
                     }
                     .pickerStyle(.wheel)
-                    .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.10)
+                    .frame(width: Global.screenWidth*0.70, height: Global.screenHeight*0.10)
                     
                     Button {
-                        dismiss()
+                        hasSeenOnboarding = false
                     } label: {
                         HStack {
-                            Text("Everything's ready!")
+                            Text("Get Started!")
                                 .foregroundStyle(.white)
                         }.padding(12)
                             .font(.title3)
-                            .frame(width: Global.screenWidth*0.85, height: 55)
+                            .frame(width: Global.screenWidth*0.70, height: 55)
                             .background(RoundedRectangle(cornerRadius: 10).fill(isFormComplete ? Color.accentColor : Color.gray))
                             .shadow(radius: 1)
                             .padding(.vertical)
                     }.disabled(!isFormComplete)
                 }
+                
             }
         }.onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now()+1) {
@@ -96,6 +103,7 @@ struct WelcomeView: View {
                 }
             }
         }
+        .frame(width: Global.screenWidth*0.75, height: Global.screenHeight*0.60)
     }
 }
 

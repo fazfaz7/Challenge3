@@ -24,44 +24,49 @@ struct AboutView: View {
                         .font(.title)
                         .fontWeight(.bold)
                 }
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("What is ItMeans?")
+                                .foregroundStyle(.accent)
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                            
+                            Text("ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language.")
+                                .font(.callout)
+                            
+                            
+                        }
+                        Divider()
+                        
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("How it works?")
+                                .foregroundStyle(.accent)
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                            
+                            VStack(alignment: .leading, spacing: 8){
+                                Text("✍️ Save any new words, phrases, or slang you discover.")
+                                Text("📚 Review your collection as you learn")
+                                Text("🤝 Complete your pendings by asking a native speaker or by searching")
+                                Text("🧠 Activate the widget to practice your saved words daily.")
+                            }.font(.callout)
+                            
+                            
+                            
+                        }
+                        
+                        
+                    }
+                    .padding(20)
+                    .padding(.vertical,5)
+                    
+                }.frame(width: Global.screenWidth*0.90)
+                    Spacer()
+                    Text("Version 1.0 © 2025 ItMeans")
+                        .padding()
                 
-                VStack(alignment: .leading, spacing: 20) {
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("What is ItMeans?")
-                            .foregroundStyle(.accent)
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                        
-                        Text("ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language.")
-                            .font(.callout)
-                            .multilineTextAlignment(.leading)
-                    }
-                    Divider()
-                    
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("How it works?")
-                            .foregroundStyle(.accent)
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                        
-                        VStack(alignment: .leading, spacing: 8){
-                            Text("✍️ Save any new words, phrases, or slang you discover.")
-                            Text("📚 Review your collection as you learn")
-                            Text("🤝 Complete your pendings by asking a native speaker or by searching")
-                            Text("🧠 Activate the widget to practice your saved words daily.")
-                        }.font(.callout)
-                        
-                    }
-                    
-                    
-                }
-                .padding(20)
-                .padding(.vertical,5)
-                .frame(width: Global.screenWidth*0.90)
-                //.background(RoundedRectangle(cornerRadius: 28).fill(.white).shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4))
-                Spacer()
-                Text("Version 1.0 © 2025 ItMeans")
             }
         
     }

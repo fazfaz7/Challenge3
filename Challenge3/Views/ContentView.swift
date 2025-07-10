@@ -36,6 +36,7 @@ struct ContentView: View {
     @State var howToSayExpanded: Bool = false
     @AppStorage("userName") private var userName: String = "No name set"
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
     @State private var isPresenting = true
     @State private var isPresentingInfo = false
     @State private var isPresentingSettings = false
@@ -296,8 +297,8 @@ struct ContentView: View {
                             isPresenting = false // Skip the welcome screen if both are set
                         }
                     }
-        .fullScreenCover(isPresented: $isPresenting, onDismiss: didDismiss) {
-            WelcomeView()
+        .fullScreenCover(isPresented: $hasSeenOnboarding, onDismiss: didDismiss) {
+            OnboardingView()
         }
         .sheet(isPresented: $isPresentingInfo) {
             AboutView()
@@ -423,6 +424,7 @@ struct NewPhraseView: View {
                         Text(newType == 1 ? "Found a word or phrase you don’t understand? Save it here to review later." : "Want to know how to say something in the language you're learning? Save it here!")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
+                            .minimumScaleFactor(0.85)
 
                 }
                 

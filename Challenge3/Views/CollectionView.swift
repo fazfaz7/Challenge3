@@ -109,7 +109,6 @@ struct CollectionView: View {
 
 
 
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -122,14 +121,19 @@ struct CollectionView: View {
                     
                     // Inline Filter Picker
                     
-                    Button {
-                        showingFilterOptions = true
+                    Menu {
+                        Picker("Order", selection: $selectedOrder) {
+                            ForEach(CollectionOrder.allCases, id: \.self) { order in
+                                Text(order.rawValue).tag(order)
+                            }
+                        }
+                        .pickerStyle(.inline) // mostrerà le scelte come una lista
                     } label: {
                         Image(systemName: "line.3.horizontal.decrease.circle.fill")
                             .font(.title2)
                             .foregroundColor(.accentColor)
                     }
-                    .padding(.horizontal, 5)
+
                 }
                 .frame(width: Global.screenWidth*0.85)
                 
