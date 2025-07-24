@@ -14,24 +14,19 @@ struct ContentView: View {
     @State var showNewPhrase: Bool = false
     @State var newPhraseText: String = ""
     @State var newType: Int = 1
-    @Query(
-        filter: #Predicate { $0.isCompleted == false },
-        sort: \LearnElement.dateAdded,
-        order: .reverse,
-        animation: .default
-    ) var testPhrases: [LearnElement]
+    @Query(sort: \LearnElement.dateAdded, order: .reverse) var allPhrases: [LearnElement]
+    
+    var testPhrases: [LearnElement] {
+        allPhrases.filter { !$0.isCompleted && $0.language == selectedLanguage }
+    }
+    
     @State var phrases: [String] = ["Mi raccomando", "Lascia perdere?", "In bocca al lupo", "Merluzzo", "Suino/Maiale?", "Stupidino"]
     @Environment(\.modelContext) var modelContext
     @Query(
         sort: \Category.dateAdded,
         animation: .default
     ) var myCategories: [Category]
-    @Query(
-        filter: #Predicate { $0.isCompleted == true },
-        sort: \LearnElement.dateAdded,
-        order: .reverse,
-        animation: .default
-    ) var collectionPhrases: [LearnElement]
+    
     @State var newPhrasesExpanded: Bool = false
     @State var howToSayExpanded: Bool = false
     @AppStorage("userName") private var userName: String = "No name set"
@@ -42,6 +37,7 @@ struct ContentView: View {
     @State private var isPresentingSettings = false
     @State private var selectedSegment = 0
     @AppStorage("hasInsertedDefaultCategories") private var hasInsertedDefaultCategories: Bool = false
+    @AppStorage("hasMigratedLanguages") private var hasMigratedLanguages = false
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -127,7 +123,7 @@ struct ContentView: View {
                             .fontWeight(.medium)
                     }
                     
-                    Text("\(testPhrases.count)")
+                    Text("\(testPhrases.filter {$0.language == selectedLanguage}.count)")
                         .padding(8)
                         .background(Circle().fill(.gray.opacity(0.6)))
                         .font(.caption2)
@@ -142,7 +138,7 @@ struct ContentView: View {
                 .pickerStyle(.segmented)
                 .padding(.bottom)
                 .frame(maxWidth: Global.screenWidth*0.85)
-                    
+                
                 
                 if selectedSegment == 0  {
                     let newExpressions = testPhrases.filter {$0.learnType == .newPhrase}
@@ -170,29 +166,29 @@ struct ContentView: View {
                             .frame(maxWidth: Global.screenWidth*0.85)
                     } else {
                         VStack {
-
-                                                ScrollView {
-                                                    VStack(spacing: 15) {
                             
-                                                    
-                                                            ForEach(testPhrases, id: \.self) { phrase in
-                                                                if phrase.learnType == .newPhrase {
-                                                                    WordElementView(phrase: phrase, isCollection: false)
-                                                                }
-                                                        
-                                                        
-                                                            
-                                                        }
-                                                    }
-                            
-                                                }
+                            ScrollView {
+                                VStack(spacing: 15) {
+                                    
+                                    
+                                    ForEach(testPhrases, id: \.self) { phrase in
+                                        if phrase.learnType == .newPhrase {
+                                            WordElementView(phrase: phrase, isCollection: false)
+                                        }
+                                        
+                                        
+                                        
+                                    }
+                                }
+                                
+                            }
                             
                             
                             
                         }
                         .frame(maxWidth: Global.screenWidth*0.85)
                     }
-
+                    
                     
                 } else {
                     
@@ -221,22 +217,22 @@ struct ContentView: View {
                             .frame(maxWidth: Global.screenWidth*0.85)
                     } else {
                         VStack {
-
-                                                ScrollView {
-                                                    VStack(spacing: 15) {
                             
-                                                    
-                                                            ForEach(testPhrases, id: \.self) { phrase in
-                                                                if phrase.learnType == .howToSay {
-                                                                    WordElementView(phrase: phrase, isCollection: false)
-                                                                }
-                                                        
-                                                        
-                                                            
-                                                        }
-                                                    }
-                            
-                                                }
+                            ScrollView {
+                                VStack(spacing: 15) {
+                                    
+                                    
+                                    ForEach(testPhrases, id: \.self) { phrase in
+                                        if phrase.learnType == .howToSay {
+                                            WordElementView(phrase: phrase, isCollection: false)
+                                        }
+                                        
+                                        
+                                        
+                                    }
+                                }
+                                
+                            }
                             
                             
                             
@@ -244,7 +240,7 @@ struct ContentView: View {
                         .frame(maxWidth: Global.screenWidth*0.85)
                     }
                     
-
+                    
                     
                 }
                 
@@ -255,8 +251,8 @@ struct ContentView: View {
                     .presentationDetents([.fraction(0.38)])
             }
             .onTapGesture {
-                       hideKeyboard()
-                   }
+                hideKeyboard()
+            }
             
             Spacer()
         }.onAppear {
@@ -290,13 +286,31 @@ struct ContentView: View {
             
         }
         .onAppear {
-                        // Check if both userName and selectedLanguage are set
-                        if userName == "No name set" || selectedLanguage == "No language selected" {
-                            isPresenting = true // Show the welcome screen
-                        } else {
-                            isPresenting = false // Skip the welcome screen if both are set
+            // Check if both userName and selectedLanguage are set
+            if userName == "No name set" || selectedLanguage == "No language selected" {
+                isPresenting = true // Show the welcome screen
+            } else {
+                isPresenting = false // Skip the welcome screen if both are set
+            }
+        }
+        .onAppear {
+            if !hasMigratedLanguages {
+                let fetchDescriptor = FetchDescriptor<LearnElement>()
+                do {
+                    let phrases = try modelContext.fetch(fetchDescriptor)
+                    for phrase in phrases {
+                        if phrase.language == nil {
+                            phrase.language = selectedLanguage
                         }
                     }
+                    try modelContext.save()
+                    hasMigratedLanguages = true
+                    print("✅ Migration completed")
+                } catch {
+                    print("❌ Migration error: \(error)")
+                }
+            }
+        }
         .fullScreenCover(isPresented: $hasSeenOnboarding, onDismiss: didDismiss) {
             OnboardingView()
         }
@@ -306,12 +320,12 @@ struct ContentView: View {
         .sheet(isPresented: $isPresentingSettings) {
             SectionSettingsView()
         }
-
+        
     }
     
     func didDismiss() {
         dismiss()
-        }
+    }
     
     
 }
@@ -391,6 +405,7 @@ struct NewPhraseView: View {
     @Environment(\.modelContext) var modelContext
     @State var showMessage: Bool = false
     let maxCharacters = 50
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     
     var body: some View {
         VStack(spacing: 10) {
@@ -410,22 +425,22 @@ struct NewPhraseView: View {
                                 .frame(width: 12)
                             
                             Circle()
-                                
-                                    .trim(from: 0.0, to: CGFloat(min(Double(newPhraseText.count) / Double(maxCharacters), 1.0)))
-                                    .stroke(
-                                        AngularGradient(gradient: Gradient(colors: [.accent, .accent]), center: .center),
-                                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                                    )
-                                    .rotationEffect(Angle(degrees: -90))
-                                    .frame(width: 12)
+                            
+                                .trim(from: 0.0, to: CGFloat(min(Double(newPhraseText.count) / Double(maxCharacters), 1.0)))
+                                .stroke(
+                                    AngularGradient(gradient: Gradient(colors: [.accent, .accent]), center: .center),
+                                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                                )
+                                .rotationEffect(Angle(degrees: -90))
+                                .frame(width: 12)
                         }
                     }
                     
-                        Text(newType == 1 ? "Found a word or phrase you don’t understand? Save it here to review later." : "Want to know how to say something in the language you're learning? Save it here!")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .minimumScaleFactor(0.85)
-
+                    Text(newType == 1 ? "Found a word or phrase you don’t understand? Save it here to review later." : "Want to know how to say something in the language you're learning? Save it here!")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        .minimumScaleFactor(0.85)
+                    
                 }
                 
                 Spacer()
@@ -450,46 +465,46 @@ struct NewPhraseView: View {
                     }
                 }
             ))
-                .frame(height: 70)
-                .padding(10)
-                .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
+            .frame(height: 70)
+            .padding(10)
+            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
             
             HStack {
-            Button {
-                    let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "")
+                Button {
+                    let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "", language: selectedLanguage)
                     
                     withAnimation {
-
-                            modelContext.insert(newElement)
+                        
+                        modelContext.insert(newElement)
                     }
                     
                     WidgetCenter.shared.reloadAllTimelines()
                     newPhraseText = ""
                     showNewPhrase = false
-
-            } label: {
-                HStack {
-                    Text("Add ")
-                        .font(.headline)
-                        .fontWeight(.semibold)
                     
-                    Image(systemName: "plus")
-                        .font(.title3)
-                }
-                .foregroundStyle(.white)
-                .padding(10)
-                .background(RoundedRectangle(cornerRadius: 10).fill(newPhraseText == "" ? Color.gray : Color.accentColor))
-                
-                
-
-            }.disabled(newPhraseText.isEmpty)
+                } label: {
+                    HStack {
+                        Text("Add ")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                        
+                        Image(systemName: "plus")
+                            .font(.title3)
+                    }
+                    .foregroundStyle(.white)
+                    .padding(10)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(newPhraseText == "" ? Color.gray : Color.accentColor))
+                    
+                    
+                    
+                }.disabled(newPhraseText.isEmpty)
                 
             }.padding(.top,10)
             
         }.padding()
     }
     
-
+    
 }
 
 
@@ -499,7 +514,7 @@ struct SectionSettingsView: View {
     @Environment(\.dismiss) var dismiss
     
     let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
-
+    
     
     var body: some View {
         NavigationStack {

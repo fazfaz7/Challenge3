@@ -125,7 +125,7 @@ struct CollectionDetailView: View {
 }
 
 #Preview {
-    CollectionDetailView(phrase: LearnElement(learnType: .newPhrase ,userEntry: "Ancora non so cosa sto facendo qua. ma ti voglio aiutare semopre", explanation: "Pero, locura! Nosotros nunca sabemos que está sucediendo por aca lol"))
+    CollectionDetailView(phrase: LearnElement(learnType: .newPhrase ,userEntry: "Ancora non so cosa sto facendo qua. ma ti voglio aiutare semopre", explanation: "Pero, locura! Nosotros nunca sabemos que está sucediendo por aca lol", language: "Italian 🇮🇹"))
 }
 
 

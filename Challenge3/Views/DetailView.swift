@@ -187,7 +187,7 @@ struct DetailView: View {
 
 
 #Preview {
-    DetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Famm nu tagl che m ", explanation: ""))
+    DetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Famm nu tagl che m ", explanation: "", language: "Italian 🇮🇹"))
 }
 
 

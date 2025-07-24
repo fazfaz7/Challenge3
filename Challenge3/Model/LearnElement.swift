@@ -22,12 +22,14 @@ class LearnElement: ObservableObject {
     var dateAdded: Date
     var isCompleted: Bool = false
     var category: Category? = nil
+    var language: String?
     
-    init(learnType: elementType = .newPhrase, userEntry: String = "", explanation: String = "") {
+    init(learnType: elementType = .newPhrase, userEntry: String = "", explanation: String = "", language: String = "Italian 🇮🇹") {
         self.learnType = learnType
         self.userEntry = userEntry
         self.explanation = explanation
         self.dateAdded = .now
+        self.language = language
     }
     
 }

@@ -21,13 +21,14 @@ enum CollectionOrder: String, CaseIterable {
 
 struct CollectionView: View {
     @Environment(\.modelContext) var modelContext
-    @Query(
-        filter: #Predicate { $0.isCompleted == true },
-        sort: \LearnElement.dateAdded,
-        order: .reverse,
-        animation: .default
-    ) var testPhrases: [LearnElement]
+
+    @Query(sort: \LearnElement.dateAdded, order: .reverse) var allPhrases: [LearnElement]
     
+    var testPhrases: [LearnElement] {
+        allPhrases.filter { $0.isCompleted && $0.language == selectedLanguage }
+    }
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
+
     @State private var searchText = ""
     @State private var selectedType: PhraseType = .newPhrase
     @Environment(\.colorScheme) var colorScheme: ColorScheme
