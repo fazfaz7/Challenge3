@@ -37,6 +37,7 @@
 "New Expression" = "Nuova Espressione";
 "Explanation" = "Spiegazione";
 "Select Category" = "Seleziona categoria";
+"Select category" = "Seleziona categoria";
 "Chinese 🇨🇳" = "Cinese 🇨🇳";
 "English 🇬🇧" = "Inglese 🇬🇧";
 "French 🇫🇷" = "Francese 🇫🇷";
@@ -77,3 +78,7 @@
 "📚 Review your collection as you learn" = "📚 Rivedi la tua collezione man mano che impari";
 "🤝 Complete your pendings by asking a native speaker or by searching" = "🤝 Completa i tuoi elementi in sospeso chiedendo a un madrelingua o cercando online";
 "🧠 Activate the widget to practice your saved words daily." = "🧠 Attiva il widget per ripassare ogni giorno le parole salvate.";
+
+"other_message" = "%@, è ora di scoprire come si dice! Cercalo nella lingua che stai imparando e segna come completato.";
+
+"Choose a category" = "Scegli una categoria";

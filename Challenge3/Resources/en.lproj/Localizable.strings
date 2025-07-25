@@ -37,6 +37,7 @@
 "Expression" = "Expression";
 "Explanation" = "Explanation";
 "Select Category" = "Select Category";
+"Select category" = "Select category";
 "Chinese 🇨🇳" = "Chinese 🇨🇳";
 "English 🇬🇧" = "English 🇬🇧";
 "French 🇫🇷" = "French 🇫🇷";
@@ -70,3 +71,4 @@
 
 
 
+"Choose a category" = "Choose a category";

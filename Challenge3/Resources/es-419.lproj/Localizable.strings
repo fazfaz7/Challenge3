@@ -40,6 +40,7 @@
 "Expression" = "Expresión";
 "Explanation" = "Explicación";
 "Select Category" = "Elegir categoría";
+"Select category" = "Elegir categoría";
 "pending_message" = "%@, escribe la explicación de la frase o palabra aquí y completa tu pendiente. ¡Aclara tu duda y guárdalo!";
 "Chinese 🇨🇳" = "Chino 🇨🇳";
 "English 🇬🇧" = "Inglés 🇬🇧";
@@ -79,3 +80,7 @@
 "📚 Review your collection as you learn" = "📚 Revisa tu colección mientras aprendes";
 "🤝 Complete your pendings by asking a native speaker or by searching" = "🤝 Completa tus pendientes preguntando a un hablante nativo o buscando por tu cuenta";
 "🧠 Activate the widget to practice your saved words daily." = "🧠 Activa el widget para repasar tus palabras guardadas cada día.";
+
+"other_message" = "%@, ¡es hora de descubrir cómo decir esto! Búscalo en el idioma que estás aprendiendo y márcalo como completado.";
+
+"Choose a category" = "Elige una categoría";
