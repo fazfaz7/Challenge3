@@ -55,22 +55,40 @@ struct Challenge3WidgetExtensionEntryView : View {
 
     var body: some View {
 
-        VStack(spacing: 5) {
+        
+
+            VStack(spacing: 5) {
                 
-            if let myphrase = testPhrases.randomElement() {
-                Text("\(myphrase.userEntry)")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .italic()
-                    .foregroundStyle(.white)
-                    .minimumScaleFactor(0.75)
-                
-                HStack {
-                    Text(myphrase.explanation)
-                        .font(.callout)
-                        .foregroundStyle(.white)
+                if let myphrase = testPhrases.randomElement() {
+                    ZStack {
+                        VStack {
+                            HStack {
+                                Spacer()
+                                if let lastChar = myphrase.language?.suffix(1) {
+                                    Text(String(lastChar))
+                                        .padding(5)
+                                        .background(Circle().fill(.gray).opacity(0.5))
+                                }
+                                
+                            }
+                            Spacer()
+                               }
+                        VStack(spacing: 5) {
+                            Text("\(myphrase.userEntry)")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .italic()
+                                .foregroundStyle(.white)
+                                .minimumScaleFactor(0.75)
+                            
+                            HStack {
+                                Text(myphrase.explanation)
+                                    .font(.callout)
+                                    .foregroundStyle(.white)
+                            }
+                        }
+                    }
                 }
-            }
                 
             }.containerBackground(for: .widget){
 
