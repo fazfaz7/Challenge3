@@ -235,7 +235,7 @@ class TextToSpeechService {
         } else if language.contains("Japanese") {
             utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
         } else if language.contains("Portuguese") {
-            utterance.voice = AVSpeechSynthesisVoice(language: "pt-PT") // Portugal, or "pt-BR" for Brazil
+            utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR") // Portugal, or "pt-BR" for Brazil
         } else if language.contains("Turkish") {
             utterance.voice = AVSpeechSynthesisVoice(language: "tr-TR")
         } else if language.contains("English") {
