@@ -99,9 +99,9 @@ struct LanguageHelper {
         
         switch AppLocale.current {
         case .english:
-            return "\(localizedLang) Learner"
+            return "\(localizedLang)"
         case .spanish:
-            return "Aprendiz de \(localizedLang)"
+            return "\(localizedLang)".capitalized
         case .italian:
             return "\(localizedLang)".capitalized
         }

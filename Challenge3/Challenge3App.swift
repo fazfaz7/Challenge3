@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct Challenge3App: App {
-    
+    @StateObject var languageStore = LanguageStore.shared
     init() {
            setupContainer()
        }
@@ -28,6 +28,7 @@ struct Challenge3App: App {
                 }
             }
         }.modelContainer(for: [LearnElement.self, Category.self])
+            .environmentObject(languageStore)
     }
     
     func setupContainer() {

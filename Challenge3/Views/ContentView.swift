@@ -39,20 +39,37 @@ struct ContentView: View {
     @AppStorage("hasInsertedDefaultCategories") private var hasInsertedDefaultCategories: Bool = false
     @AppStorage("hasMigratedLanguages") private var hasMigratedLanguages = false
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var languageStore: LanguageStore
     
     var body: some View {
         NavigationStack {
             VStack {
                 HStack {
                     HStack {
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text("Hey \(userName)")
                                 .font(.largeTitle)
                                 .fontWeight(.regular)
                                 .minimumScaleFactor(0.85)
-                            Text(LanguageHelper.getLocalizedLearnerTitle(for: selectedLanguage))
-                                .font(.title3)
-                                .foregroundStyle(.accent)
+                            Menu {
+                                ForEach(languageStore.userLanguages, id: \.self) { lang in
+                                    Button(action: {
+                                        selectedLanguage = lang
+                                    }) {
+                                        Text(LanguageHelper.getLocalizedLanguageName(lang).capitalized)
+                                    }
+                                }
+                            } label: {
+                                HStack(spacing: 5) {
+                                    Text(LanguageHelper.getLocalizedLanguageName(selectedLanguage).capitalized)
+                                        .font(.title3)
+                                        .foregroundStyle(.accent)
+                                    
+                                    Image(systemName: "chevron.down")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.accent)
+                                }
+                            }
                             
                         }
                         Spacer()
@@ -311,6 +328,13 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear {
+            if languageStore.userLanguages.isEmpty {
+                if selectedLanguage != "" {
+                    languageStore.addLanguage(selectedLanguage)
+                }
+               }
+           }
         .fullScreenCover(isPresented: $hasSeenOnboarding, onDismiss: didDismiss) {
             OnboardingView()
         }
@@ -515,6 +539,10 @@ struct SectionSettingsView: View {
     
     let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
     
+    @EnvironmentObject var languageStore: LanguageStore
+    @State private var showAddLanguage = false
+    @State private var languageToDelete: String?
+    
     
     var body: some View {
         NavigationStack {
@@ -522,15 +550,47 @@ struct SectionSettingsView: View {
                 Section(header: Text("Nickname")) {
                     TextField("Enter your nickname", text: $userName)
                 }
+  
                 
-                Section(header: Text("Language you're learning")) {
-                    Picker("Select Language", selection: $selectedLanguage) {
-                        ForEach(languages, id: \.self) { lang in
-                            Text(LocalizedStringKey(lang))
+                Section(header: Text("Languages you are learning")) {
+                    ForEach(languageStore.userLanguages, id: \.self) { language in
+                        HStack {
+                            Text(LocalizedStringKey(language))
+                            Spacer()
+                            if language == selectedLanguage {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.accentColor)
+                            }
                         }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedLanguage = language
+                        }
+                    }.onDelete { indexSet in
+                        
+                        guard let index = indexSet.first else { return }
+                        languageToDelete = languageStore.userLanguages[index]
+                        
+                        languageStore.removeLanguage(languageToDelete!)
+                        // Reset selected language if needed
+                        if selectedLanguage == languageToDelete {
+                            selectedLanguage = languageStore.userLanguages.first ?? ""
+                        }
+                        
+                        
                     }
-                    .pickerStyle(.menu)
                 }
+                
+                Button {
+                    showAddLanguage = true
+                } label: {
+                    Text("Add Language")
+                }
+                
+                
+                
+                
+                
             }
             .navigationTitle("Settings")
             .toolbar {
@@ -540,6 +600,9 @@ struct SectionSettingsView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showAddLanguage) {
+                        AddLanguageView()
+                    }
         }
     }
 }
@@ -549,5 +612,38 @@ struct SectionSettingsView: View {
 extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+struct AddLanguageView: View {
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
+    @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
+    @EnvironmentObject var languageStore: LanguageStore
+    
+    let allLanguages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
+    
+    var availableLanguages: [String] {
+        
+        allLanguages.filter { lang in
+            !languageStore.userLanguages.contains(where: { $0 == lang })
+        }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(availableLanguages, id: \.self) { language in
+                    Button(LocalizedStringKey(language)) {
+                        
+                        languageStore.addLanguage(language)
+                        selectedLanguage = language
+                        
+                        dismiss()
+                    }.foregroundStyle(.primary)
+                }
+            }
+            .navigationTitle("Add Language")
+        }
     }
 }
