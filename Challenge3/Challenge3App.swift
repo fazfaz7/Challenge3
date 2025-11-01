@@ -26,6 +26,10 @@ struct Challenge3App: App {
                 Tab("My Collection", systemImage: "books.vertical.fill") {
                     CollectionView()
                 }
+                
+                Tab("Settings", systemImage: "gear") {
+                    EmptyView()
+                }
             }
         }.modelContainer(for: [LearnElement.self, Category.self])
             .environmentObject(languageStore)
