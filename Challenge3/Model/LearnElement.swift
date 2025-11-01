@@ -76,22 +76,25 @@ enum AppLocale: String {
 
 struct LanguageHelper {
     
-    static func getLocalizedLanguageName(_ language: String) -> String {
-        let rawName = language.components(separatedBy: " ").dropLast().joined(separator: " ") // Removes the emoji
+    /// Ritorna la bandierina dalla stringa "Italian 🇮🇹"
+    static func flag(from language: String) -> String {
+        // prende l’ultimo “token” (separa per spazi) – nelle tue stringhe è l’emoji
+        if let last = language.split(separator: " ").last {
+            let s = String(last)
+            // semplice controllo che sia davvero un’emoji (opzionale)
+            if s.unicodeScalars.contains(where: { $0.properties.isEmoji }) {
+                return s
+            }
+        }
+        return "🏳️" // fallback neutro
+    }
 
-        let localizedNames: [String: [AppLocale: String]] = [
-            "Italian": [.english: "Italian", .spanish: "italiano", .italian: "italiano"],
-            "Spanish": [.english: "Spanish", .spanish: "español", .italian: "spagnolo"],
-            "English": [.english: "English", .spanish: "inglés", .italian: "inglese"],
-            "French": [.english: "French", .spanish: "francés", .italian: "francese"],
-            "German": [.english: "German", .spanish: "alemán", .italian: "tedesco"],
-            "Portuguese": [.english: "Portuguese", .spanish: "portugués", .italian: "portoghese"],
-            "Chinese": [.english: "Chinese", .spanish: "chino", .italian: "cinese"],
-            "Japanese": [.english: "Japanese", .spanish: "japonés", .italian: "giapponese"],
-            "Turkish": [.english: "Turkish", .spanish: "turco", .italian: "turco"]
-        ]
-        
-        return localizedNames[rawName]?[AppLocale.current] ?? rawName
+    /// Ritorna il nome localizzato senza emoji (già lo usi, ma lascio anche qui)
+    static func getLocalizedLanguageName(_ language: String) -> String {
+        // es: "Italian 🇮🇹" -> "Italian"
+        return language.split(separator: " ")
+            .dropLast() // rimuove l’emoji finale
+            .joined(separator: " ")
     }
     
     static func getLocalizedLearnerTitle(for language: String) -> String {

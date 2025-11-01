@@ -264,3 +264,37 @@ class TextToSpeechViewModel: ObservableObject {
 
 
 
+
+struct AddLanguageView: View {
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
+    @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
+    @EnvironmentObject var languageStore: LanguageStore
+    
+    let allLanguages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
+    
+    var availableLanguages: [String] {
+        
+        allLanguages.filter { lang in
+            !languageStore.userLanguages.contains(where: { $0 == lang })
+        }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(availableLanguages, id: \.self) { language in
+                    Button(LocalizedStringKey(language)) {
+                        
+                        languageStore.addLanguage(language)
+                        selectedLanguage = language
+                        
+                        dismiss()
+                    }.foregroundStyle(.primary)
+                }
+            }
+            .navigationTitle("Add Language")
+        }
+    }
+}
+

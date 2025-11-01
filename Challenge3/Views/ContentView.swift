@@ -43,308 +43,249 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                HStack {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Hey \(userName)")
-                                .font(.largeTitle)
-                                .fontWeight(.regular)
-                                .minimumScaleFactor(0.85)
-                            Menu {
-                                ForEach(languageStore.userLanguages, id: \.self) { lang in
-                                    Button(action: {
-                                        selectedLanguage = lang
-                                    }) {
-                                        Text(LanguageHelper.getLocalizedLanguageName(lang).capitalized)
+            
+            ZStack {
+                // Background gradient
+                Color(.systemGroupedBackground).ignoresSafeArea()
+                .ignoresSafeArea()
+                
+                
+                VStack {
+                    // NUEVO HEADER - iOS 18 Style
+                    VStack(alignment: .leading, spacing: 12) {
+                        // Language selector con flag y nombre
+                        HStack(spacing: 12) {
+                            Text(LanguageHelper.flag(from: selectedLanguage))  // ✅ Dinámico
+                                .font(.system(size: 48))
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Menu {
+                                    ForEach(languageStore.userLanguages, id: \.self) { lang in
+                                        Button(action: {
+                                            selectedLanguage = lang
+                                        }) {
+                                            Text(LanguageHelper.getLocalizedLanguageName(lang).capitalized)
+                                        }
+                                    }
+                                } label: {
+                                    HStack(spacing: 6) {
+                                        Text(LanguageHelper.getLocalizedLanguageName(selectedLanguage).capitalized)
+                                            .font(.system(size: 34, weight: .bold))
+                                            .foregroundColor(.primary)
+                                        
+                                        Image(systemName: "chevron.down")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
                                     }
                                 }
+                                
+                                Text("Learning")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .fontWeight(.medium)
+                            }
+                            
+                            Spacer()
+                            
+                            // ✅ BOTÓN + AQUÍ
+                            Button {
+                                newType = 1
+                                showNewPhrase = true
                             } label: {
-                                HStack(spacing: 5) {
-                                    Text(LanguageHelper.getLocalizedLanguageName(selectedLanguage).capitalized)
-                                        .font(.title3)
+                                if #available(iOS 26.0, *) {
+                                    Image(systemName: "plus.circle.fill")
+                                    //.foregroundStyle(.accent)
+                                        .font(.largeTitle)
+                                        .glassEffect(.regular.interactive())
+                                } else {
+                                    Image(systemName: "plus.circle.fill")
                                         .foregroundStyle(.accent)
-                                    
-                                    Image(systemName: "chevron.down")
-                                        .font(.subheadline)
-                                        .foregroundStyle(.accent)
+                                        .font(.largeTitle)
                                 }
                             }
-                            
                         }
-                        Spacer()
                         
-                        
-                        
-                    }.frame(width: Global.screenWidth*0.67, height: Global.screenHeight*0.08)
-                    
-                    Spacer()
-                    
-                    Button {
-                        isPresentingInfo = true
-                    } label: {
-                        Image(systemName: "info.circle.fill")
-                            .foregroundStyle(.accent)
-                            .font(.title3)
-                    }
-                    
-                    Button {
-                        isPresentingSettings = true
-                    } label: {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundStyle(.accent)
-                            .font(.title3)
-                    }
-                    
-                }.frame(maxWidth: Global.screenWidth*0.85)
-                
-                HStack(spacing: 12) {
-                    
-                    Button {
-                        newType = 1
-                        showNewPhrase = true
-                    } label: {
-                        VStack(spacing: 5) {
-                            Image(systemName: "book.fill")
-                                .font(.title)
-                            Text(LocalizedStringKey("New Expression"))
-                            
-                        }.foregroundStyle(.white)
-                            .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
-                            .background(RoundedRectangle(cornerRadius: 10).fill(Color.accent).opacity(0.8).shadow(radius:1))
-                    }
-                    .accessibilityLabel("New Phrase. Add a New Phrase that you do not understand the meaning.")
-                    
-                    
-                    Button {
-                        newType = 2
-                        showNewPhrase = true
-                    } label: {
-                        VStack(spacing: 5) {
-                            Image(systemName: "rectangle.and.pencil.and.ellipsis")
-                                .font(.title)
-                            Text("How to say...?")
-                            
-                        }.foregroundStyle(.white)
-                            .frame(width: Global.screenWidth*0.42, height: Global.screenHeight*0.09)
-                            .background(RoundedRectangle(cornerRadius: 10).fill(Color.accent)
-                                .opacity(0.8).shadow(radius:1))
-                    }.accessibilityLabel("How to say? Add a phrase or word in your native language to learn how to say it in your new language.")
-                    
-                }.padding(.vertical)
-                
-                HStack(spacing: 20) {
-                    VStack {
-                        Text("To Review")
-                            .font(.title)
-                            .fontWeight(.medium)
-                    }
-                    
-                    Text("\(testPhrases.filter {$0.language == selectedLanguage}.count)")
-                        .padding(8)
-                        .background(Circle().fill(.gray.opacity(0.6)))
-                        .font(.caption2)
-                        .foregroundStyle(.white)
-                    Spacer()
-                }.frame(width: Global.screenWidth*0.85)
-                
-                Picker("", selection: $selectedSegment) {
-                    Text("Expressions").tag(0)
-                    Text("How to say...?").tag(1)
-                }
-                .pickerStyle(.segmented)
-                .padding(.bottom)
-                .frame(maxWidth: Global.screenWidth*0.85)
-                
-                
-                if selectedSegment == 0  {
-                    let newExpressions = testPhrases.filter {$0.learnType == .newPhrase}
-                    
-                    if newExpressions.isEmpty {
-                        VStack(alignment: .center, spacing: 10) {
+                        // Stats Card con Glass Effect
+                        HStack {
                             Spacer()
-                            Image(systemName: "tray")
-                                .font(.largeTitle)
-                                .foregroundStyle(.secondary)
                             
-                            Text("No expressions to review!")
-                                .fontWeight(.semibold)
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
+                            VStack(spacing: 6) {
+                                Text("\(testPhrases.count)")
+                                    .font(.system(size: 42, weight: .bold))  // ✅ Era 36
+                                    .foregroundColor(.accentColor)
+                                
+                                Text("TO REVIEW")  // ✅ Uppercase
+                                    .font(.caption2)  // ✅ Más pequeño
+                                    .foregroundColor(.secondary)
+                                    .fontWeight(.semibold)  // ✅ Era .medium
+                                    .tracking(0.8)  // ✅ Letter spacing
+                            }
+                            .frame(maxWidth: .infinity)
                             
-                            Text("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.")
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
+                            
+                            Divider()
+                                .frame(height: 60)
+                            
+                            VStack(spacing: 6) {
+                                Text("\(allPhrases.filter { $0.isCompleted && $0.language == selectedLanguage }.count)")
+                                    .font(.system(size: 42, weight: .bold))  // ✅ Era 36
+                                    .foregroundColor(Color(red: 0.1, green: 0.7, blue: 0.8))
+                                
+                                Text("LEARNED")  // ✅ Uppercase
+                                    .font(.caption2)  // ✅ Más pequeño
+                                    .foregroundColor(.secondary)
+                                    .fontWeight(.semibold)  // ✅ Era .medium
+                                    .tracking(0.8)  // ✅ Letter spacing
+                            }
+                            .frame(maxWidth: .infinity)
                             
                             Spacer()
-                        }.padding()
-                            .frame(maxWidth: Global.screenWidth*0.85)
-                    } else {
-                        VStack {
-                            
+                        }
+                        .padding(.vertical, 20)  // ✅ Más padding vertical
+                        .padding(.horizontal, 20)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(24)
+                        .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 6)
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 12)
+                    
+                    // Section Header para la lista
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("All Words to Review")
+                            .font(.system(size: 18, weight: .bold))  // ✅ Era 20, ahora 18
+                            .foregroundColor(.primary)
+                            .padding(.horizontal, 24)
+                            .padding(.top, 20)  // ✅ Era 16
+                            .padding(.bottom, 4)  // ✅ Agregar
+                        
+                        // Lista de palabras
+                        if testPhrases.isEmpty {
+                            VStack(alignment: .center, spacing: 10) {
+                                Spacer()
+                                Image(systemName: "tray")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.secondary)
+                                
+                                Text("No expressions to review!")
+                                    .fontWeight(.semibold)
+                                    .font(.callout)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.center)
+                                
+                                Text("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.")
+                                    .font(.callout)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.center)
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                        } else {
                             ScrollView {
-                                VStack(spacing: 15) {
-                                    
-                                    
+                                VStack(spacing: 10) {  // ✅ Era 12, ahora 10
                                     ForEach(testPhrases, id: \.self) { phrase in
-                                        if phrase.learnType == .newPhrase {
-                                            WordElementView(phrase: phrase, isCollection: false)
-                                        }
-                                        
-                                        
-                                        
+                                        WordElementView(phrase: phrase, isCollection: false)
                                     }
                                 }
-                                
+                                .padding(.horizontal, 24)
+                                .padding(.bottom, 20)  // ✅ Agregar padding inferior
                             }
-                            
-                            
-                            
                         }
-                        .frame(maxWidth: Global.screenWidth*0.85)
-                    }
-                    
-                    
-                } else {
-                    
-                    let newExpressions = testPhrases.filter {$0.learnType == .howToSay}
-                    
-                    if newExpressions.isEmpty {
-                        VStack(alignment: .center, spacing: 10) {
-                            Spacer()
-                            Image(systemName: "tray")
-                                .font(.largeTitle)
-                                .foregroundStyle(.secondary)
-                            
-                            Text("No translation doubts yet!")
-                                .fontWeight(.semibold)
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                            
-                            Text("Want to know how to say something in the language you're learning? Save it here!")
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                            
-                            Spacer()
-                        }.padding()
-                            .frame(maxWidth: Global.screenWidth*0.85)
-                    } else {
-                        VStack {
-                            
-                            ScrollView {
-                                VStack(spacing: 15) {
-                                    
-                                    
-                                    ForEach(testPhrases, id: \.self) { phrase in
-                                        if phrase.learnType == .howToSay {
-                                            WordElementView(phrase: phrase, isCollection: false)
-                                        }
-                                        
-                                        
-                                        
-                                    }
-                                }
-                                
-                            }
-                            
-                            
-                            
-                        }
-                        .frame(maxWidth: Global.screenWidth*0.85)
                     }
                     
                     
                     
                 }
-                
-            }
-            .sheet(isPresented: $showNewPhrase) {
-                NewPhraseView(newPhraseText: $newPhraseText, showNewPhrase: $showNewPhrase, phrases: $phrases, newType: $newType)
-                
-                    .presentationDetents([.fraction(0.38)])
-            }
-            .onTapGesture {
-                hideKeyboard()
-            }
-            
-            Spacer()
-        }.onAppear {
-            
-            guard !hasInsertedDefaultCategories else { return }
-            
-            let fetchRequest = FetchDescriptor<Category>()
-            do {
-                let existingCategories = try modelContext.fetch(fetchRequest)
-                let existingCategoryNames = Set(existingCategories.map { $0.name }) // Collect existing category names
-                
-                // Filter categories to insert, excluding those already present
-                let categoriesToInsert = categories.filter { !existingCategoryNames.contains($0.name) }
-                
-                for category in categoriesToInsert {
-                    modelContext.insert(category)
+                .sheet(isPresented: $showNewPhrase) {
+                    NewPhraseView(newPhraseText: $newPhraseText,
+                                  showNewPhrase: $showNewPhrase,
+                                  phrases: $phrases,
+                                  newType: $newType)
+                    .presentationDetents([.fraction(0.48)])
+                    .presentationCornerRadius(28)
+                }
+                .onTapGesture {
+                    hideKeyboard()
                 }
                 
-                // Save the context if there are new categories
-                if !categoriesToInsert.isEmpty {
-                    try modelContext.save()
-                }
+                Spacer()
                 
-                hasInsertedDefaultCategories = true // ✅ Dopo aver salvat
-            } catch {
-                print("Error fetching or saving categories: \(error)")
-            }
-            
-            
-            
-            
-        }
-        .onAppear {
-            // Check if both userName and selectedLanguage are set
-            if userName == "No name set" || selectedLanguage == "No language selected" {
-                isPresenting = true // Show the welcome screen
-            } else {
-                isPresenting = false // Skip the welcome screen if both are set
-            }
-        }
-        .onAppear {
-            if !hasMigratedLanguages {
-                let fetchDescriptor = FetchDescriptor<LearnElement>()
+            }.onAppear {
+                
+                guard !hasInsertedDefaultCategories else { return }
+                
+                let fetchRequest = FetchDescriptor<Category>()
                 do {
-                    let phrases = try modelContext.fetch(fetchDescriptor)
-                    for phrase in phrases {
-                        if phrase.language == nil {
-                            phrase.language = selectedLanguage
-                        }
+                    let existingCategories = try modelContext.fetch(fetchRequest)
+                    let existingCategoryNames = Set(existingCategories.map { $0.name }) // Collect existing category names
+                    
+                    // Filter categories to insert, excluding those already present
+                    let categoriesToInsert = categories.filter { !existingCategoryNames.contains($0.name) }
+                    
+                    for category in categoriesToInsert {
+                        modelContext.insert(category)
                     }
-                    try modelContext.save()
-                    hasMigratedLanguages = true
-                    print("✅ Migration completed")
+                    
+                    // Save the context if there are new categories
+                    if !categoriesToInsert.isEmpty {
+                        try modelContext.save()
+                    }
+                    
+                    hasInsertedDefaultCategories = true // ✅ Dopo aver salvat
                 } catch {
-                    print("❌ Migration error: \(error)")
+                    print("Error fetching or saving categories: \(error)")
+                }
+                
+                
+                
+                
+            }
+            .onAppear {
+                // Check if both userName and selectedLanguage are set
+                if userName == "No name set" || selectedLanguage == "No language selected" {
+                    isPresenting = true // Show the welcome screen
+                } else {
+                    isPresenting = false // Skip the welcome screen if both are set
                 }
             }
-        }
-        .onAppear {
-            if languageStore.userLanguages.isEmpty {
-                if selectedLanguage != "" {
-                    languageStore.addLanguage(selectedLanguage)
+            .onAppear {
+                if !hasMigratedLanguages {
+                    let fetchDescriptor = FetchDescriptor<LearnElement>()
+                    do {
+                        let phrases = try modelContext.fetch(fetchDescriptor)
+                        for phrase in phrases {
+                            if phrase.language == nil {
+                                phrase.language = selectedLanguage
+                            }
+                        }
+                        try modelContext.save()
+                        hasMigratedLanguages = true
+                        print("✅ Migration completed")
+                    } catch {
+                        print("❌ Migration error: \(error)")
+                    }
                 }
-               }
-           }
-        .fullScreenCover(isPresented: $hasSeenOnboarding, onDismiss: didDismiss) {
-            OnboardingView()
+            }
+            .onAppear {
+                if languageStore.userLanguages.isEmpty {
+                    if selectedLanguage != "" {
+                        languageStore.addLanguage(selectedLanguage)
+                    }
+                }
+            }
+            .fullScreenCover(isPresented: $hasSeenOnboarding, onDismiss: didDismiss) {
+                OnboardingView()
+            }
+            .sheet(isPresented: $isPresentingInfo) {
+                AboutView()
+            }
+            .sheet(isPresented: $isPresentingSettings) {
+                SectionSettingsView()
+            }
+            
         }
-        .sheet(isPresented: $isPresentingInfo) {
-            AboutView()
-        }
-        .sheet(isPresented: $isPresentingSettings) {
-            SectionSettingsView()
-        }
-        
     }
     
     func didDismiss() {
@@ -362,61 +303,54 @@ struct WordElementView: View {
     var phrase: LearnElement
     var isCollection: Bool = false
     @Environment(\.modelContext) var modelContext
-    
+
+    private let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
+
     var body: some View {
-        ZStack {
+        NavigationLink {
+            if !isCollection { DetailView(phrase: phrase) }
+            else { CollectionDetailView(phrase: phrase) }
+        } label: {
             HStack {
-                Rectangle()
-                    .fill(phrase.learnType == .howToSay ? .accent : .accent).opacity(0.7)
-                    .clipShape(.rect(topLeadingRadius: 10, bottomLeadingRadius: 10))
-                    .frame(width: 10)
-                
+                Text(phrase.userEntry)
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(.primary)
+                    .lineLimit(1)
+
                 Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(.secondary.opacity(0.3))
             }
-            
-            
-            NavigationLink {
-                if !isCollection {
-                    DetailView(phrase: phrase)
-                } else {
-                    CollectionDetailView(phrase: phrase)
-                }
-            } label: {
-                HStack {
-                    Text(phrase.userEntry)
-                        .foregroundStyle(.primary)
-                        .padding(.horizontal,8)
-                    Spacer()
-                    
-                }
-                .padding()
-                .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
-                .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary
-                    .opacity(0.1)).shadow(radius:1))
-                .foregroundStyle(.primary)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
+            // espacio para la rayita
+            .padding(.leading, 16 + 4) // 16 = inset, 4 = ancho de la raya
+            // card
+            .background(.ultraThinMaterial, in: shape)
+            // raya DENTRO de la card
+            .overlay(alignment: .leading) {
+                Capsule()
+                    .fill(LinearGradient(colors: [.accent, .accent],
+                                         startPoint: .top, endPoint: .bottom))
+                    .frame(width: 4, height: 28)   // ← pequeña dentro
+                    .padding(.leading, 16)         // ← inset interno
             }
+            .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
         }
-        .padding()
-        .frame(width: Global.screenWidth*0.85, height: Global.screenHeight*0.08)
-        .background(RoundedRectangle(cornerRadius: 10).fill(Color.secondary.opacity(0.1)).shadow(radius:1))
-        .foregroundStyle(.primary)
+        .buttonStyle(.plain)
         .contextMenu {
-            Button {
+            Button(role: .destructive) {
                 withAnimation {
                     modelContext.delete(phrase)
-                    do {
-                        try modelContext.save()
-                    } catch {
-                        print("Error deleting element: \(error)")
-                    }
+                    try? modelContext.save()
                 }
-            } label: {
-                
-                Label(isCollection ? "Delete from collection" : "Delete pending", systemImage: "trash.fill")
-            }
+            } label: { Label(isCollection ? "Delete from collection" : "Delete pending", systemImage: "trash.fill") }
         }
     }
 }
+
 
 
 
@@ -425,111 +359,130 @@ struct NewPhraseView: View {
     @Binding var showNewPhrase: Bool
     @Binding var phrases: [String]
     @Binding var newType: Int
-    @Environment(\.dismiss) var dismiss
+
     @Environment(\.modelContext) var modelContext
-    @State var showMessage: Bool = false
-    let maxCharacters = 50
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
-    
+
+    @FocusState private var isFocused: Bool
+    let maxCharacters = 50
+
+    private var trimmed: String { newPhraseText.trimmingCharacters(in: .whitespacesAndNewlines) }
+    private var remaining: Int { max(0, maxCharacters - newPhraseText.count) }
+
     var body: some View {
-        VStack(spacing: 10) {
-            HStack {
-                VStack(alignment: .leading)  {
-                    
-                    HStack(spacing: 15) {
-                        Text(newType == 1 ? "Add New Expression" : "How to say...?")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                        
-                        ZStack {
-                            Circle()
-                                .stroke(lineWidth: 3)
-                                .opacity(0.5)
-                                .foregroundColor(.gray)
-                                .frame(width: 12)
-                            
-                            Circle()
-                            
-                                .trim(from: 0.0, to: CGFloat(min(Double(newPhraseText.count) / Double(maxCharacters), 1.0)))
-                                .stroke(
-                                    AngularGradient(gradient: Gradient(colors: [.accent, .accent]), center: .center),
-                                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                                )
-                                .rotationEffect(Angle(degrees: -90))
-                                .frame(width: 12)
-                        }
+        VStack(alignment: .leading, spacing: 16) {
+
+            // Title + mini progress
+            HStack(spacing: 10) {
+                Text(newType == 1 ? "Add New Expression" : "How to say…?")
+                    .font(.title2).fontWeight(.semibold)
+                ProgressRing(progress: Double(newPhraseText.count)/Double(maxCharacters))
+            }
+
+            Text(newType == 1
+                 ? "Found a word or phrase you don’t understand? Save it to review later."
+                 : "Write what you want to say in the language you’re learning.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            // COMPACT TEXTFIELD
+            HStack(spacing: 10) {
+                Image(systemName: "text.magnifyingglass")
+                    .foregroundStyle(.secondary)
+
+                TextField("Type the word or phrase…", text: $newPhraseText)
+                    .focused($isFocused)
+                    .textInputAutocapitalization(.words)
+                    .disableAutocorrection(false)
+                    .submitLabel(.done)
+                    .onSubmit { add() }
+                    .onChange(of: newPhraseText) { old, new in
+                        if new.count > maxCharacters { newPhraseText = String(new.prefix(maxCharacters)) }
                     }
-                    
-                    Text(newType == 1 ? "Found a word or phrase you don’t understand? Save it here to review later." : "Want to know how to say something in the language you're learning? Save it here!")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .minimumScaleFactor(0.85)
-                    
+
+                // clear button
+                if !newPhraseText.isEmpty {
+                    Button {
+                        newPhraseText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.tertiary)
+                    }
+                    .buttonStyle(.plain)
                 }
-                
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 48)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(Color(.separator).opacity(0.6), lineWidth: 0.5)
+            )
+
+            // helper row: counter
+            HStack {
                 Spacer()
+                Text("\(remaining)")
+                    .font(.caption).monospacedDigit()
+                    .foregroundStyle(remaining == 0 ? .red : .secondary)
             }
-            
-            if showMessage {
-                Text("Make sure your word/phrase is in Italian!")
-                    .foregroundStyle(.red)
-                    .font(.callout)
-                    .fontWeight(.medium)
-            }
-            
-            TextEditor(text: Binding(
-                get: { newPhraseText },
-                set: { newValue in
-                    // Trim to max length
-                    if newValue.count <= maxCharacters {
-                        newPhraseText = newValue
-                    } else {
-                        newPhraseText = String(newValue.prefix(maxCharacters))
-                        
-                    }
-                }
-            ))
-            .frame(height: 70)
-            .padding(10)
-            .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
-            
+
+            Spacer(minLength: 0)
+        }
+        .padding(20)
+        // bottom primary button (fixed, safe with home indicator)
+        .safeAreaInset(edge: .bottom) {
             HStack {
-                Button {
-                    let newElement = LearnElement(learnType: newType == 1 ? .newPhrase : .howToSay, userEntry: newPhraseText, explanation: "", language: selectedLanguage)
-                    
-                    withAnimation {
-                        
-                        modelContext.insert(newElement)
-                    }
-                    
-                    WidgetCenter.shared.reloadAllTimelines()
-                    newPhraseText = ""
-                    showNewPhrase = false
-                    
-                } label: {
-                    HStack {
-                        Text("Add ")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        Image(systemName: "plus")
-                            .font(.title3)
-                    }
-                    .foregroundStyle(.white)
-                    .padding(10)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(newPhraseText == "" ? Color.gray : Color.accentColor))
-                    
-                    
-                    
-                }.disabled(newPhraseText.isEmpty)
-                
-            }.padding(.top,10)
-            
-        }.padding()
+                Button(action: add) {
+                    Label("Add", systemImage: "plus")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.accentColor)
+                .controlSize(.large)
+                .disabled(trimmed.isEmpty)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.thinMaterial)
+        }
+        .onAppear { isFocused = true }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") { showNewPhrase = false }
+            }
+        }
     }
-    
-    
+
+    private func add() {
+        let text = trimmed
+        guard !text.isEmpty else { return }
+        let element = LearnElement(
+            learnType: newType == 1 ? .newPhrase : .howToSay,
+            userEntry: text, explanation: "", language: selectedLanguage
+        )
+        withAnimation { modelContext.insert(element) }
+        newPhraseText = ""
+        showNewPhrase = false
+    }
 }
+
+// tiny progress ring (same as antes)
+private struct ProgressRing: View {
+    var progress: Double
+    var body: some View {
+        ZStack {
+            Circle().stroke(Color(.separator).opacity(0.6), lineWidth: 3)
+            Circle()
+                .trim(from: 0, to: min(progress, 1))
+                .stroke(.tint, style: .init(lineWidth: 3, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+        }
+        .frame(width: 14, height: 14)
+        .accessibilityHidden(true)
+    }
+}
+
 
 
 struct SectionSettingsView: View {
@@ -615,35 +568,3 @@ extension View {
     }
 }
 
-struct AddLanguageView: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) var modelContext
-    @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
-    @EnvironmentObject var languageStore: LanguageStore
-    
-    let allLanguages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
-    
-    var availableLanguages: [String] {
-        
-        allLanguages.filter { lang in
-            !languageStore.userLanguages.contains(where: { $0 == lang })
-        }
-    }
-    
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(availableLanguages, id: \.self) { language in
-                    Button(LocalizedStringKey(language)) {
-                        
-                        languageStore.addLanguage(language)
-                        selectedLanguage = language
-                        
-                        dismiss()
-                    }.foregroundStyle(.primary)
-                }
-            }
-            .navigationTitle("Add Language")
-        }
-    }
-}
