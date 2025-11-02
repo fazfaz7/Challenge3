@@ -27,10 +27,9 @@ extension Character {
 
 
 class EmojiTextField: UITextField {
-
     
-    override var textInputContextIdentifier: String? { "" } 
-
+    override var textInputContextIdentifier: String? { "" }
+    
     override var textInputMode: UITextInputMode? {
         for mode in UITextInputMode.activeInputModes {
             if mode.primaryLanguage == "emoji" {
@@ -38,6 +37,33 @@ class EmojiTextField: UITextField {
             }
         }
         return nil
+    }
+    
+    // ✅ AGREGAR ESTO para centrar el texto
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds
+    }
+    
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds
+    }
+    
+    // ✅ Configuración inicial
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupTextField()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupTextField()
+    }
+    
+    private func setupTextField() {
+        textAlignment = .center  // ✅ Centrado horizontal
+        contentVerticalAlignment = .center  // ✅ Centrado vertical
+        backgroundColor = .clear
+        borderStyle = .none
     }
 }
 
