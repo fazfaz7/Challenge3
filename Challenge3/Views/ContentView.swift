@@ -203,7 +203,7 @@ struct ContentView: View {
                                   showNewPhrase: $showNewPhrase,
                                   phrases: $phrases,
                                   newType: $newType)
-                    .presentationDetents([.fraction(0.48)])
+                    .presentationDetents([.fraction(0.40)])
                     .presentationCornerRadius(28)
                 }
                 .onTapGesture {
@@ -384,7 +384,10 @@ struct NewPhraseView: View {
                  : "Write what you want to say in the language you’re learning.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-
+                .lineLimit(nil)                      // or .lineLimit(2/3)
+                  .fixedSize(horizontal: false, vertical: true)
+                  .multilineTextAlignment(.leading)
+                  .frame(maxWidth: .infinity, alignment: .leading)
             // COMPACT TEXTFIELD
             HStack(spacing: 10) {
                 Image(systemName: "text.magnifyingglass")
@@ -392,8 +395,6 @@ struct NewPhraseView: View {
 
                 TextField("Type the word or phrase…", text: $newPhraseText)
                     .focused($isFocused)
-                    .textInputAutocapitalization(.words)
-                    .disableAutocorrection(false)
                     .submitLabel(.done)
                     .onSubmit { add() }
                     .onChange(of: newPhraseText) { old, new in

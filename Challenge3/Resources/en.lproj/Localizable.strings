@@ -17,8 +17,8 @@
 "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later.";
 "To Review" = "To Review";
 "My Collection" = "My Collection";
-"pending_message" = "%@, time to find out what it means! Write a small explanation or translation, then mark it complete.";
-"other_message" = "%@, time to figure out how to say this! Look it up in the language you're learning and mark it complete.";
+"pending_message" = "Time to find out what it means! Write a small explanation or translation, then mark it complete.";
+"other_message" = "Time to figure out how to say this! Look it up in the language you're learning and mark it complete.";
 "Found a word or phrase you don’t understand? Save it here to review later." = "Found a word or phrase you don’t understand? Save it here to review later.";
 "Want to know how to say something in the language you're learning? Save it here!" = "Want to know how to say something in the language you're learning? Save it here!";
 "Add New Expression" = "Add New Expression";

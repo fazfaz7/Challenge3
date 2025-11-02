@@ -17,7 +17,7 @@
 "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "Vuoi dire qualcosa nella lingua che stai imparando ma non sai come? Usa “Come si dice?” per salvarlo nella tua lingua e controllarlo in seguito.";
 "To Review" = "Da completare";
 "My Collection" = "La mia collezione";
-"pending_message" = "%@, scopri cosa significa! Scrivi una breve spiegazione o traduzione, poi segna come completato.";
+"pending_message" = "Scopri cosa significa! Scrivi una breve spiegazione o traduzione, poi segna come completato.";
 "Found a word or phrase you don’t understand? Save it here to review later." = "Hai trovato una parola o una frase che non capisci? Salvala qui per controllarla più tardi.";
 "Want to know how to say something in the language you're learning? Save it here!" = "Vuoi sapere come dire qualcosa nella lingua che stai imparando? Salvalo qui!";
 "Add New Expression" = "Aggiungi nuova espressione";
@@ -79,7 +79,7 @@
 "🤝 Complete your pendings by asking a native speaker or by searching" = "🤝 Completa i tuoi elementi in sospeso chiedendo a un madrelingua o cercando online";
 "🧠 Activate the widget to practice your saved words daily." = "🧠 Attiva il widget per ripassare ogni giorno le parole salvate.";
 
-"other_message" = "%@, è ora di scoprire come si dice! Cercalo nella lingua che stai imparando e segna come completato.";
+"other_message" = "É ora di scoprire come si dice! Cercalo nella lingua che stai imparando e segna come completato.";
 
 "Choose a category" = "Scegli una categoria";
 "Languages you are learning" = "Lingue che stai imparando";

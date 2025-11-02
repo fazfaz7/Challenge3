@@ -23,164 +23,239 @@ struct DetailView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     @State var temporaryPhrase: String = ""
+    @FocusState private var isTextFieldFocused: Bool
 
-    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 15) {
-                HStack {
-                    VStack(alignment: .leading) {
-                        
-                        Text(phrase.learnType == .newPhrase ? "New expression" : "How to say...?")
-                            .foregroundStyle(.accent)
-                            .fontWeight(.medium)
-                        Text(phrase.userEntry)
-                            .font(.title)
+        ZStack {
+            
+            Color(.systemGroupedBackground).ignoresSafeArea()
+            .ignoresSafeArea()
+            
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    
+                    // HEADER: Label + Palabra + Botones
+                    VStack(alignment: .leading, spacing: 12) {
+                        // Label superior con uppercase
+                        Text(phrase.learnType == .newPhrase ? "NEW EXPRESSION" : "HOW TO SAY...?")
+                            .font(.caption)
                             .fontWeight(.semibold)
-                            .italic()
-                            .lineLimit(3)
-                            .minimumScaleFactor(0.7)
-                    }                    .fixedSize(horizontal: false, vertical: true)
-                    
-                    Spacer()
-                    
-                    
+                            .foregroundColor(.accentColor)
+                            .tracking(0.8)
                         
-                        HStack {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 42)
-                                    .foregroundStyle(.accent)
-                                
+                        // Palabra + botones
+                        HStack(alignment: .top, spacing: 16) {
+                            Text(phrase.userEntry)
+                                .font(.system(size: 40, weight: .bold))
+                                .foregroundColor(.primary)
+                                .italic()
+                                .lineLimit(3)
+                                .minimumScaleFactor(0.7)
+                                .fixedSize(horizontal: false, vertical: true)
+                            
+                            Spacer()
+                            
+                            // Botones circulares con gradiente
+                            HStack(spacing: 12) {
+                                // Botón traducir
                                 Button {
                                     showTranslation = true
                                 } label: {
                                     Image(systemName: "translate")
-                                        .foregroundStyle(.white)
-                                        .font(.callout)
-
-                                    
+                                        .font(.system(size: 18, weight: .semibold))
+                                        .foregroundColor(.white)
+                                        .frame(width: 50, height: 50)
+                                        .background(
+                                            LinearGradient(
+                                                colors: [
+                                                    Color(red: 0.08, green: 0.72, blue: 0.65),
+                                                    Color(red: 0.1, green: 0.7, blue: 0.8)
+                                                ],
+                                                startPoint: .topLeading,
+                                                endPoint: .bottomTrailing
+                                            )
+                                        )
+                                        .clipShape(Circle())
+                                        .shadow(color: .accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
                                 }
                                 
-                            }                    .fixedSize(horizontal: false, vertical: true)
-                            if phrase.learnType == .newPhrase {
-                            ZStack {
-                                Circle()
-                                    .frame(width: 42)
-                                    .foregroundStyle(.accent)
-                                
-                                Button {
-                                    viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
-                               
-
-                                } label: {
-                                    Image(systemName: "speaker.3.fill")
-                                                                   .foregroundStyle(.white)
-                                                                   .font(.callout)
-                                                                  
-                                    
+                                // Botón audio (solo si es newPhrase)
+                                if phrase.learnType == .newPhrase {
+                                    Button {
+                                        viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
+                                    } label: {
+                                        Image(systemName: "speaker.wave.2.fill")
+                                            .font(.system(size: 18, weight: .semibold))
+                                            .foregroundColor(.white)
+                                            .frame(width: 50, height: 50)
+                                            .background(
+                                                LinearGradient(
+                                                    colors: [
+                                                        Color(red: 0.08, green: 0.72, blue: 0.65),
+                                                        Color(red: 0.1, green: 0.7, blue: 0.8)
+                                                    ],
+                                                    startPoint: .topLeading,
+                                                    endPoint: .bottomTrailing
+                                                )
+                                            )
+                                            .clipShape(Circle())
+                                            .shadow(color: .accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+                                    }
                                 }
-                                
-                            }                    .fixedSize(horizontal: false, vertical: true)
-                            
+                            }
                         }
                     }
                     
-                }.padding(.bottom, 2)
-                
-                
-                VStack(alignment: .leading, spacing: 20){
-                    Text(String(format: NSLocalizedString(phrase.learnType == .newPhrase ?  "pending_message" : "other_message", comment: ""), userName))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    
-                
-                    
-                    TextEditor(text: $phrase.explanation)
-                        .frame(width:Global.screenWidth*0.78 ,height: 70) //
-                        .padding(10)
-                        .background(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 1))
-                    
-                    
-                    VStack(alignment:.leading) {
+                    // EXPLICACIÓN
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text(String(format: NSLocalizedString(phrase.learnType == .newPhrase ? "pending_message" : "other_message", comment: ""), userName))
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
                         
-                        
+                        // TextField multilínea con glass effect
+                        ZStack(alignment: .topLeading) {
+                            // Placeholder
+                            if phrase.explanation.isEmpty {
+                                Text("Write your explanation here...")
+                                    .foregroundColor(.secondary.opacity(0.5))
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 14)
+                            }
+                            
+                            // TextEditor con glass effect
+                            TextEditor(text: $phrase.explanation)
+                                .font(.body)
+                                .foregroundColor(.primary)
+                                .scrollContentBackground(.hidden)
+                                .frame(minHeight: 120)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 10)
+                                .focused($isTextFieldFocused)
+                                
+                            
+                        }
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 18)
+                                .stroke(
+                                    isTextFieldFocused ? Color.accentColor : Color.accentColor.opacity(0.3),
+                                    lineWidth: isTextFieldFocused ? 2 : 1.5
+                                )
+                        )
+                        .shadow(color: .black.opacity(0.03), radius: 8, x: 0, y: 4)
+                    }
+                    
+                    // CATEGORY SELECTOR
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Category")
-                            .font(.title3)
-                            .foregroundStyle(.primary)
-                            .fontWeight(.medium)
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        
                         Button {
                             showCategoryView.toggle()
                         } label: {
-                            
-                            HStack {
-                                if let selectedCategory = selectedCategory{
+                            HStack(spacing: 12) {
+                                if let selectedCategory = selectedCategory {
                                     Text(selectedCategory.emoji)
                                         .font(.title3)
                                     Text(selectedCategory.name)
-                                        .foregroundStyle(colorScheme == .dark ? .white : .black )
+                                        .foregroundColor(.primary)
+                                        .fontWeight(.medium)
                                 } else {
                                     Text("None")
-                                        .foregroundStyle(.gray)
+                                        .foregroundColor(.secondary)
+                                        .fontWeight(.medium)
                                 }
+                                
                                 Spacer()
                                 
-                                Image(systemName: "triangle.fill")
-                                    .foregroundStyle(.gray.opacity(0.4))
-                                    .rotationEffect(.degrees(180))
-                            }.padding()
-                                .frame(width: Global.screenWidth*0.85, height:50).background(RoundedRectangle(cornerRadius: 8).fill(Color.gray.opacity(0.15)))
+                                Image(systemName: "chevron.down")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(16)
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
+                            )
+                            .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
                         }
-                    }.padding(.vertical)
-                    HStack {
-                        Spacer()
-                        Button {
-                            
-                            if phrase.learnType == .howToSay {
-                                temporaryPhrase = phrase.explanation
-                                phrase.explanation = phrase.userEntry
-                                phrase.userEntry = temporaryPhrase
-                            }
-                            phrase.category = selectedCategory
-                                phrase.isCompleted = true
-                                try? modelContext.save()
-                            WidgetCenter.shared.reloadAllTimelines()
-                            
-                            dismiss()
-                        } label: {
-                            HStack {
-                                Text("Mark complete")
-                                Image(systemName: "checkmark")
-                            }
-                            .padding(15)
-                            .background(RoundedRectangle(cornerRadius: 10).fill(phrase.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray.opacity(0.6) : Color.accentColor))
-                            .foregroundStyle(.white)
-                        }.disabled(phrase.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                        Spacer()
                     }
                     
-                }
-                
-                
-                
-                Spacer()
-                
-            }            .frame(width: Global.screenWidth*0.85)
-            
-            
-                .sheet(isPresented: $showCategoryView) {
-                    SelectCategoryView(selectedCategory: $selectedCategory)
-                        .presentationDetents([.fraction(0.85)])
+                    // BOTÓN MARK COMPLETE
+                    Button {
+                        if phrase.learnType == .howToSay {
+                            temporaryPhrase = phrase.explanation
+                            phrase.explanation = phrase.userEntry
+                            phrase.userEntry = temporaryPhrase
+                        }
+                        phrase.category = selectedCategory
+                        phrase.isCompleted = true
+                        try? modelContext.save()
+                        WidgetCenter.shared.reloadAllTimelines()
+                        dismiss()
+                    } label: {
+                        HStack(spacing: 10) {
+                            Text("Mark complete")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            
+                            Image(systemName: "checkmark")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                        }
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(
+                            Group {
+                                if phrase.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                    Color.gray.opacity(0.4)
+                                } else {
+                                    LinearGradient(
+                                        colors: [
+                                            Color(red: 0.08, green: 0.72, blue: 0.65),
+                                            Color(red: 0.1, green: 0.7, blue: 0.8)
+                                        ],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                }
+                            }
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .shadow(
+                            color: phrase.explanation.isEmpty ? .clear : .accentColor.opacity(0.3),
+                            radius: 12,
+                            x: 0,
+                            y: 6
+                        )
+                    }
+                    .disabled(phrase.explanation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .padding(.top, 16)
                     
                 }
-                .translationPresentation(isPresented: $showTranslation, text: phrase.userEntry) { translatedText in
-                    
-                    phrase.explanation = translatedText
-                }
-        } .onTapGesture {
-            hideKeyboard()
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                .padding(.bottom, 40)
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showCategoryView) {
+            SelectCategoryView(selectedCategory: $selectedCategory)
+                .presentationDetents([.fraction(0.85)])
+        }
+        .translationPresentation(isPresented: $showTranslation, text: phrase.userEntry) { translatedText in
+            phrase.explanation = translatedText
+        }
+        .onTapGesture {
+            isTextFieldFocused = false
         }
     }
 }
@@ -297,4 +372,6 @@ struct AddLanguageView: View {
         }
     }
 }
+
+
 

@@ -18,7 +18,7 @@
 "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "¿Hay algo que quieres decir en el idioma que estás aprendiendo pero no sabes cómo? Usa “¿Cómo se dice?” para guardarlo en tu idioma y revisarlo más tarde.";
 "To Review" = "Mis Pendientes";
 "My Collection" = "Mi Colección";
-"pending_message" = "%@, ¡Es hora de descubrir qué significa! Escribe una breve explicación o traducción y completa tu pendiente.";
+"pending_message" = "¡Es hora de descubrir qué significa! Escribe una breve explicación o traducción y completa tu pendiente.";
 "Found a word or phrase you don’t understand? Save it here to review later." = "¿Encontraste una palabra o frase que no entiendes? Guárdala aquí y revísala después.";
 "Want to know how to say something in the language you're learning? Save it here!" = "¿Quieres saber cómo decir algo en el idioma que estás aprendiendo? Escríbelo aquí para revisarlo luego.";
 "Add New Expression" = "Agregar Expresión";
@@ -41,7 +41,7 @@
 "Explanation" = "Explicación";
 "Select Category" = "Elegir categoría";
 "Select category" = "Elegir categoría";
-"pending_message" = "%@, escribe la explicación de la frase o palabra aquí y completa tu pendiente. ¡Aclara tu duda y guárdalo!";
+"pending_message" = "Escribe la explicación de la frase o palabra aquí y completa tu pendiente. ¡Aclara tu duda y guárdalo!";
 "Chinese 🇨🇳" = "Chino 🇨🇳";
 "English 🇬🇧" = "Inglés 🇬🇧";
 "French 🇫🇷" = "Francés 🇫🇷";
@@ -81,7 +81,7 @@
 "🤝 Complete your pendings by asking a native speaker or by searching" = "🤝 Completa tus pendientes preguntando a un hablante nativo o buscando por tu cuenta";
 "🧠 Activate the widget to practice your saved words daily." = "🧠 Activa el widget para repasar tus palabras guardadas cada día.";
 
-"other_message" = "%@, ¡es hora de descubrir cómo decir esto! Búscalo en el idioma que estás aprendiendo y márcalo como completado.";
+"other_message" = "¡Es hora de descubrir cómo decir esto! Búscalo en el idioma que estás aprendiendo y márcalo como completado.";
 
 "Choose a category" = "Elige una categoría";
 "Languages you are learning" = "Idiomas que estás aprendiendo";
