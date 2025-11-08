@@ -15,121 +15,174 @@ struct CollectionDetailView: View {
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
     @State private var isEditing = false
-
-
     
     var body: some View {
         ZStack {
-            Color.gray.opacity(0.15).ignoresSafeArea()
-                    VStack(alignment: .center) {
-
-                        VStack(spacing: 20) {
-                            VStack {
-                                
-                                HStack {
-                                    Button {
-                                        isEditing = true
-                                    } label: {
-                                        Image(systemName: "pencil")
-                                            .font(.title3)
-                                    }
-                                    Spacer()
-                                    Button {
-                                        viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
-                                    } label: {
-                                        Image(systemName: "speaker.wave.3.fill")
-                                            .font(.callout)
-                                        
-                                    }
+            // Background gradient iOS 18
+            Color(.systemGroupedBackground).ignoresSafeArea()
+            .ignoresSafeArea()
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    // HEADER: Badge + Palabra
+                    VStack(spacing: 16) {
+                        // Badge "New Expression"
+                        HStack {
+                            Spacer()
+                            Text("New Expression")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .textCase(.uppercase)
+                                .tracking(0.5)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(
+                                    Capsule()
+                                        .fill(
+                                            LinearGradient(
+                                                colors: [
+                                                    Color(red: 0.08, green: 0.72, blue: 0.65),
+                                                    Color(red: 0.1, green: 0.7, blue: 0.8)
+                                                ],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
+                                        )
+                                )
+                                .shadow(color: .accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+                            Spacer()
+                        }
+                        
+                        // Palabra principal
+                        Text(phrase.userEntry)
+                            .font(.system(size: 44, weight: .bold))
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.center)
+                            .minimumScaleFactor(0.7)
+                            .lineLimit(3)
+                            .padding(.horizontal, 24)
+                        
+                        // Botones Edit + Audio
+                        HStack(spacing: 16) {
+                            // Botón Edit
+                            Button {
+                                isEditing = true
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "pencil")
+                                        .font(.system(size: 16, weight: .semibold))
+                                    Text("Edit")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
                                 }
-                                
-                                HStack {
-                                    
-                                    Spacer()
-                                    Text("New Expression")
-                                        .padding(.horizontal,10)
-                                        .padding(.vertical,5)
-                                        .background(RoundedRectangle(cornerRadius: 20).fill(.accent))
-                                        .foregroundStyle(.white)
-                                        .font(.callout)
-                                        .fontWeight(.medium)
-                                    
-                                    Spacer()
-                                    
-                                    
-                                    
-                                }
-                                
-                                Text(phrase.userEntry)
-                                    .font(.largeTitle)
-                                    .fontWeight(.semibold)
-                                    .multilineTextAlignment(.center)
-                                    .minimumScaleFactor(0.8)
-                           
-                            Divider()
-                                .padding(.horizontal,20)
+                                .foregroundColor(.accentColor)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 12)
+                                .background(.ultraThinMaterial)
+                                .clipShape(Capsule())
+                                .overlay(
+                                    Capsule()
+                                        .stroke(Color.accentColor.opacity(0.3), lineWidth: 1.5)
+                                )
                             }
-                            VStack {
-                                Text("Explanation/Meaning")
-                                    .foregroundStyle(.accent)
-                                    .padding(.bottom,3)
-                                    .fontWeight(.medium)
-                                Text(phrase.explanation)
-                                    .multilineTextAlignment(.center)
-                                    
-                                
-                            }.font(.title3)
                             
-                            if let category = phrase.category {
-                            Divider()
-                                .padding(.horizontal,20)
+                            // Botón Audio
+                            Button {
+                                viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
+                            } label: {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(.white)
+                                    .frame(width: 48, height: 48)
+                                    .background(
+                                        LinearGradient(
+                                            colors: [
+                                                Color(red: 0.08, green: 0.72, blue: 0.65),
+                                                Color(red: 0.1, green: 0.7, blue: 0.8)
+                                            ],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .clipShape(Circle())
+                                    .shadow(color: .accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+                            }
+                        }
+                    }
+                    .padding(.top, 20)
+                    
+                    // EXPLANATION CARD
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Explanation/Meaning")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.accentColor)
+                                .textCase(.uppercase)
+                                .tracking(0.5)
+                            Spacer()
+                        }
+                        
+                        Text(phrase.explanation)
+                            .font(.body)
+                            .foregroundColor(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(20)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .shadow(color: .black.opacity(0.04), radius: 10, x: 0, y: 4)
+                    
+                    // CATEGORY CARD (solo si existe)
+                    if let category = phrase.category {
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Text("Category")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.accentColor)
+                                    .textCase(.uppercase)
+                                    .tracking(0.5)
+                                Spacer()
+                            }
                             
-                                VStack {
-                                    Text("Category")
-                                        .foregroundStyle(.accent)
-                                        .padding(.bottom,3)
-                                        .fontWeight(.medium)
-                                    
-                                    HStack {
-                                        
-                                        
-                                        Text(category.emoji)
-                                        Text(category.name)
-                                        
-                                    }
-                                }.font(.title3)
+                            HStack(spacing: 12) {
+                                Text(category.emoji)
+                                    .font(.system(size: 32))
                                 
+                                Text(category.name)
+                                    .font(.body)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
                             }
                         }
                         .padding(20)
-                        .padding(.vertical,5)
-                        .frame(width: Global.screenWidth*0.80)
-                        .background(RoundedRectangle(cornerRadius: 20).fill(colorScheme == .dark ? Color.secondary.opacity(0.1)  : .white).shadow(radius: 0.5))
-                        .frame(maxHeight: Global.screenHeight*0.55)
-                        
-                        
-                        
-                        
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .shadow(color: .black.opacity(0.04), radius: 10, x: 0, y: 4)
                     }
-                    
-                    
-                    
-                    
-
-        }.sheet(isPresented: $isEditing) {
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 40)
+            }
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $isEditing) {
             EditPhraseView(phrase: phrase)
         }
-
-        
     }
 }
 
 #Preview {
-    CollectionDetailView(phrase: LearnElement(learnType: .newPhrase ,userEntry: "Ancora non so cosa sto facendo qua. ma ti voglio aiutare semopre", explanation: "Pero, locura! Nosotros nunca sabemos que está sucediendo por aca lol", language: "Italian 🇮🇹"))
+    CollectionDetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Amicizia", explanation: "Friendship", language: "Italian 🇮🇹"))
 }
 
-
-
+// MARK: - Edit Phrase View (Modernizado)
 struct EditPhraseView: View {
     @ObservedObject var phrase: LearnElement
     @Environment(\.dismiss) var dismiss
@@ -140,30 +193,127 @@ struct EditPhraseView: View {
     @State private var editedEntry: String = ""
     @State private var editedExplanation: String = ""
     @State private var selectedCategory: Category?
+    @FocusState private var focusedField: Field?
+    
+    enum Field {
+        case entry, explanation
+    }
     
     var body: some View {
         NavigationStack {
-            Form {
-                Section(header: Text("Expression")) {
-                    TextField("Enter phrase", text: $editedEntry)
-                }
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.96, green: 0.98, blue: 0.99),
+                        Color(red: 0.98, green: 0.99, blue: 1.0)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea()
                 
-                Section(header: Text("Explanation")) {
-                    TextField("Enter explanation", text: $editedExplanation)
-                }
-                
-                Section(header: Text("Category")) {
-                    Picker("Select Category", selection: $selectedCategory) {
-                        ForEach(categories, id: \.self) { category in
-                            HStack {
-                                //Text(category.emoji)
-                                Text("\(category.emoji) \(category.name)")
-                            }.tag(Optional(category))
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        // Expression field
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Expression")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            TextField("Enter phrase", text: $editedEntry)
+                                .font(.body)
+                                .padding(16)
+                                .background(.ultraThinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(
+                                            focusedField == .entry ? Color.accentColor : Color.secondary.opacity(0.2),
+                                            lineWidth: focusedField == .entry ? 2 : 1
+                                        )
+                                )
+                                .focused($focusedField, equals: .entry)
+                        }
+                        
+                        // Explanation field
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Explanation")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            TextField("Enter explanation", text: $editedExplanation)
+                                .font(.body)
+                                .padding(16)
+                                .background(.ultraThinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(
+                                            focusedField == .explanation ? Color.accentColor : Color.secondary.opacity(0.2),
+                                            lineWidth: focusedField == .explanation ? 2 : 1
+                                        )
+                                )
+                                .focused($focusedField, equals: .explanation)
+                        }
+                        
+                        // Category picker
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Category")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                            
+                            Menu {
+                                ForEach(categories, id: \.self) { category in
+                                    Button {
+                                        selectedCategory = category
+                                    } label: {
+                                        HStack {
+                                            Text(category.emoji)
+                                            Text(category.name)
+                                        }
+                                    }
+                                }
+                            } label: {
+                                HStack(spacing: 12) {
+                                    if let selectedCategory = selectedCategory {
+                                        Text(selectedCategory.emoji)
+                                            .font(.title3)
+                                        Text(selectedCategory.name)
+                                            .foregroundColor(.primary)
+                                            .fontWeight(.medium)
+                                    } else {
+                                        Text("Select a category")
+                                            .foregroundColor(.secondary)
+                                            .fontWeight(.medium)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.down")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(16)
+                                .background(.ultraThinMaterial)
+                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                                )
+                            }
                         }
                     }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 20)
+                    .padding(.bottom, 40)
                 }
             }
             .navigationTitle("Edit Phrase")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -177,11 +327,14 @@ struct EditPhraseView: View {
                         }
                         dismiss()
                     }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.accentColor)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .foregroundColor(.secondary)
                 }
             }
             .onAppear {

@@ -112,7 +112,14 @@ struct ContentView: View {
                             VStack(spacing: 6) {
                                 Text("\(testPhrases.count)")
                                     .font(.system(size: 42, weight: .bold))  // ✅ Era 36
-                                    .foregroundColor(.accentColor)
+                                    .foregroundStyle(LinearGradient(
+                                        colors: [
+                                            Color(red: 0.08, green: 0.72, blue: 0.65),
+                                            Color(red: 0.1, green: 0.7, blue: 0.8)
+                                        ],
+                                        startPoint: .bottom,
+                                        endPoint: .top
+                                    ))
                                 
                                 Text("TO REVIEW")  // ✅ Uppercase
                                     .font(.caption2)  // ✅ Más pequeño
@@ -129,7 +136,14 @@ struct ContentView: View {
                             VStack(spacing: 6) {
                                 Text("\(allPhrases.filter { $0.isCompleted && $0.language == selectedLanguage }.count)")
                                     .font(.system(size: 42, weight: .bold))  // ✅ Era 36
-                                    .foregroundColor(Color(red: 0.1, green: 0.7, blue: 0.8))
+                                    .foregroundStyle(LinearGradient(
+                                        colors: [
+                                            Color(red: 0.08, green: 0.72, blue: 0.65),
+                                            Color(red: 0.1, green: 0.7, blue: 0.8)
+                                        ],
+                                        startPoint: .bottom,
+                                        endPoint: .top
+                                    ))
                                 
                                 Text("LEARNED")  // ✅ Uppercase
                                     .font(.caption2)  // ✅ Más pequeño
@@ -332,8 +346,14 @@ struct WordElementView: View {
             // raya DENTRO de la card
             .overlay(alignment: .leading) {
                 Capsule()
-                    .fill(LinearGradient(colors: [.accent, .accent],
-                                         startPoint: .top, endPoint: .bottom))
+                    .fill(LinearGradient(
+                        colors: [
+                            Color(red: 0.08, green: 0.72, blue: 0.65),
+                            Color(red: 0.1, green: 0.7, blue: 0.8)
+                        ],
+                        startPoint: .bottom,
+                        endPoint: .top
+                    ))
                     .frame(width: 4, height: 28)   // ← pequeña dentro
                     .padding(.leading, 16)         // ← inset interno
             }
@@ -435,12 +455,42 @@ struct NewPhraseView: View {
         .safeAreaInset(edge: .bottom) {
             HStack {
                 Button(action: add) {
-                    Label("Add", systemImage: "plus")
-                        .frame(maxWidth: .infinity)
+                    HStack(spacing: 10) {
+                        Text("Add")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                        
+                        Image(systemName: "plus")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+                    .background(
+                        Group {
+                            if trimmed.isEmpty {
+                                Color.gray.opacity(0.4)
+                            } else {
+                                LinearGradient(
+                                    colors: [
+                                        Color(red: 0.08, green: 0.72, blue: 0.65),
+                                        Color(red: 0.1, green: 0.7, blue: 0.8)
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            }
+                        }
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(
+                        color: trimmed.isEmpty ? .clear : .accentColor.opacity(0.3),
+                        radius: 12,
+                        x: 0,
+                        y: 6
+                    )
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.accentColor)
-                .controlSize(.large)
                 .disabled(trimmed.isEmpty)
             }
             .padding(.horizontal, 16)
@@ -453,6 +503,7 @@ struct NewPhraseView: View {
                 Button("Cancel") { showNewPhrase = false }
             }
         }
+
     }
 
     private func add() {
