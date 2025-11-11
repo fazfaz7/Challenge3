@@ -45,7 +45,8 @@ struct SimpleEntry: TimelineEntry {
 struct Challenge3WidgetExtensionEntryView : View {
     var entry: Provider.Entry
     @Environment(\.modelContext) var modelContext
-    //@Query(filter: #Predicate { $0.isCompleted == true }) var testPhrases: [LearnElement]
+    @Environment(\.widgetFamily) var widgetFamily
+    
     @Query(
         filter: #Predicate { $0.isCompleted == true },
         sort: \LearnElement.dateAdded,
@@ -54,49 +55,198 @@ struct Challenge3WidgetExtensionEntryView : View {
     ) var testPhrases: [LearnElement]
 
     var body: some View {
-
-        
-
-            VStack(spacing: 5) {
-                
-                if let myphrase = testPhrases.randomElement() {
-                    ZStack {
-                        VStack {
-                            HStack {
-                                Spacer()
-                                if let lastChar = myphrase.language?.suffix(1) {
-                                    Text(String(lastChar))
-                                        .padding(5)
-                                        .background(Circle().fill(.gray).opacity(0.5))
-                                }
-                                
-                            }
-                            Spacer()
-                               }
-                        VStack(spacing: 5) {
-                            Text("\(myphrase.userEntry)")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .italic()
-                                .foregroundStyle(.white)
-                                .minimumScaleFactor(0.75)
-                            
-                            HStack {
-                                Text(myphrase.explanation)
-                                    .font(.callout)
-                                    .foregroundStyle(.white)
-                            }
-                        }
-                    }
+        if let myphrase = testPhrases.randomElement() {
+            Group {
+                switch widgetFamily {
+                case .systemSmall:
+                    SmallWidgetView(phrase: myphrase)
+                case .systemMedium:
+                    MediumWidgetView(phrase: myphrase)
+                default:
+                    MediumWidgetView(phrase: myphrase)
                 }
-                
-            }.containerBackground(for: .widget){
-
-                LinearGradient(colors: [.darkaccent,.accent], startPoint: .top, endPoint: .bottom)
-                    
             }
-        
-        
+            .containerBackground(for: .widget) {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.08, green: 0.72, blue: 0.65),
+                        Color(red: 0.1, green: 0.7, blue: 0.8)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+        }
+    }
+}
+
+// MARK: - Small Widget View
+struct SmallWidgetView: View {
+    let phrase: LearnElement
+    
+    var body: some View {
+        ZStack {
+            // Floating orb for depth
+            GeometryReader { geometry in
+                Circle()
+                    .fill(Color.white.opacity(0.12))
+                    .frame(width: 80, height: 80)
+                    .blur(radius: 25)
+                    .offset(x: -20, y: -20)
+                
+                Circle()
+                    .fill(Color.white.opacity(0.08))
+                    .frame(width: 60, height: 60)
+                    .blur(radius: 20)
+                    .offset(x: geometry.size.width - 40, y: geometry.size.height - 40)
+            }
+            
+            VStack(spacing: 0) {
+                // Flag in top-right corner
+                HStack {
+                    Spacer()
+                    let flag = LanguageHelper.flag(from: phrase.language ?? "")
+                    Text(flag)
+                        .font(.system(size: 22))
+                        .padding(6)
+                        .background(
+                            Circle()
+                                .fill(Color.white.opacity(0.15))
+                        )
+                }
+                .padding(.top, 10)
+                .padding(.trailing, 10)
+                
+                Spacer()
+                
+                // Word and explanation
+                VStack(spacing: 6) {
+                    Text(phrase.userEntry)
+                        .font(.system(size: 24, weight: .bold))
+                        .italic()
+                        .foregroundColor(.white)
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.center)
+                    
+                    Rectangle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0),
+                                    Color.white.opacity(0.3),
+                                    Color.white.opacity(0)
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(height: 0.5)
+                        .frame(maxWidth: 60)
+                    
+                    Text(phrase.explanation)
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                }
+                .padding(.horizontal, 12)
+                
+                Spacer()
+            }
+        }
+    }
+}
+
+// MARK: - Medium Widget View
+struct MediumWidgetView: View {
+    let phrase: LearnElement
+    
+    var body: some View {
+        ZStack {
+            // Floating orbs para profundidad
+            GeometryReader { geometry in
+                Circle()
+                    .fill(Color.white.opacity(0.1))
+                    .frame(width: 120, height: 120)
+                    .blur(radius: 30)
+                    .offset(x: -40, y: -40)
+                
+                Circle()
+                    .fill(Color.white.opacity(0.08))
+                    .frame(width: 100, height: 100)
+                    .blur(radius: 25)
+                    .offset(x: geometry.size.width - 60, y: geometry.size.height - 60)
+            }
+            
+            // Contenido
+            VStack(spacing: 0) {
+                // Header
+                HStack {
+                    Text("DAILY WORD")
+                        .font(.system(size: 9, weight: .bold))
+                        .tracking(0.5)
+                        .foregroundColor(.white.opacity(0.9))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.2))
+                        )
+                    
+                    Spacer()
+                    
+                    let flag = LanguageHelper.flag(from: phrase.language ?? "")
+                    Text(flag)
+                        .font(.system(size: 20))
+                        .padding(6)
+                        .background(
+                            Circle()
+                                .fill(Color.white.opacity(0.2))
+                        )
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+                
+                Spacer()
+                
+                // Palabra y explicación
+                VStack(spacing: 8) {
+                    Text(phrase.userEntry)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .italic()
+                        .foregroundColor(.white)
+                        .minimumScaleFactor(0.75)
+                        .multilineTextAlignment(.center)
+                    
+                    Rectangle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.white.opacity(0),
+                                    Color.white.opacity(0.3),
+                                    Color.white.opacity(0)
+                                ],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(height: 0.5)
+                        .frame(maxWidth: 100)
+                    
+                    Text(phrase.explanation)
+                        .font(.callout)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
+                .padding(.horizontal, 16)
+                
+                Spacer()
+            }
+        }
     }
 }
 
@@ -108,7 +258,7 @@ struct Challenge3WidgetExtension: Widget {
             Challenge3WidgetExtensionEntryView(entry: entry)
                 .modelContainer(for: [LearnElement.self, Category.self])
         }
-        .supportedFamilies([.systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
