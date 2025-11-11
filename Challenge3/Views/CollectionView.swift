@@ -17,18 +17,25 @@ enum CollectionOrder: String, CaseIterable {
     case alphabetical = "Alphabetical"
     case byDate = "By Date"
     case byCategory = "By Category"
+    
+    var icon: String {
+        switch self {
+        case .alphabetical: return "textformat.abc"
+        case .byDate: return "calendar"
+        case .byCategory: return "folder"
+        }
+    }
 }
 
 struct CollectionView: View {
     @Environment(\.modelContext) var modelContext
-
     @Query(sort: \LearnElement.dateAdded, order: .reverse) var allPhrases: [LearnElement]
     
     var testPhrases: [LearnElement] {
         allPhrases.filter { $0.isCompleted && $0.language == selectedLanguage }
     }
+    
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
-
     @State private var searchText = ""
     @State private var selectedType: PhraseType = .newPhrase
     @Environment(\.colorScheme) var colorScheme: ColorScheme
@@ -36,14 +43,10 @@ struct CollectionView: View {
     @State private var showingFilterOptions = false
     @State private var expandedCategories: Set<String> = []
     
-
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
             let matchesSearch = searchText.isEmpty || phrase.userEntry.localizedCaseInsensitiveContains(searchText)
-            let matchesType =
-            (selectedType == .howToSay && phrase.learnType == .howToSay) ||
-            (selectedType == .newPhrase && phrase.learnType == .newPhrase)
-            return matchesSearch //&& matchesType
+            return matchesSearch
         }
     }
     
@@ -72,204 +75,255 @@ struct CollectionView: View {
         case .byCategory:
             return Dictionary(grouping: filteredPhrases) { phrase in
                 if let category = phrase.category {
-                    "\(category.name) \(category.emoji) "
+                    "\(category.emoji) \(category.name)"
                 } else {
-                    "No Category"
+                    "📝 No Category"
                 }
             }
             .mapValues { phrases in
                 phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
             }
             .sorted { lhs, rhs in
-                if lhs.key == "No Category" { return false }
-                if rhs.key == "No Category" { return true }
+                if lhs.key.contains("No Category") { return false }
+                if rhs.key.contains("No Category") { return true }
                 return lhs.key < rhs.key
             }
-
             .map { (title: $0.key, phrases: $0.value) }
-
-
         }
-        
-
-
-        
-       
-
-        
-        
     }
     
     var isLibraryCompletelyEmpty: Bool {
         testPhrases.isEmpty
     }
-
+    
     var isFilteredEmpty: Bool {
         !testPhrases.isEmpty && filteredPhrases.isEmpty
     }
-
-
-
+    
     var body: some View {
         NavigationStack {
-            VStack {
-                HStack {
-                    Text("My Collection")
-                        .font(.title)
-                        .fontWeight(.semibold)
+            ZStack {
+                // Background gradient iOS 18
+                Color(.systemGroupedBackground).ignoresSafeArea()
+                .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    // HEADER
+                    HStack(alignment: .bottom) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("My Collection")
+                                .font(.system(size: 34, weight: .bold))
+                                .foregroundColor(.primary)
+                            
+                            Text("\(filteredPhrases.count) \(filteredPhrases.count == 1 ? "word" : "words")")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .fontWeight(.medium)
+                        }
+                        
+                        Spacer()
+                        
+                        // Filter button con glass effect
+                        Menu {
+                            Picker("Order", selection: $selectedOrder) {
+                                ForEach(CollectionOrder.allCases, id: \.self) { order in
+                                    Label(order.rawValue, systemImage: order.icon)
+                                        .tag(order)
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(width: 48, height: 48)
+                                .background(
+                                    LinearGradient(
+                                        colors: [
+                                            Color(red: 0.08, green: 0.72, blue: 0.65),
+                                            Color(red: 0.1, green: 0.7, blue: 0.8)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                                .clipShape(Circle())
+                                .shadow(color: .accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 12)
+                    .padding(.bottom, 16)
                     
-                    Spacer()
-                    
-                    // Inline Filter Picker
-                    
-                    Menu {
-                        Picker("Order", selection: $selectedOrder) {
-                            ForEach(CollectionOrder.allCases, id: \.self) { order in
-                                Text(order.rawValue).tag(order)
+                    // SEARCH BAR
+                    HStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.secondary)
+                        
+                        TextField("Search for a word or phrase", text: $searchText)
+                            .font(.body)
+                        
+                        if !searchText.isEmpty {
+                            Button {
+                                searchText = ""
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.secondary.opacity(0.6))
                             }
                         }
-                        .pickerStyle(.inline) // mostrerà le scelte come una lista
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(.accentColor)
                     }
-
-                }
-                .frame(width: Global.screenWidth*0.85)
-                
-                
-                TextField("Search for a word or phrase", text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: Global.screenWidth*0.85)
-                
-               
-                        
-                        if isLibraryCompletelyEmpty {
+                    .padding(14)
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                    )
+                    .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 16)
+                    
+                    // CONTENT
+                    if isLibraryCompletelyEmpty {
+                        // Empty state
+                        VStack(spacing: 20) {
                             Spacer()
-                            VStack(alignment: .center, spacing: 10) {
-                                Spacer()
-                                Image(systemName: "books.vertical")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(.secondary)
-                                
+                            
+                            Image(systemName: "books.vertical")
+                                .font(.system(size: 60))
+                                .foregroundColor(.secondary.opacity(0.5))
+                            
+                            VStack(spacing: 8) {
                                 Text("Your collection is empty")
-                                    .fontWeight(.semibold)
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.primary)
+                                
+                                Text("Start adding words to build your vocabulary")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
                                     .multilineTextAlignment(.center)
-                                
-                                Text("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.")
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
-                                    .multilineTextAlignment(.center)
-                                
-                                Spacer()
-                            }.padding()
-                                .frame(maxWidth: Global.screenWidth*0.85)
-                           Spacer()
-                        } else if isFilteredEmpty {
-                            VStack(alignment: .center, spacing: 10) {
-                                Spacer()
-                                
-                                Image(systemName: "magnifyingglass.circle")
-                                    .font(.largeTitle)
-                                    .foregroundStyle(.secondary)
-                                
-                                Text("No results found")
-                                    .fontWeight(.semibold)
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
-                                    .multilineTextAlignment(.center)
-                                
-                                Text("Try searching for something else!")
-                                    .font(.callout)
-                                    .foregroundStyle(.secondary)
-                                    .multilineTextAlignment(.center)
-                                
-                                Spacer()
                             }
-                            .padding()
-                            .frame(maxWidth: Global.screenWidth * 0.85)
-
-                        } else {
                             
-                            ScrollView {
-                                VStack(spacing: 20) {
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 40)
+                        
+                    } else if isFilteredEmpty {
+                        // No results state
+                        VStack(spacing: 20) {
+                            Spacer()
                             
-                            ForEach(groupedPhrases, id: \.title) { group in
-                                Section(header:
-                                            HStack {
-                                    if selectedOrder == .byCategory {
+                            Image(systemName: "magnifyingglass.circle")
+                                .font(.system(size: 60))
+                                .foregroundColor(.secondary.opacity(0.5))
+                            
+                            VStack(spacing: 8) {
+                                Text("No results found")
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.primary)
+                                
+                                Text("Try searching for something else")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.center)
+                            }
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 40)
+                        
+                    } else {
+                        // Lista con palabras
+                        ScrollView {
+                            VStack(spacing: 16) {
+                                ForEach(groupedPhrases, id: \.title) { group in
+                                    VStack(spacing: 12) {
+                                        // Section header UNIFICADO (colapsable para todos)
                                         Button {
-                                            if expandedCategories.contains(group.title) {
-                                                expandedCategories.remove(group.title)
-                                            } else {
-                                                expandedCategories.insert(group.title)
+                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                                if expandedCategories.contains(group.title) {
+                                                    expandedCategories.remove(group.title)
+                                                } else {
+                                                    expandedCategories.insert(group.title)
+                                                }
                                             }
                                         } label: {
-                                            HStack {
-                                                Image(systemName: expandedCategories.contains(group.title) ? "chevron.down.circle.fill" : "chevron.right.circle.fill")
+                                            HStack(spacing: 12) {
+                                                Image(systemName: expandedCategories.contains(group.title)
+                                                      ? "chevron.down" : "chevron.right")
+                                                    .font(.system(size: 14, weight: .semibold))
                                                     .foregroundColor(.accentColor)
+                                                
                                                 Text(group.title)
-                                                    .font(selectedOrder == .alphabetical ? .title2 : .title3)
+                                                    .font(.headline)
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.primary)
+                                                
+                                                Spacer()
+                                                
+                                                Text("\(group.phrases.count)")
+                                                    .font(.caption)
                                                     .fontWeight(.semibold)
-                                                    .foregroundColor(.accentColor)
+                                                    .foregroundColor(.secondary)
+                                                    .padding(.horizontal, 8)
+                                                    .padding(.vertical, 4)
+                                                    .background(
+                                                        Capsule()
+                                                            .fill(Color.secondary.opacity(0.15))
+                                                    )
                                             }
+                                            .padding(.horizontal, 16)
+                                            .padding(.vertical, 12)
+                                            .background(.ultraThinMaterial)
+                                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                                            .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
                                         }
-                                    } else {
-                                        HStack {
-                                            Text(group.title)
-                                                .font(selectedOrder == .alphabetical ? .title2 : .title3)
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(.accentColor)
+                                        .buttonStyle(.plain)
+                                        .padding(.horizontal, 24)
+                                        
+                                        // Words list (solo si está expandido)
+                                        if expandedCategories.contains(group.title) {
+                                            VStack(spacing: 10) {
+                                                ForEach(group.phrases, id: \.self) { phrase in
+                                                    NavigationLink {
+                                                        CollectionDetailView(phrase: phrase)
+                                                    } label: {
+                                                        WordElementView(phrase: phrase, isCollection: true)
+                                                    }
+                                                    .buttonStyle(.plain)
+                                                }
+                                            }
+                                            .padding(.horizontal, 24)
                                         }
                                     }
-                                    Spacer()
                                 }
-                                    .padding(.top, 10)
-                                ) {
-                                    if selectedOrder != .byCategory || expandedCategories.contains(group.title) {
-                                        ForEach(group.phrases, id: \.self) { phrase in
-                                            NavigationLink {
-                                                CollectionDetailView(phrase: phrase)
-                                            } label: {
-                                                WordElementView(phrase: phrase, isCollection: true)
-                                                    .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                            }
-                                        }
-                                    }
-                                }
-                                .frame(width: Global.screenWidth*0.85)
                             }
-                            
+                            .padding(.top, 8)
+                            .padding(.bottom, 40)
                         }
-
-                        
                     }
-                    .padding(.horizontal)
-                    .animation(.easeInOut(duration: 0.40), value: expandedCategories)
                 }
             }
-            .padding(.top)
-            
         }
-        
         .confirmationDialog("Choose Order", isPresented: $showingFilterOptions, titleVisibility: .visible) {
             Button("Alphabetical") { selectedOrder = .alphabetical }
             Button("By Date") { selectedOrder = .byDate }
-            Button("By Category") {selectedOrder = .byCategory}
+            Button("By Category") { selectedOrder = .byCategory }
             Button("Cancel", role: .cancel) { }
         }
-
     }
     
     func formatDate(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM d, yyyy"
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
         return dateFormatter.string(from: date)
     }
-
 }
 
 #Preview {
