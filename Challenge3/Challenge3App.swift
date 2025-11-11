@@ -28,7 +28,7 @@ struct Challenge3App: App {
                 }
                 
                 Tab("Settings", systemImage: "gear") {
-                    EmptyView()
+                    SettingsView()
                 }
             }
         }.modelContainer(for: [LearnElement.self, Category.self])
