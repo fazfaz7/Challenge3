@@ -94,12 +94,28 @@ struct ContentView: View {
                             } label: {
                                 if #available(iOS 26.0, *) {
                                     Image(systemName: "plus.circle.fill")
-                                    //.foregroundStyle(.accent)
+                                        .symbolRenderingMode(.monochrome)
+                                        .foregroundStyle(LinearGradient(
+                                            colors: [
+                                                Color(red: 0.08, green: 0.72, blue: 0.65),
+                                                Color(red: 0.1, green: 0.7, blue: 0.8)
+                                            ],
+                                            startPoint: .bottom,
+                                            endPoint: .top
+                                        ))
                                         .font(.largeTitle)
                                         .glassEffect(.regular.interactive())
                                 } else {
                                     Image(systemName: "plus.circle.fill")
-                                        .foregroundStyle(.accent)
+                                        .symbolRenderingMode(.monochrome)
+                                        .foregroundStyle(LinearGradient(
+                                            colors: [
+                                                Color(red: 0.08, green: 0.72, blue: 0.65),
+                                                Color(red: 0.1, green: 0.7, blue: 0.8)
+                                            ],
+                                            startPoint: .bottom,
+                                            endPoint: .top
+                                        ))
                                         .font(.largeTitle)
                                 }
                             }

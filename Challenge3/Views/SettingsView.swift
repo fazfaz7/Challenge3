@@ -195,7 +195,7 @@ struct SettingsView: View {
                             } label: {
                                 HStack(spacing: 16) {
                                     // App icon
-                                    Image("LyngoIcon")
+                                    Image("MyIcon")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 50, height: 50)
@@ -274,21 +274,14 @@ struct AboutSheetView: View {
         NavigationStack {
             ZStack {
                 // Background gradient
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.96, green: 0.98, blue: 0.99),
-                        Color(red: 0.98, green: 0.99, blue: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                Color(.systemGroupedBackground)
                 .ignoresSafeArea()
                 
                 ScrollView {
                     VStack(spacing: 32) {
                         // App Icon + Title
                         VStack(spacing: 16) {
-                            Image("LyngoIcon")
+                            Image("MyIcon")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 100, height: 100)

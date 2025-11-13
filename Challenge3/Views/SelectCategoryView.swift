@@ -23,14 +23,7 @@ struct SelectCategoryView: View {
     var body: some View {
         ZStack {
             // Background gradient iOS 18
-            LinearGradient(
-                colors: [
-                    Color(red: 0.96, green: 0.98, blue: 0.99),
-                    Color(red: 0.98, green: 0.99, blue: 1.0)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            Color(.systemGroupedBackground)
             .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 0) {
@@ -231,14 +224,7 @@ struct AddCategoryView: View {
     var body: some View {
         ZStack {
             // Background gradient
-            LinearGradient(
-                colors: [
-                    Color(red: 0.96, green: 0.98, blue: 0.99),
-                    Color(red: 0.98, green: 0.99, blue: 1.0)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+            Color(.systemGroupedBackground)
             .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 20) {
