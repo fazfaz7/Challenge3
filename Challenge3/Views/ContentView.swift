@@ -30,7 +30,7 @@ struct ContentView: View {
     @State var newPhrasesExpanded: Bool = false
     @State var howToSayExpanded: Bool = false
     @AppStorage("userName") private var userName: String = "No name set"
-    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
+    @AppStorage("selectedLanguage") private var selectedLanguage: String = ""
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
     @State private var isPresenting = true
     @State private var isPresentingInfo = false
@@ -265,7 +265,7 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                if !hasMigratedLanguages {
+                if !hasMigratedLanguages && !selectedLanguage.isEmpty {
                     let fetchDescriptor = FetchDescriptor<LearnElement>()
                     do {
                         let phrases = try modelContext.fetch(fetchDescriptor)
@@ -283,8 +283,9 @@ struct ContentView: View {
                 }
             }
             .onAppear {
-                if languageStore.userLanguages.isEmpty {
-                    if selectedLanguage != "" {
+                // Only add language to store AFTER onboarding is complete
+                if !hasSeenOnboarding && !selectedLanguage.isEmpty {
+                    if languageStore.userLanguages.isEmpty {
                         languageStore.addLanguage(selectedLanguage)
                     }
                 }
@@ -297,6 +298,12 @@ struct ContentView: View {
             }
             .sheet(isPresented: $isPresentingSettings) {
                 SectionSettingsView()
+            }
+            .onAppear {
+                // Safety: If user is past onboarding but has no language, use first from store
+                if !hasSeenOnboarding && selectedLanguage.isEmpty && !languageStore.userLanguages.isEmpty {
+                    selectedLanguage = languageStore.userLanguages.first ?? ""
+                }
             }
             
         }
