@@ -31,7 +31,7 @@ struct WelcomeView: View {
             
                 HStack {
 
-                    Text("Welcome to \n ItMeans!")
+                    Text(LocalizedStringKey("Welcome to \n ItMeans!"))
                         .font(.title)
                         .foregroundStyle(.black)
                         .fontWeight(.bold)
@@ -46,13 +46,13 @@ struct WelcomeView: View {
             if showAll {
                 VStack {
                     HStack {
-                        Text("What is your nickname?")
+                        Text(LocalizedStringKey("What is your nickname?"))
                             .fontWeight(.semibold)
                             .foregroundStyle(.accent)
                         Spacer()
                     }.frame(width: Global.screenWidth*0.70)
-                    
-                    TextField("", text: $userName, prompt: Text("Enter your nickname").foregroundStyle(.gray))
+
+                    TextField("", text: $userName, prompt: Text(LocalizedStringKey("Enter your nickname")).foregroundStyle(.gray))
                         .foregroundStyle(.black)
                         .padding(5)
                         .frame(width: Global.screenWidth*0.70)
@@ -63,7 +63,7 @@ struct WelcomeView: View {
                 
                 VStack {
                     HStack {
-                        Text("Which language are you learning?")
+                        Text(LocalizedStringKey("Which language are you learning?"))
                             .fontWeight(.semibold)
                             .foregroundStyle(.accent)
                             .minimumScaleFactor(0.85)
@@ -71,8 +71,8 @@ struct WelcomeView: View {
                     }.frame(width: Global.screenWidth*0.70)
                     
                     Picker("Language", selection: $selectedLanguage) {
-                        ForEach(languages, id: \.self) {
-                            Text($0)
+                        ForEach(languages, id: \.self) { language in
+                            Text(LocalizedStringKey(language))
                                 .font(.title3)
                                 .foregroundStyle(.black)
                         }
@@ -84,7 +84,7 @@ struct WelcomeView: View {
                         hasSeenOnboarding = false
                     } label: {
                         HStack {
-                            Text("Get Started!")
+                            Text(LocalizedStringKey("Get Started!"))
                                 .foregroundStyle(.white)
                         }.padding(12)
                             .font(.title3)

@@ -28,11 +28,11 @@ struct SettingsView: View {
                     VStack(spacing: 24) {
                         // HEADER
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Settings")
+                            Text(LocalizedStringKey("Settings"))
                                 .font(.system(size: 34, weight: .bold))
                                 .foregroundColor(.primary)
-                            
-                            Text("Customize your learning experience")
+
+                            Text(LocalizedStringKey("Customize your learning experience"))
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                                 .fontWeight(.medium)
@@ -43,7 +43,7 @@ struct SettingsView: View {
                         
                         // PROFILE SECTION
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("PROFILE")
+                            Text(LocalizedStringKey("PROFILE"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -74,12 +74,12 @@ struct SettingsView: View {
                                     
                                     // Name field
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("Nickname")
+                                        Text(LocalizedStringKey("Nickname"))
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                             .fontWeight(.medium)
-                                        
-                                        TextField("Enter your name", text: $userName)
+
+                                        TextField(LocalizedStringKey("Enter your name"), text: $userName)
                                             .font(.body)
                                             .fontWeight(.semibold)
                                     }
@@ -96,7 +96,7 @@ struct SettingsView: View {
                         
                         // LANGUAGES SECTION
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("LANGUAGES YOU'RE LEARNING")
+                            Text(LocalizedStringKey("LANGUAGES YOU'RE LEARNING"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -163,7 +163,7 @@ struct SettingsView: View {
                                             .font(.system(size: 32))
                                             .foregroundColor(.accentColor)
                                         
-                                        Text("Add Language")
+                                        Text(LocalizedStringKey("Add Language"))
                                             .font(.body)
                                             .fontWeight(.semibold)
                                             .foregroundColor(.accentColor)
@@ -183,7 +183,7 @@ struct SettingsView: View {
                         
                         // ABOUT SECTION
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("ABOUT")
+                            Text(LocalizedStringKey("ABOUT"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
@@ -207,7 +207,7 @@ struct SettingsView: View {
                                             .fontWeight(.bold)
                                             .foregroundColor(.primary)
                                         
-                                        Text("Version 1.0")
+                                        Text(LocalizedStringKey("Version 1.0"))
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                     }
@@ -228,7 +228,7 @@ struct SettingsView: View {
                         }
                         
                         // Footer
-                        Text("© 2025 ItMeans")
+                        Text(LocalizedStringKey("© 2025 ItMeans"))
                             .font(.caption)
                             .foregroundColor(.secondary)
                             .padding(.top, 20)
@@ -245,8 +245,8 @@ struct SettingsView: View {
                 AboutSheetView()
                     .presentationDetents([.large])
             }
-            .alert("Delete Language", isPresented: $showDeleteAlert) {
-                Button("Delete", role: .destructive) {
+            .alert(LocalizedStringKey("Delete Language"), isPresented: $showDeleteAlert) {
+                Button(LocalizedStringKey("Delete"), role: .destructive) {
                     if let languageToDelete = languageToDelete {
                         languageStore.removeLanguage(languageToDelete)
                         if selectedLanguage == languageToDelete {
@@ -254,7 +254,7 @@ struct SettingsView: View {
                         }
                     }
                 }
-                Button("Cancel", role: .cancel) {
+                Button(LocalizedStringKey("Cancel"), role: .cancel) {
                     languageToDelete = nil
                 }
             } message: {
@@ -293,7 +293,7 @@ struct AboutSheetView: View {
                                     .font(.system(size: 28, weight: .bold))
                                     .foregroundColor(.primary)
                                 
-                                Text("Your personal vocabulary builder")
+                                Text(LocalizedStringKey("Your personal vocabulary builder"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
@@ -302,12 +302,12 @@ struct AboutSheetView: View {
                         
                         // What is ItMeans?
                         VStack(alignment: .leading, spacing: 12) {
-                            Label("What is ItMeans?", systemImage: "questionmark.circle.fill")
+                            Label(LocalizedStringKey("What is ItMeans?"), systemImage: "questionmark.circle.fill")
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.accentColor)
-                            
-                            Text("ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language.")
+
+                            Text(LocalizedStringKey("ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language."))
                                 .font(.body)
                                 .foregroundColor(.primary)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -320,16 +320,16 @@ struct AboutSheetView: View {
                         
                         // How it works
                         VStack(alignment: .leading, spacing: 12) {
-                            Label("How it works", systemImage: "lightbulb.fill")
+                            Label(LocalizedStringKey("How it works"), systemImage: "lightbulb.fill")
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.accentColor)
-                            
+
                             VStack(alignment: .leading, spacing: 12) {
-                                FeatureRow(icon: "✍️", text: "Save any new words, phrases, or slang you discover")
-                                FeatureRow(icon: "📚", text: "Review your collection as you learn")
-                                FeatureRow(icon: "🤝", text: "Complete your pendings by asking a native speaker")
-                                FeatureRow(icon: "🧠", text: "Activate the widget to practice daily")
+                                FeatureRow(icon: "✍️", text: NSLocalizedString("✍️ Save any new words, phrases, or slang you discover.", comment: ""))
+                                FeatureRow(icon: "📚", text: NSLocalizedString("📚 Review your collection as you learn", comment: ""))
+                                FeatureRow(icon: "🤝", text: NSLocalizedString("🤝 Complete your pendings by asking a native speaker or by searching", comment: ""))
+                                FeatureRow(icon: "🧠", text: NSLocalizedString("🧠 Activate the widget to practice your saved words daily.", comment: ""))
                             }
                         }
                         .padding(20)
@@ -356,7 +356,7 @@ struct AboutSheetView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button(LocalizedStringKey("Done")) {
                         dismiss()
                     }
                     .fontWeight(.semibold)

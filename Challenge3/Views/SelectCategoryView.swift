@@ -28,7 +28,7 @@ struct SelectCategoryView: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 // Header
-                Text("Choose a category")
+                Text(LocalizedStringKey("Choose a category"))
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(.primary)
                     .padding(.horizontal, 24)
@@ -63,7 +63,7 @@ struct SelectCategoryView: View {
                                     .font(.title3)
                                     .foregroundColor(.accentColor)
                                 
-                                Text("Add new category")
+                                Text(LocalizedStringKey("Add new category"))
                                     .font(.body)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.accentColor)
@@ -96,7 +96,7 @@ struct SelectCategoryView: View {
                     dismiss()
                 } label: {
                     HStack(spacing: 10) {
-                        Text("Select category")
+                        Text(LocalizedStringKey("Select category"))
                             .font(.headline)
                             .fontWeight(.semibold)
                         
@@ -127,8 +127,8 @@ struct SelectCategoryView: View {
             AddCategoryView()
                 .presentationDetents([.height(280)])
         }
-        .alert("Delete Category", isPresented: $showDeleteAlert) {
-            Button("Delete", role: .destructive) {
+        .alert(LocalizedStringKey("Delete Category"), isPresented: $showDeleteAlert) {
+            Button(LocalizedStringKey("Delete"), role: .destructive) {
                 if let categoryToDelete = categoryToDelete {
                     withAnimation {
                         do {
@@ -147,14 +147,14 @@ struct SelectCategoryView: View {
                     }
                 }
             }
-            Button("Cancel", role: .cancel) {
+            Button(LocalizedStringKey("Cancel"), role: .cancel) {
                 categoryToDelete = nil
             }
         } message: {
             if let categoryToDelete = categoryToDelete {
                 Text("All words in '\(categoryToDelete.name)' will become uncategorized. This cannot be undone.")
             } else {
-                Text("Unknown category.")
+                Text(LocalizedStringKey("Unknown category."))
             }
         }
     }
@@ -207,7 +207,7 @@ struct CategoryCardView: View {
             Button(role: .destructive) {
                 onDelete()
             } label: {
-                Label("Delete Category", systemImage: "trash.fill")
+                Label(LocalizedStringKey("Delete Category"), systemImage: "trash.fill")
             }
         }
     }
@@ -228,7 +228,7 @@ struct AddCategoryView: View {
             .ignoresSafeArea()
             
             VStack(alignment: .leading, spacing: 20) {
-                Text("Add Custom Category")
+                Text(LocalizedStringKey("Add Custom Category"))
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(.primary)
                 
@@ -262,7 +262,7 @@ struct AddCategoryView: View {
                     }
                     
                     // Name TextField
-                    TextField("Category Name", text: $categoryName)
+                    TextField(LocalizedStringKey("Category Name"), text: $categoryName)
                         .font(.body)
                         .padding(16)
                         .background(.ultraThinMaterial)
@@ -290,7 +290,7 @@ struct AddCategoryView: View {
                     }
                 } label: {
                     HStack(spacing: 10) {
-                        Text("Add category")
+                        Text(LocalizedStringKey("Add category"))
                             .font(.headline)
                             .fontWeight(.semibold)
                         

@@ -1,43 +1,97 @@
-/* 
+/*
   Localizable.strings
   Challenge3
 
   Created by Adrian Emmanuel Faz Mercado on 10/04/25.
-  
+
 */
 
-"New Expression" = "New Expression";
-"How to say...?" = "How to say...?";
-"To review" = "To review";
-"Expressions" = "Expressions";
-"How to say" = "How to say";
+// Main Screen
+"Learning" = "Learning";
+"TO REVIEW" = "TO REVIEW";
+"LEARNED" = "LEARNED";
+"All Words to Review" = "All Words to Review";
 "No expressions to review!" = "No expressions to review!";
 "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day." = "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.";
-"No translation doubts yet!" = "No translation doubts yet!";
-"Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later.";
-"To Review" = "To Review";
-"My Collection" = "My Collection";
-"pending_message" = "Time to find out what it means! Write a small explanation or translation, then mark it complete.";
-"other_message" = "Time to figure out how to say this! Look it up in the language you're learning and mark it complete.";
-"Found a word or phrase you don’t understand? Save it here to review later." = "Found a word or phrase you don’t understand? Save it here to review later.";
-"Want to know how to say something in the language you're learning? Save it here!" = "Want to know how to say something in the language you're learning? Save it here!";
+
+// Add Expression
 "Add New Expression" = "Add New Expression";
-"Search for a word or phrase" = "Search for a word or phrase";
-"Explanation/Meaning" = "Explanation/Meaning";
-"Category" = "Category";
-"New Phrases" = "New Phrases";
-"Settings" = "Settings";
-"Language you're learning" = "Language you're learning";
-"Select Language" = "Select Language";
-"Mark complete" = "Mark complete";
-"Choose Order" = "Choose Order";
-"Alphabetical" = "Alphabetical";
-"By Date" = "By Date";
-"By Category" = "By Category";
+"How to say…?" = "How to say…?";
+"New Expression" = "New Expression";
+"New expression" = "New expression";
+"Type the word or phrase…" = "Type the word or phrase…";
+"Add" = "Add";
+"Cancel" = "Cancel";
+"Done" = "Done";
+"Found a word or phrase you don't understand? Save it to review later." = "Found a word or phrase you don't understand? Save it to review later.";
+"Write what you want to say in the language you're learning." = "Write what you want to say in the language you're learning.";
+
+// Detail View
 "Expression" = "Expression";
 "Explanation" = "Explanation";
-"Select Category" = "Select Category";
+"Explanation/Meaning" = "Explanation/Meaning";
+"Write your explanation here..." = "Write your explanation here...";
+"Category" = "Category";
+"None" = "None";
+"Mark complete" = "Mark complete";
+"Edit" = "Edit";
+"pending_message" = "Time to find out what it means! Write a small explanation or translation, then mark it complete.";
+"other_message" = "Time to figure out how to say this! Look it up in the language you're learning and mark it complete.";
+
+// Categories
+"Choose a category" = "Choose a category";
 "Select category" = "Select category";
+"Select a category" = "Select a category";
+"Add new category" = "Add new category";
+"Add Custom Category" = "Add Custom Category";
+"Category Name" = "Category Name";
+"Add category" = "Add category";
+"Choose the category that best represents your new phrase/word" = "Choose the category that best represents your new phrase/word";
+"Delete Category" = "Delete Category";
+"All words in '\(categoryToDelete.name)' will become uncategorized. This cannot be undone." = "All words in '%@' will become uncategorized. This cannot be undone.";
+"Unknown category." = "Unknown category.";
+"Delete" = "Delete";
+
+// Collection
+"My Collection" = "My Collection";
+"Your collection is empty" = "Your collection is empty";
+"Start adding words to build your vocabulary" = "Start adding words to build your vocabulary";
+"No results found" = "No results found";
+"Try searching for something else" = "Try searching for something else";
+"Search for a word or phrase" = "Search for a word or phrase";
+
+// Settings
+"Settings" = "Settings";
+"Customize your learning experience" = "Customize your learning experience";
+"PROFILE" = "PROFILE";
+"Nickname" = "Nickname";
+"Enter your nickname" = "Enter your nickname";
+"LANGUAGES YOU'RE LEARNING" = "LANGUAGES YOU'RE LEARNING";
+"Languages you are learning" = "Languages you are learning";
+"Add Language" = "Add Language";
+"Select a language you want to learn" = "Select a language you want to learn";
+"All languages added!" = "All languages added!";
+"You're learning all available languages" = "You're learning all available languages";
+"This will remove %@ from your learning languages." = "This will remove %@ from your learning languages.";
+"Delete Language" = "Delete Language";
+"ABOUT" = "ABOUT";
+"ItMeans" = "ItMeans";
+"Version 1.0" = "Version 1.0";
+"© 2025 ItMeans" = "© 2025 ItMeans";
+"Your personal vocabulary builder" = "Your personal vocabulary builder";
+
+// About
+"About ItMeans" = "About ItMeans";
+"What is ItMeans?" = "What is ItMeans?";
+"ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language." = "ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language.";
+"How it works" = "How it works";
+"How it works?" = "How it works?";
+"✍️ Save any new words, phrases, or slang you discover." = "Save any new words, phrases, or slang you discover.";
+"📚 Review your collection as you learn" = "Review your collection as you learn";
+"🤝 Complete your pendings by asking a native speaker or by searching" = "Complete your pendings by asking a native speaker or by searching";
+"🧠 Activate the widget to practice your saved words daily." = "Activate the widget to practice your saved words daily.";
+
+// Languages
 "Chinese 🇨🇳" = "Chinese 🇨🇳";
 "English 🇬🇧" = "English 🇬🇧";
 "French 🇫🇷" = "French 🇫🇷";
@@ -48,29 +102,50 @@
 "Spanish 🇪🇸" = "Spanish 🇪🇸";
 "Turkish 🇹🇷" = "Turkish 🇹🇷";
 
-"No results found" = "No results found";
-"Your collection is empty" = "Your collection is empty";
-"Try searching for something else!" = "Try searching for something else!";
+// Onboarding
+"Welcome to \n ItMeans!" = "Welcome to ItMeans!";
+"Skip" = "Skip";
+"Learn Through" = "Learn Through";
+"Real Life" = "Real Life";
+"Capture words and phrases as you\nencounter them in your daily life" = "Capture words and phrases as you\nencounter them in your daily life";
+"Save & Learn" = "Save & Learn";
+"Your Personal Vocabulary" = "Your Personal Vocabulary";
+"Save instantly" = "Save instantly";
+"Don't know a word? Save it for later" = "Don't know a word? Save it for later";
+"Add meanings" = "Add meanings";
+"Complete entries when you're ready" = "Complete entries when you're ready";
+"Stay organized" = "Stay organized";
+"Use categories to group your words" = "Use categories to group your words";
+"Practice Daily" = "Practice Daily";
+"Add the home screen widget to\nreview words throughout the day" = "Add the home screen widget to\nreview words throughout the day";
+"Welcome!" = "Welcome!";
+"Let's personalize your experience" = "Let's personalize your experience";
+"What's your name?" = "What's your name?";
+"What is your nickname?" = "What is your nickname?";
+"Enter your name" = "Enter your name";
+"Which language are you learning?" = "Which language are you learning?";
+"Get Started!" = "Get Started!";
+"Start Learning" = "Start Learning";
+"Select Language" = "Select Language";
 
+// Legacy/Alternative
+"To review" = "To review";
+"Expressions" = "Expressions";
+"How to say" = "How to say";
+"New Phrases" = "New Phrases";
+"Language you're learning" = "Language you're learning";
+"Choose Order" = "Choose Order";
+"Alphabetical" = "Alphabetical";
+"By Date" = "By Date";
+"By Category" = "By Category";
+"To Review" = "To Review";
 "Boost your language skills through your experiences" = "Boost your language skills through your experiences";
 "Capture new words and phrases as you go about your day" = "Capture new words and phrases as you go about your day";
-"Don’t understand a word or phrase?" = "Don’t understand a word or phrase?";
+"Don't understand a word or phrase?" = "Don't understand a word or phrase?";
 "Heard, saw, or read something unfamiliar? Just save it for later." = "Heard, saw, or read something unfamiliar? Just save it for later.";
-"Want to say something but don’t know how?" = "Want to say something but don't know how?";
+"Want to say something but don't know how?" = "Want to say something but don't know how?";
 "Write it down in your native language and save it for later..." = "Write it down in your native language and save it for later...";
 "Complete your saved items" = "Complete your saved items";
 "When you're ready, add a translation, meaning, or explanation — however works best for you." = "When you're ready, add a translation, meaning, or explanation — however works best for you.";
 "Your language journey, all in one place" = "Your language journey, all in one place";
-"Revisit everything you’ve learned — saved and ready whenever you need it." = "Revisit everything you’ve learned — saved and ready whenever you need it.";
-"Welcome to \n ItMeans!" = "Welcome to ItMeans!";
-"What is your nickname?" = "What is your nickname?";
-"Enter your nickname" = "Enter your nickname";
-"Which language are you learning?" = "Which language are you learning?";
-"Get Started!" = "Get Started!";
-
-
-
-
-"Choose a category" = "Choose a category";
-
-
+"Revisit everything you've learned — saved and ready whenever you need it." = "Revisit everything you've learned — saved and ready whenever you need it.";

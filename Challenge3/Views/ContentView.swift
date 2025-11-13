@@ -79,7 +79,7 @@ struct ContentView: View {
                                     }
                                 }
                                 
-                                Text("Learning")
+                                Text(LocalizedStringKey("Learning"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                     .fontWeight(.medium)
@@ -137,7 +137,7 @@ struct ContentView: View {
                                         endPoint: .top
                                     ))
                                 
-                                Text("TO REVIEW")  // ✅ Uppercase
+                                Text(LocalizedStringKey("TO REVIEW"))  // ✅ Uppercase
                                     .font(.caption2)  // ✅ Más pequeño
                                     .foregroundColor(.secondary)
                                     .fontWeight(.semibold)  // ✅ Era .medium
@@ -161,7 +161,7 @@ struct ContentView: View {
                                         endPoint: .top
                                     ))
                                 
-                                Text("LEARNED")  // ✅ Uppercase
+                                Text(LocalizedStringKey("LEARNED"))  // ✅ Uppercase
                                     .font(.caption2)  // ✅ Más pequeño
                                     .foregroundColor(.secondary)
                                     .fontWeight(.semibold)  // ✅ Era .medium
@@ -182,7 +182,7 @@ struct ContentView: View {
                     
                     // Section Header para la lista
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("All Words to Review")
+                        Text(LocalizedStringKey("All Words to Review"))
                             .font(.system(size: 18, weight: .bold))  // ✅ Era 20, ahora 18
                             .foregroundColor(.primary)
                             .padding(.horizontal, 24)
@@ -197,13 +197,13 @@ struct ContentView: View {
                                     .font(.largeTitle)
                                     .foregroundColor(.secondary)
                                 
-                                Text("No expressions to review!")
+                                Text(LocalizedStringKey("No expressions to review!"))
                                     .fontWeight(.semibold)
                                     .font(.callout)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.center)
-                                
-                                Text("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.")
+
+                                Text(LocalizedStringKey("Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day."))
                                     .font(.callout)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.center)
@@ -417,14 +417,14 @@ struct NewPhraseView: View {
 
             // Title + mini progress
             HStack(spacing: 10) {
-                Text(newType == 1 ? "Add New Expression" : "How to say…?")
+                Text(LocalizedStringKey(newType == 1 ? "Add New Expression" : "How to say…?"))
                     .font(.title2).fontWeight(.semibold)
                 ProgressRing(progress: Double(newPhraseText.count)/Double(maxCharacters))
             }
 
-            Text(newType == 1
-                 ? "Found a word or phrase you don’t understand? Save it to review later."
-                 : "Write what you want to say in the language you’re learning.")
+            Text(LocalizedStringKey(newType == 1
+                 ? "Found a word or phrase you don't understand? Save it to review later."
+                 : "Write what you want to say in the language you're learning."))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .lineLimit(nil)                      // or .lineLimit(2/3)
@@ -436,7 +436,7 @@ struct NewPhraseView: View {
                 Image(systemName: "text.magnifyingglass")
                     .foregroundStyle(.secondary)
 
-                TextField("Type the word or phrase…", text: $newPhraseText)
+                TextField(LocalizedStringKey("Type the word or phrase…"), text: $newPhraseText)
                     .focused($isFocused)
                     .submitLabel(.done)
                     .onSubmit { add() }
@@ -479,10 +479,10 @@ struct NewPhraseView: View {
             HStack {
                 Button(action: add) {
                     HStack(spacing: 10) {
-                        Text("Add")
+                        Text(LocalizedStringKey("Add"))
                             .font(.headline)
                             .fontWeight(.semibold)
-                        
+
                         Image(systemName: "plus")
                             .font(.headline)
                             .fontWeight(.bold)
@@ -523,7 +523,7 @@ struct NewPhraseView: View {
         .onAppear { isFocused = true }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") { showNewPhrase = false }
+                Button(LocalizedStringKey("Cancel")) { showNewPhrase = false }
             }
         }
 
@@ -575,12 +575,12 @@ struct SectionSettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Nickname")) {
-                    TextField("Enter your nickname", text: $userName)
+                Section(header: Text(LocalizedStringKey("Nickname"))) {
+                    TextField(LocalizedStringKey("Enter your nickname"), text: $userName)
                 }
-  
-                
-                Section(header: Text("Languages you are learning")) {
+
+
+                Section(header: Text(LocalizedStringKey("Languages you are learning"))) {
                     ForEach(languageStore.userLanguages, id: \.self) { language in
                         HStack {
                             Text(LocalizedStringKey(language))
@@ -612,7 +612,7 @@ struct SectionSettingsView: View {
                 Button {
                     showAddLanguage = true
                 } label: {
-                    Text("Add Language")
+                    Text(LocalizedStringKey("Add Language"))
                 }
                 
                 
@@ -620,10 +620,10 @@ struct SectionSettingsView: View {
                 
                 
             }
-            .navigationTitle("Settings")
+            .navigationTitle(LocalizedStringKey("Settings"))
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Done") {
+                    Button(LocalizedStringKey("Done")) {
                         dismiss()
                     }
                 }

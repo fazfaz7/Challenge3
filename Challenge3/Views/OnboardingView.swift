@@ -50,7 +50,7 @@ struct OnboardingView: View {
                                 currentPage = 3
                             }
                         } label: {
-                            Text("Skip")
+                            Text(LocalizedStringKey("Skip"))
                                 .font(.body)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.white)
@@ -123,20 +123,20 @@ struct OnboardingPage1: View {
                     .opacity(appeared ? 1 : 0)
                 
                 VStack(spacing: 16) {
-                    Text("Learn Through")
+                    Text(LocalizedStringKey("Learn Through"))
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(.white.opacity(0.9))
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
                     
-                    Text("Real Life")
+                    Text(LocalizedStringKey("Real Life"))
                         .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.white)
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
                 }
                 
-                Text("Capture words and phrases as you\nencounter them in your daily life")
+                Text(LocalizedStringKey("Capture words and phrases as you\nencounter them in your daily life"))
                     .font(.system(size: 18))
                     .multilineTextAlignment(.center)
                     .foregroundColor(.white.opacity(0.85))
@@ -171,13 +171,13 @@ struct OnboardingPage2: View {
                     .opacity(appeared ? 1 : 0)
                 
                 VStack(spacing: 16) {
-                    Text("Save & Learn")
+                    Text(LocalizedStringKey("Save & Learn"))
                         .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.white)
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
                     
-                    Text("Your Personal Vocabulary")
+                    Text(LocalizedStringKey("Your Personal Vocabulary"))
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white.opacity(0.9))
                         .offset(y: appeared ? 0 : 20)
@@ -187,24 +187,24 @@ struct OnboardingPage2: View {
                 VStack(spacing: 20) {
                     FeatureCard(
                         icon: "💭",
-                        title: "Save instantly",
-                        description: "Don't know a word? Save it for later",
+                        title: NSLocalizedString("Save instantly", comment: ""),
+                        description: NSLocalizedString("Don't know a word? Save it for later", comment: ""),
                         appeared: appeared,
                         delay: 0.1
                     )
-                    
+
                     FeatureCard(
                         icon: "📝",
-                        title: "Add meanings",
-                        description: "Complete entries when you're ready",
+                        title: NSLocalizedString("Add meanings", comment: ""),
+                        description: NSLocalizedString("Complete entries when you're ready", comment: ""),
                         appeared: appeared,
                         delay: 0.2
                     )
-                    
+
                     FeatureCard(
                         icon: "🗂️",
-                        title: "Stay organized",
-                        description: "Use categories to group your words",
+                        title: NSLocalizedString("Stay organized", comment: ""),
+                        description: NSLocalizedString("Use categories to group your words", comment: ""),
                         appeared: appeared,
                         delay: 0.3
                     )
@@ -276,13 +276,13 @@ struct OnboardingPage3: View {
                     .opacity(appeared ? 1 : 0)
                 
                 VStack(spacing: 16) {
-                    Text("Practice Daily")
+                    Text(LocalizedStringKey("Practice Daily"))
                         .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.white)
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
                     
-                    Text("Add the home screen widget to\nreview words throughout the day")
+                    Text(LocalizedStringKey("Add the home screen widget to\nreview words throughout the day"))
                         .font(.system(size: 18))
                         .multilineTextAlignment(.center)
                         .foregroundColor(.white.opacity(0.85))
@@ -367,13 +367,13 @@ struct OnboardingPage4: View {
                         .opacity(appeared ? 1 : 0)
                     
                     VStack(spacing: 8) {
-                        Text("Welcome!")
+                        Text(LocalizedStringKey("Welcome!"))
                             .font(.system(size: 42, weight: .bold))
                             .foregroundColor(.white)
                             .offset(y: appeared ? 0 : 20)
                             .opacity(appeared ? 1 : 0)
                         
-                        Text("Let's personalize your experience")
+                        Text(LocalizedStringKey("Let's personalize your experience"))
                             .font(.body)
                             .foregroundColor(.white.opacity(0.85))
                             .offset(y: appeared ? 0 : 20)
@@ -385,12 +385,12 @@ struct OnboardingPage4: View {
                 VStack(spacing: 20) {
                     // Name field
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("What's your name?")
+                        Text(LocalizedStringKey("What's your name?"))
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(.white.opacity(0.9))
                         
-                        TextField("", text: $userName, prompt: Text("Enter your name").foregroundStyle(.white.opacity(0.5)))
+                        TextField("", text: $userName, prompt: Text(LocalizedStringKey("Enter your name")).foregroundStyle(.white.opacity(0.5)))
                             .foregroundStyle(.white)
                             .padding(16)
                             .background(
@@ -412,7 +412,7 @@ struct OnboardingPage4: View {
                     
                     // Language selector
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Which language are you learning?")
+                        Text(LocalizedStringKey("Which language are you learning?"))
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(.white.opacity(0.9))
@@ -455,7 +455,7 @@ struct OnboardingPage4: View {
                     hasSeenOnboarding = false
                 } label: {
                     HStack(spacing: 10) {
-                        Text("Start Learning")
+                        Text(LocalizedStringKey("Start Learning"))
                             .font(.headline)
                             .fontWeight(.semibold)
                         
@@ -482,7 +482,7 @@ struct OnboardingPage4: View {
                             if isFormComplete {
                                 // Gradient text effect
                                 HStack(spacing: 10) {
-                                    Text("Start Learning")
+                                    Text(LocalizedStringKey("Start Learning"))
                                         .font(.headline)
                                         .fontWeight(.semibold)
                                     
@@ -558,7 +558,7 @@ struct LanguageSelectionSheet: View {
             VStack(spacing: 0) {
                 // Header
                 HStack {
-                    Text("Select Language")
+                    Text(LocalizedStringKey("Select Language"))
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.white)

@@ -91,9 +91,12 @@ struct LanguageHelper {
 
     /// Ritorna il nome localizzato senza emoji (già lo usi, ma lascio anche qui)
     static func getLocalizedLanguageName(_ language: String) -> String {
-        // es: "Italian 🇮🇹" -> "Italian"
-        return language.split(separator: " ")
-            .dropLast() // rimuove l’emoji finale
+        // Obtiene la traducción completa del idioma (ej: "Italiano 🇮🇹" en italiano)
+        let localizedFullName = NSLocalizedString(language, comment: "")
+
+        // Quita el emoji del final
+        return localizedFullName.split(separator: " ")
+            .dropLast() // rimuove l'emoji finale
             .joined(separator: " ")
     }
     

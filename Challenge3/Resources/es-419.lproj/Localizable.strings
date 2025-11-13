@@ -1,47 +1,97 @@
-/* 
+/*
   Localizable.strings
   Challenge3
 
   Created by Adrian Emmanuel Faz Mercado on 10/04/25.
-  
+
 */
 
-"New Expression" = "Expresión Nueva";
-"New expression" = "Expresión Nueva";
-"How to say...?" = "¿Cómo decir...?";
-"To review" = "Mis pendientes";
-"Expressions" = "Expresiones";
-"How to say" = "¿Cómo se dice?";
+// Main Screen
+"Learning" = "Estoy aprendiendo";
+"TO REVIEW" = "POR COMPLETAR";
+"LEARNED" = "APRENDIDAS";
+"All Words to Review" = "Todas las palabras por completar";
 "No expressions to review!" = "¡No hay expresiones pendientes!";
 "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day." = "Guarda las palabras y frases que descubras y construye tu vocabulario a partir de lo que vives, ves y escuchas.";
-"No translation doubts yet!" = "¡Aún no tienes dudas guardadas!";
-"Have something you want to say in your target language but don’t know how? Use “How to say?” to save it in your native language and check it later." = "¿Hay algo que quieres decir en el idioma que estás aprendiendo pero no sabes cómo? Usa “¿Cómo se dice?” para guardarlo en tu idioma y revisarlo más tarde.";
-"To Review" = "Mis Pendientes";
-"My Collection" = "Mi Colección";
-"pending_message" = "¡Es hora de descubrir qué significa! Escribe una breve explicación o traducción y completa tu pendiente.";
-"Found a word or phrase you don’t understand? Save it here to review later." = "¿Encontraste una palabra o frase que no entiendes? Guárdala aquí y revísala después.";
-"Want to know how to say something in the language you're learning? Save it here!" = "¿Quieres saber cómo decir algo en el idioma que estás aprendiendo? Escríbelo aquí para revisarlo luego.";
-"Add New Expression" = "Agregar Expresión";
 
-"My Collection" = "Mi Colección";
-"Search for a word or phrase" = "Busca una palabra o frase";
-"Explanation/Meaning" = "Explicación/Significado";
-"Category" = "Categoría";
-"New Phrases" = "Frases Nuevas";
-", write the explanation of the phrase or word here and finish your pending! Clear your doubt and save it!" = ", Escribe la explicación de la frase o palabra aquí y termina tu pendiente! Resuelve tu duda y guardalo!";
-"Settings" = "Configuración";
-"Language you're learning" = "Idioma que estás aprendiendo";
-"Select Language" = "Elegir Idioma";
-"Mark complete" = "Completar pendiente";
-"Choose Order" = "Elegir orden";
-"Alphabetical" = "Alfabéticamente";
-"By Date" = "Por Fecha";
-"By Category" = "Por Categoría";
+// Add Expression
+"Add New Expression" = "Agregar expresión";
+"How to say…?" = "¿Cómo decir...?";
+"New Expression" = "Expresión Nueva";
+"New expression" = "Expresión Nueva";
+"Type the word or phrase…" = "Escribe la palabra o frase…";
+"Add" = "Agregar";
+"Cancel" = "Cancelar";
+"Done" = "Listo";
+"Found a word or phrase you don't understand? Save it to review later." = "¿Encontraste una palabra o frase que no entiendes? Guárdala aquí y revísala después.";
+"Write what you want to say in the language you're learning." = "Escribe lo que quieres decir en el idioma que estás aprendiendo.";
+
+// Detail View
 "Expression" = "Expresión";
 "Explanation" = "Explicación";
-"Select Category" = "Elegir categoría";
+"Explanation/Meaning" = "Explicación/Significado";
+"Write your explanation here..." = "Escribe tu explicación aquí...";
+"Category" = "Categoría";
+"None" = "Ninguna";
+"Mark complete" = "Completar pendiente";
+"Edit" = "Editar";
+"pending_message" = "¡Es hora de descubrir qué significa! Escribe una breve explicación o traducción y completa tu pendiente.";
+"other_message" = "¡Es hora de descubrir cómo decir esto! Búscalo en el idioma que estás aprendiendo y márcalo como completado.";
+
+// Categories
+"Choose a category" = "Elige una categoría";
 "Select category" = "Elegir categoría";
-"pending_message" = "Escribe la explicación de la frase o palabra aquí y completa tu pendiente. ¡Aclara tu duda y guárdalo!";
+"Select a category" = "Seleccionar una categoría";
+"Add new category" = "Agregar nueva categoría";
+"Add Custom Category" = "Agregar categoría";
+"Category Name" = "Nombre de categoría";
+"Add category" = "Agregar categoría";
+"Choose the category that best represents your new phrase/word" = "Elige la categoría que mejor represente tu nueva frase/palabra";
+"Delete Category" = "Eliminar categoría";
+"All words in '\(categoryToDelete.name)' will become uncategorized. This cannot be undone." = "Todas las palabras en '%@' quedarán sin categoría. Esta acción no se puede deshacer.";
+"Unknown category." = "Categoría desconocida.";
+"Delete" = "Eliminar";
+
+// Collection
+"My Collection" = "Mi Colección";
+"Your collection is empty" = "Tu colección está vacía";
+"Start adding words to build your vocabulary" = "Comienza a agregar palabras para construir tu vocabulario";
+"No results found" = "No se encontraron resultados";
+"Try searching for something else" = "Intenta buscar un término o frase diferente";
+"Search for a word or phrase" = "Busca una palabra o frase";
+
+// Settings
+"Settings" = "Configuración";
+"Customize your learning experience" = "Personaliza tu experiencia de aprendizaje";
+"PROFILE" = "PERFIL";
+"Nickname" = "Apodo";
+"Enter your nickname" = "Escribe tu apodo";
+"LANGUAGES YOU'RE LEARNING" = "IDIOMAS QUE ESTÁS APRENDIENDO";
+"Languages you are learning" = "Idiomas que estás aprendiendo";
+"Add Language" = "Agregar idioma";
+"Select a language you want to learn" = "Selecciona un idioma que quieras aprender";
+"All languages added!" = "¡Todos los idiomas agregados!";
+"You're learning all available languages" = "Estás aprendiendo todos los idiomas disponibles";
+"This will remove %@ from your learning languages." = "Esto eliminará %@ de tus idiomas de aprendizaje.";
+"Delete Language" = "Eliminar idioma";
+"ABOUT" = "ACERCA DE";
+"ItMeans" = "ItMeans";
+"Version 1.0" = "Versión 1.0";
+"© 2025 ItMeans" = "© 2025 ItMeans";
+"Your personal vocabulary builder" = "Tu constructor de vocabulario personal";
+
+// About
+"About ItMeans" = "Acerca de ItMeans";
+"What is ItMeans?" = "¿Qué es ItMeans?";
+"ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language." = "ItMeans es tu espacio personal para guardar palabras, frases y expresiones que encuentres mientras te sumerges en un nuevo idioma.";
+"How it works" = "Cómo funciona";
+"How it works?" = "¿Cómo funciona?";
+"✍️ Save any new words, phrases, or slang you discover." = "Guarda cualquier palabra, frase o expresión que descubras.";
+"📚 Review your collection as you learn" = "Revisa tu colección mientras aprendes";
+"🤝 Complete your pendings by asking a native speaker or by searching" = "Completa tus pendientes preguntando a un hablante nativo o buscando por tu cuenta";
+"🧠 Activate the widget to practice your saved words daily." = "Activa el widget para repasar tus palabras guardadas cada día.";
+
+// Languages
 "Chinese 🇨🇳" = "Chino 🇨🇳";
 "English 🇬🇧" = "Inglés 🇬🇧";
 "French 🇫🇷" = "Francés 🇫🇷";
@@ -52,37 +102,51 @@
 "Spanish 🇪🇸" = "Español 🇪🇸";
 "Turkish 🇹🇷" = "Turco 🇹🇷";
 
-"No results found" = "No se encontraron resultados.";
-"Your collection is empty" = "Tu colección está vacía";
-"Try searching for something else!" = "Intenta buscar un término o frase diferente.";
+// Onboarding
+"Welcome to \n ItMeans!" = "¡Bienvenido a \n ItMeans!";
+"Skip" = "Saltar";
+"Learn Through" = "Aprende a través de";
+"Real Life" = "La vida real";
+"Enter your name" = "Escribe tu nombre";
+"Capture words and phrases as you\nencounter them in your daily life" = "Captura palabras y frases mientras\nlas encuentras en tu vida diaria";
+"Save & Learn" = "Guarda y aprende";
+"Your Personal Vocabulary" = "Tu vocabulario personal";
+"Save instantly" = "Guarda al instante";
+"Don't know a word? Save it for later" = "¿No conoces una palabra? Guárdala para después";
+"Add meanings" = "Agrega significados";
+"Complete entries when you're ready" = "Completa las entradas cuando estés listo";
+"Stay organized" = "Mantente organizado";
+"Use categories to group your words" = "Usa categorías para agrupar tus palabras";
+"Practice Daily" = "Práctica diaria";
+"Add the home screen widget to\nreview words throughout the day" = "Agrega el widget a tu pantalla de\ninicio para repasar durante el día";
+"Welcome!" = "¡Bienvenido!";
+"Let's personalize your experience" = "Personalicemos tu experiencia";
+"What's your name?" = "¿Cómo te llamas?";
+"What is your nickname?" = "¿Cuál es tu apodo?";
+"Enter your name" = "Escribe tu nombre";
+"Which language are you learning?" = "¿Qué idioma estás aprendiendo?";
+"Get Started!" = "¡Comenzar!";
+"Start Learning" = "Comenzar a aprender";
+"Select Language" = "Elegir Idioma";
 
+// Legacy/Alternative
+"To review" = "Mis pendientes";
+"Expressions" = "Expresiones";
+"How to say" = "¿Cómo se dice?";
+"New Phrases" = "Frases Nuevas";
+"Language you're learning" = "Idioma que estás aprendiendo";
+"Choose Order" = "Elegir orden";
+"Alphabetical" = "Alfabéticamente";
+"By Date" = "Por Fecha";
+"By Category" = "Por Categoría";
+"To Review" = "Mis Pendientes";
 "Boost your language skills through your experiences" = "Aprende un nuevo idioma a través de tus experiencias";
 "Capture new words and phrases as you go about your day" = "Captura nuevas palabras y frases en tu día a día";
-"Don’t understand a word or phrase?" = "¿No entiendes una palabra o frase?";
+"Don't understand a word or phrase?" = "¿No entiendes una palabra o frase?";
 "Heard, saw, or read something unfamiliar? Just save it for later." = "¿Oíste, viste o leíste algo desconocido? Guárdalo para después.";
-"Want to say something but don’t know how?" = "¿Quieres decir algo pero no sabes cómo?";
+"Want to say something but don't know how?" = "¿Quieres decir algo pero no sabes cómo?";
 "Write it down in your native language and save it for later..." = "Escríbelo en tu idioma y guárdalo para después...";
 "Complete your saved items" = "Completa tus elementos guardados";
 "When you're ready, add a translation, meaning, or explanation — however works best for you." = "Cuando quieras, agrega una traducción, significado o explicación — como prefieras.";
 "Your language journey, all in one place" = "Tu viaje de idiomas, todo en un solo lugar";
-"Revisit everything you’ve learned — saved and ready whenever you need it." = "Revisa todo lo que has aprendido — guardado y listo cuando lo necesites.";
-"Welcome to \n ItMeans!" = "¡Bienvenido a \n ItMeans!";
-"What is your nickname?" = "¿Cuál es tu apodo?";
-"Enter your nickname" = "Escribe tu apodo";
-"Which language are you learning?" = "¿Qué idioma estás aprendiendo?";
-"Get Started!" = "¡Comenzar!";
-"Add Custom Category" = "Agregar categoría";
-"About ItMeans" = "Acerca de ItMeans";
-"What is ItMeans?" = "¿Qué es ItMeans?";
-"ItMeans is your personal space to save the words, phrases, and expressions you encounter while immersing yourself in a new language." = "ItMeans es tu espacio personal para guardar palabras, frases y expresiones que encuentres mientras te sumerges en un nuevo idioma.";
-"How it works?" = "¿Cómo funciona?";
-"✍️ Save any new words, phrases, or slang you discover." = "✍️ Guarda cualquier palabra, frase o expresión que descubras.";
-"📚 Review your collection as you learn" = "📚 Revisa tu colección mientras aprendes";
-"🤝 Complete your pendings by asking a native speaker or by searching" = "🤝 Completa tus pendientes preguntando a un hablante nativo o buscando por tu cuenta";
-"🧠 Activate the widget to practice your saved words daily." = "🧠 Activa el widget para repasar tus palabras guardadas cada día.";
-
-"other_message" = "¡Es hora de descubrir cómo decir esto! Búscalo en el idioma que estás aprendiendo y márcalo como completado.";
-
-"Choose a category" = "Elige una categoría";
-"Languages you are learning" = "Idiomas que estás aprendiendo";
-"Add Language" = "Agregar idioma";
+"Revisit everything you've learned — saved and ready whenever you need it." = "Revisa todo lo que has aprendido — guardado y listo cuando lo necesites.";

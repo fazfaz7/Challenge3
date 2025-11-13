@@ -17,13 +17,17 @@ enum CollectionOrder: String, CaseIterable {
     case alphabetical = "Alphabetical"
     case byDate = "By Date"
     case byCategory = "By Category"
-    
+
     var icon: String {
         switch self {
         case .alphabetical: return "textformat.abc"
         case .byDate: return "calendar"
         case .byCategory: return "folder"
         }
+    }
+
+    var localizedName: String {
+        NSLocalizedString(self.rawValue, comment: "")
     }
 }
 
@@ -127,7 +131,7 @@ struct CollectionView: View {
                         Menu {
                             Picker("Order", selection: $selectedOrder) {
                                 ForEach(CollectionOrder.allCases, id: \.self) { order in
-                                    Label(order.rawValue, systemImage: order.icon)
+                                    Label(order.localizedName, systemImage: order.icon)
                                         .tag(order)
                                 }
                             }
@@ -310,11 +314,11 @@ struct CollectionView: View {
                 }
             }
         }
-        .confirmationDialog("Choose Order", isPresented: $showingFilterOptions, titleVisibility: .visible) {
-            Button("Alphabetical") { selectedOrder = .alphabetical }
-            Button("By Date") { selectedOrder = .byDate }
-            Button("By Category") { selectedOrder = .byCategory }
-            Button("Cancel", role: .cancel) { }
+        .confirmationDialog(LocalizedStringKey("Choose Order"), isPresented: $showingFilterOptions, titleVisibility: .visible) {
+            Button(LocalizedStringKey("Alphabetical")) { selectedOrder = .alphabetical }
+            Button(LocalizedStringKey("By Date")) { selectedOrder = .byDate }
+            Button(LocalizedStringKey("By Category")) { selectedOrder = .byCategory }
+            Button(LocalizedStringKey("Cancel"), role: .cancel) { }
         }
     }
     

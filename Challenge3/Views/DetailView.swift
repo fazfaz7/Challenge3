@@ -366,7 +366,7 @@ struct AddLanguageView: View {
                 
                 VStack(spacing: 0) {
                     // Header description
-                    Text("Select a language you want to learn")
+                    Text(LocalizedStringKey("Select a language you want to learn"))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
@@ -383,14 +383,15 @@ struct AddLanguageView: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .font(.system(size: 60))
                                 .foregroundColor(.accentColor)
-                            
+
+
                             VStack(spacing: 8) {
-                                Text("All languages added!")
+                                Text(LocalizedStringKey("All languages added!"))
                                     .font(.title3)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
-                                
-                                Text("You're learning all available languages")
+
+                                Text(LocalizedStringKey("You're learning all available languages"))
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
                                     .multilineTextAlignment(.center)
