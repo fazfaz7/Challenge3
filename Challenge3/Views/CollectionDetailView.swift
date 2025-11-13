@@ -139,7 +139,7 @@ struct CollectionDetailView: View {
                     if let category = phrase.category {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
-                                Text("Category")
+                                Text(LocalizedStringKey("Category"))
                                     .font(.subheadline)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.accentColor)
@@ -193,8 +193,9 @@ struct EditPhraseView: View {
     @State private var editedEntry: String = ""
     @State private var editedExplanation: String = ""
     @State private var selectedCategory: Category?
+    @State private var showCategorySheet = false
     @FocusState private var focusedField: Field?
-    
+
     enum Field {
         case entry, explanation
     }
@@ -217,12 +218,12 @@ struct EditPhraseView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         // Expression field
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Expression")
+                            Text(LocalizedStringKey("Expression"))
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)
-                            
-                            TextField("Enter phrase", text: $editedEntry)
+
+                            TextField(LocalizedStringKey("Enter phrase"), text: $editedEntry)
                                 .font(.body)
                                 .padding(16)
                                 .background(.ultraThinMaterial)
@@ -239,12 +240,12 @@ struct EditPhraseView: View {
                         
                         // Explanation field
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Explanation")
+                            Text(LocalizedStringKey("Explanation"))
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)
-                            
-                            TextField("Enter explanation", text: $editedExplanation)
+
+                            TextField(LocalizedStringKey("Enter explanation"), text: $editedExplanation)
                                 .font(.body)
                                 .padding(16)
                                 .background(.ultraThinMaterial)
@@ -261,22 +262,13 @@ struct EditPhraseView: View {
                         
                         // Category picker
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Category")
+                            Text(LocalizedStringKey("Category"))
                                 .font(.headline)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary)
-                            
-                            Menu {
-                                ForEach(categories, id: \.self) { category in
-                                    Button {
-                                        selectedCategory = category
-                                    } label: {
-                                        HStack {
-                                            Text(category.emoji)
-                                            Text(category.name)
-                                        }
-                                    }
-                                }
+
+                            Button {
+                                showCategorySheet = true
                             } label: {
                                 HStack(spacing: 12) {
                                     if let selectedCategory = selectedCategory {
@@ -286,13 +278,13 @@ struct EditPhraseView: View {
                                             .foregroundColor(.primary)
                                             .fontWeight(.medium)
                                     } else {
-                                        Text("Select a category")
+                                        Text(LocalizedStringKey("Select a category"))
                                             .foregroundColor(.secondary)
                                             .fontWeight(.medium)
                                     }
-                                    
+
                                     Spacer()
-                                    
+
                                     Image(systemName: "chevron.down")
                                         .font(.caption)
                                         .foregroundColor(.secondary)
@@ -312,11 +304,11 @@ struct EditPhraseView: View {
                     .padding(.bottom, 40)
                 }
             }
-            .navigationTitle("Edit Phrase")
+            .navigationTitle(LocalizedStringKey("Edit Phrase"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
+                    Button(LocalizedStringKey("Save")) {
                         phrase.userEntry = editedEntry
                         phrase.explanation = editedExplanation
                         phrase.category = selectedCategory
@@ -331,11 +323,14 @@ struct EditPhraseView: View {
                     .foregroundColor(.accentColor)
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(LocalizedStringKey("Cancel")) {
                         dismiss()
                     }
                     .foregroundColor(.secondary)
                 }
+            }
+            .sheet(isPresented: $showCategorySheet) {
+                SelectCategoryView(selectedCategory: $selectedCategory)
             }
             .onAppear {
                 editedEntry = phrase.userEntry

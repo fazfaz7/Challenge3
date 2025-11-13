@@ -35,6 +35,10 @@
 "None" = "Nessuna";
 "Mark complete" = "Segna come completato";
 "Edit" = "Modifica";
+"Edit Phrase" = "Modifica frase";
+"Enter phrase" = "Inserisci la frase";
+"Enter explanation" = "Inserisci la spiegazione";
+"Save" = "Salva";
 "pending_message" = "Scopri cosa significa! Scrivi una breve spiegazione o traduzione, poi segna come completato.";
 "other_message" = "È ora di scoprire come si dice! Cercalo nella lingua che stai imparando e segna come completato.";
 

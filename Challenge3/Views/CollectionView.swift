@@ -49,7 +49,9 @@ struct CollectionView: View {
     
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
-            let matchesSearch = searchText.isEmpty || phrase.userEntry.localizedCaseInsensitiveContains(searchText)
+            let matchesSearch = searchText.isEmpty ||
+                phrase.userEntry.localizedCaseInsensitiveContains(searchText) ||
+                phrase.explanation.localizedCaseInsensitiveContains(searchText)
             return matchesSearch
         }
     }

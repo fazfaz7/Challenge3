@@ -35,6 +35,10 @@
 "None" = "Ninguna";
 "Mark complete" = "Completar pendiente";
 "Edit" = "Editar";
+"Edit Phrase" = "Editar frase";
+"Enter phrase" = "Escribe la frase";
+"Enter explanation" = "Escribe la explicación";
+"Save" = "Guardar";
 "pending_message" = "¡Es hora de descubrir qué significa! Escribe una breve explicación o traducción y completa tu pendiente.";
 "other_message" = "¡Es hora de descubrir cómo decir esto! Búscalo en el idioma que estás aprendiendo y márcalo como completado.";
 

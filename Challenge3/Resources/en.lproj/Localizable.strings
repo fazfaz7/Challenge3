@@ -35,6 +35,10 @@
 "None" = "None";
 "Mark complete" = "Mark complete";
 "Edit" = "Edit";
+"Edit Phrase" = "Edit Phrase";
+"Enter phrase" = "Enter phrase";
+"Enter explanation" = "Enter explanation";
+"Save" = "Save";
 "pending_message" = "Time to find out what it means! Write a small explanation or translation, then mark it complete.";
 "other_message" = "Time to figure out how to say this! Look it up in the language you're learning and mark it complete.";
 
