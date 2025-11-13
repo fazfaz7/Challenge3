@@ -14,7 +14,7 @@ struct AboutView: View {
             VStack(spacing: 20) {
                 Spacer()
                 VStack(spacing: 20) {
-                    Image("LyngoIcon")
+                    Image("MyIcon")
                         .resizable()
                         .scaledToFit()
                         .clipShape(RoundedRectangle(cornerRadius: 20))
