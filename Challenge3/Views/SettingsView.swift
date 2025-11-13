@@ -207,7 +207,7 @@ struct SettingsView: View {
                                             .fontWeight(.bold)
                                             .foregroundColor(.primary)
                                         
-                                        Text(LocalizedStringKey("Version 1.0"))
+                                        Text(LocalizedStringKey("Version 1.3"))
                                             .font(.caption)
                                             .foregroundColor(.secondary)
                                     }
@@ -340,7 +340,7 @@ struct AboutSheetView: View {
                         
                         // Footer
                         VStack(spacing: 8) {
-                            Text("Version 1.0")
+                            Text("Version 1.3")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                             
