@@ -46,16 +46,36 @@ struct Challenge3WidgetExtensionEntryView : View {
     var entry: Provider.Entry
     @Environment(\.modelContext) var modelContext
     @Environment(\.widgetFamily) var widgetFamily
-    
+
     @Query(
         filter: #Predicate { $0.isCompleted == true },
         sort: \LearnElement.dateAdded,
         order: .reverse,
         animation: .default
-    ) var testPhrases: [LearnElement]
+    ) var allPhrases: [LearnElement]
+
+    // Filter phrases by selected language
+    var filteredPhrases: [LearnElement] {
+        guard let selectedLang = entry.configuration.selectedLanguage else {
+            // No language selected, show all phrases
+            return allPhrases
+        }
+
+        let languageId = selectedLang.id
+
+        // If "All Languages" is selected, show all phrases
+        if languageId == "All Languages" {
+            return allPhrases
+        }
+
+        // Otherwise, filter by the selected language
+        return allPhrases.filter { phrase in
+            phrase.language == languageId
+        }
+    }
 
     var body: some View {
-        if let myphrase = testPhrases.randomElement() {
+        if let myphrase = filteredPhrases.randomElement() {
             Group {
                 switch widgetFamily {
                 case .systemSmall:
@@ -65,6 +85,32 @@ struct Challenge3WidgetExtensionEntryView : View {
                 default:
                     MediumWidgetView(phrase: myphrase)
                 }
+            }
+            .containerBackground(for: .widget) {
+                LinearGradient(
+                    colors: [
+                        Color(red: 0.08, green: 0.72, blue: 0.65),
+                        Color(red: 0.1, green: 0.7, blue: 0.8)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            }
+        } else {
+            // Empty state when no phrases available
+            VStack(spacing: 12) {
+                Image(systemName: "book.closed.fill")
+                    .font(.system(size: 32))
+                    .foregroundColor(.white.opacity(0.7))
+
+                Text(NSLocalizedString("No words yet", comment: ""))
+                    .font(.headline)
+                    .foregroundColor(.white)
+
+                Text(entry.configuration.selectedLanguage?.id == "All Languages" ? NSLocalizedString("Add words to see them here", comment: "") : "\(NSLocalizedString("Add some words in", comment: ""))\n\(entry.configuration.selectedLanguage?.name ?? NSLocalizedString("your language", comment: ""))")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
             }
             .containerBackground(for: .widget) {
                 LinearGradient(
@@ -184,7 +230,7 @@ struct MediumWidgetView: View {
             VStack(spacing: 0) {
                 // Header
                 HStack {
-                    Text("DAILY WORD")
+                    Text(NSLocalizedString("DAILY WORD", comment: ""))
                         .font(.system(size: 9, weight: .bold))
                         .tracking(0.5)
                         .foregroundColor(.white.opacity(0.9))
@@ -263,15 +309,15 @@ struct Challenge3WidgetExtension: Widget {
 }
 
 extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
+    fileprivate static var allLanguages: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
+        intent.selectedLanguage = LanguageEntity(id: "All Languages", name: NSLocalizedString("All Languages", comment: ""))
         return intent
     }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
+
+    fileprivate static var italian: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
+        intent.selectedLanguage = LanguageEntity(id: "Italian 🇮🇹", name: "Italian 🇮🇹")
         return intent
     }
 }
@@ -279,6 +325,6 @@ extension ConfigurationAppIntent {
 #Preview(as: .systemMedium) {
     Challenge3WidgetExtension()
 } timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
+    SimpleEntry(date: .now, configuration: .allLanguages)
+    SimpleEntry(date: .now, configuration: .italian)
 }

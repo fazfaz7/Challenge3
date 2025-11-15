@@ -1,0 +1,14 @@
+/*
+  Localizable.strings (Widget)
+  Challenge3WidgetExtension
+
+  Created for widget localization.
+*/
+
+// Widget Display
+"No words yet" = "No words yet";
+"Add words to see them here" = "Add words to see them here";
+"Add some words in" = "Add some words in";
+"your language" = "your language";
+"DAILY WORD" = "DAILY WORD";
+"All Languages" = "All Languages";
