@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "IMG_0352.png",
+      "filename" : "Global Dialogue Icon.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "IMG_0352 1.png",
+      "filename" : "Global Dialogue Icon 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "IMG_0352 2.png",
+      "filename" : "Global Dialogue Icon 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
