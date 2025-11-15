@@ -10,7 +10,7 @@
 "Learning" = "Learning";
 "TO REVIEW" = "TO REVIEW";
 "LEARNED" = "LEARNED";
-"All Words to Review" = "All Words to Review";
+"All Words to Review" = "Words to Review";
 "No expressions to review!" = "No expressions to review!";
 "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day." = "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day.";
 
@@ -108,6 +108,8 @@
 
 // Onboarding
 "Welcome to \n ItMeans!" = "Welcome to ItMeans!";
+"Welcome to" = "Welcome to";
+"Swipe to continue" = "Swipe to continue";
 "Skip" = "Skip";
 "Learn Through" = "Learn Through";
 "Real Life" = "Real Life";

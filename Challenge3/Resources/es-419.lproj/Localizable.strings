@@ -10,7 +10,7 @@
 "Learning" = "Estoy aprendiendo";
 "TO REVIEW" = "POR COMPLETAR";
 "LEARNED" = "APRENDIDAS";
-"All Words to Review" = "Todas las palabras por completar";
+"All Words to Review" = "Palabras por completar";
 "No expressions to review!" = "¡No hay expresiones pendientes!";
 "Save the words and phrases you discover and build your vocabulary from the things you live, see, and hear every day." = "Guarda las palabras y frases que descubras y construye tu vocabulario a partir de lo que vives, ves y escuchas.";
 
@@ -108,6 +108,8 @@
 
 // Onboarding
 "Welcome to \n ItMeans!" = "¡Bienvenido a \n ItMeans!";
+"Welcome to" = "Bienvenido a";
+"Swipe to continue" = "Desliza para continuar";
 "Skip" = "Saltar";
 "Learn Through" = "Aprende a través de";
 "Real Life" = "La vida real";

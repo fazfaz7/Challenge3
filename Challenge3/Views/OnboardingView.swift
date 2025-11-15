@@ -19,23 +19,26 @@ struct OnboardingView: View {
             
             // Content
             TabView(selection: $currentPage) {
-                OnboardingPage1()
+                OnboardingPage0()
                     .tag(0)
-                
-                OnboardingPage2()
+
+                OnboardingPage1()
                     .tag(1)
-                
-                OnboardingPage3()
+
+                OnboardingPage2()
                     .tag(2)
-                
-                OnboardingPage4()
+
+                OnboardingPage3()
                     .tag(3)
+
+                OnboardingPage4()
+                    .tag(4)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
             .onChange(of: currentPage) { oldValue, newValue in
                 withAnimation(.easeInOut(duration: 0.5)) {
-                    progress = CGFloat(newValue) / 3.0
+                    progress = CGFloat(newValue) / 4.0
                 }
             }
             
@@ -43,11 +46,11 @@ struct OnboardingView: View {
             VStack {
                 HStack {
                     Spacer()
-                    
-                    if currentPage < 3 {
+
+                    if currentPage < 4 {
                         Button {
                             withAnimation {
-                                currentPage = 3
+                                currentPage = 4
                             }
                         } label: {
                             Text(LocalizedStringKey("Skip"))
@@ -65,17 +68,17 @@ struct OnboardingView: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 50)
-                
+
                 Spacer()
             }
-            
+
             // Bottom progress indicator
             VStack {
                 Spacer()
-                
-                if currentPage < 3 {
+
+                if currentPage < 4 {
                     HStack(spacing: 12) {
-                        ForEach(0..<3) { index in
+                        ForEach(0..<4) { index in
                             RoundedRectangle(cornerRadius: 4)
                                 .fill(currentPage == index ? Color.white : Color.white.opacity(0.3))
                                 .frame(width: currentPage == index ? 32 : 24, height: 6)
@@ -107,35 +110,138 @@ struct AnimatedGradientBackground: View {
     }
 }
 
-// MARK: - Page 1: Main Value
-struct OnboardingPage1: View {
+// MARK: - Page 0: Welcome Screen
+struct OnboardingPage0: View {
     @State private var appeared = false
-    
+    @State private var logoScale: CGFloat = 0.5
+    @State private var logoRotation: Double = -10
+
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            
+
+            VStack(spacing: 40) {
+                // App Icon/Logo with animations
+                ZStack {
+                    // Glow effect
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                colors: [
+                                    Color.white.opacity(0.3),
+                                    Color.white.opacity(0.0)
+                                ],
+                                center: .center,
+                                startRadius: 30,
+                                endRadius: 80
+                            )
+                        )
+                        .frame(width: 160, height: 160)
+                        .scaleEffect(appeared ? 1.2 : 0.8)
+                        .opacity(appeared ? 1 : 0)
+
+                    // App icon
+                    Image("MyIcon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 120, height: 120)
+                        .clipShape(RoundedRectangle(cornerRadius: 26))
+                        .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+                        .scaleEffect(logoScale)
+                        .rotationEffect(.degrees(logoRotation))
+                }
+
+                VStack(spacing: 16) {
+                    // Welcome text
+                    Text(LocalizedStringKey("Welcome to"))
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.white.opacity(0.9))
+                        .offset(y: appeared ? 0 : 30)
+                        .opacity(appeared ? 1 : 0)
+
+                    // App name
+                    Text("ItMeans")
+                        .font(.system(size: 56, weight: .bold))
+                        .foregroundColor(.white)
+                        .offset(y: appeared ? 0 : 30)
+                        .opacity(appeared ? 1 : 0)
+                }
+
+                // Tagline
+                Text(LocalizedStringKey("Your personal vocabulary builder"))
+                    .font(.system(size: 18, weight: .medium))
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.white.opacity(0.85))
+                    .padding(.horizontal, 50)
+                    .offset(y: appeared ? 0 : 30)
+                    .opacity(appeared ? 1 : 0)
+
+                // Swipe indicator
+                VStack(spacing: 12) {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white.opacity(0.6))
+
+                    Text(LocalizedStringKey("Swipe to continue"))
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+                .offset(y: appeared ? 0 : 30)
+                .opacity(appeared ? 0.8 : 0)
+            }
+
+            Spacer()
+            Spacer()
+        }
+        .onAppear {
+            // Logo entrance animation
+            withAnimation(.spring(response: 0.8, dampingFraction: 0.6).delay(0.1)) {
+                logoScale = 1.0
+                logoRotation = 0
+            }
+
+            // Content fade in
+            withAnimation(.easeOut(duration: 0.8).delay(0.3)) {
+                appeared = true
+            }
+
+            // Continuous subtle pulse for glow
+            withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true).delay(1)) {
+                logoScale = 1.05
+            }
+        }
+    }
+}
+
+// MARK: - Page 1: Main Value
+struct OnboardingPage1: View {
+    @State private var appeared = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Spacer()
+
             VStack(spacing: 32) {
                 // Emoji with parallax effect
                 Text("📚")
                     .font(.system(size: 100))
                     .scaleEffect(appeared ? 1 : 0.5)
                     .opacity(appeared ? 1 : 0)
-                
+
                 VStack(spacing: 16) {
                     Text(LocalizedStringKey("Learn Through"))
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(.white.opacity(0.9))
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
-                    
+
                     Text(LocalizedStringKey("Real Life"))
                         .font(.system(size: 48, weight: .bold))
                         .foregroundColor(.white)
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
                 }
-                
+
                 Text(LocalizedStringKey("Capture words and phrases as you\nencounter them in your daily life"))
                     .font(.system(size: 18))
                     .multilineTextAlignment(.center)
@@ -144,7 +250,7 @@ struct OnboardingPage1: View {
                     .offset(y: appeared ? 0 : 20)
                     .opacity(appeared ? 1 : 0)
             }
-            
+
             Spacer()
             Spacer()
         }
