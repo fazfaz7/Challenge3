@@ -54,24 +54,33 @@ struct Challenge3WidgetExtensionEntryView : View {
         animation: .default
     ) var allPhrases: [LearnElement]
 
-    // Filter phrases by selected language
+    // Filter phrases by selected language and time range
     var filteredPhrases: [LearnElement] {
-        guard let selectedLang = entry.configuration.selectedLanguage else {
-            // No language selected, show all phrases
-            return allPhrases
+        var phrases = allPhrases
+
+        // Filter by language
+        if let selectedLang = entry.configuration.selectedLanguage {
+            let languageId = selectedLang.id
+
+            // If not "All Languages", filter by specific language
+            if languageId != "All Languages" {
+                phrases = phrases.filter { phrase in
+                    phrase.language == languageId
+                }
+            }
         }
 
-        let languageId = selectedLang.id
-
-        // If "All Languages" is selected, show all phrases
-        if languageId == "All Languages" {
-            return allPhrases
+        // Filter by time range
+        if let selectedTimeRange = entry.configuration.selectedTimeRange,
+           let days = selectedTimeRange.days {
+            let cutoffDate = Calendar.current.date(byAdding: .day, value: -days, to: Date())!
+            phrases = phrases.filter { phrase in
+                phrase.dateAdded >= cutoffDate
+            }
         }
+        // If days is nil or no time range selected, show all time (no additional filtering)
 
-        // Otherwise, filter by the selected language
-        return allPhrases.filter { phrase in
-            phrase.language == languageId
-        }
+        return phrases
     }
 
     var body: some View {
@@ -312,12 +321,14 @@ extension ConfigurationAppIntent {
     fileprivate static var allLanguages: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
         intent.selectedLanguage = LanguageEntity(id: "All Languages", name: NSLocalizedString("All Languages", comment: ""))
+        intent.selectedTimeRange = TimeRangeEntity(id: "All time", name: NSLocalizedString("All time", comment: ""), days: nil)
         return intent
     }
 
     fileprivate static var italian: ConfigurationAppIntent {
         let intent = ConfigurationAppIntent()
         intent.selectedLanguage = LanguageEntity(id: "Italian 🇮🇹", name: "Italian 🇮🇹")
+        intent.selectedTimeRange = TimeRangeEntity(id: "Last 7 days", name: NSLocalizedString("Last 7 days", comment: ""), days: 7)
         return intent
     }
 }

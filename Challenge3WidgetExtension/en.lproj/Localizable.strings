@@ -12,3 +12,9 @@
 "your language" = "your language";
 "DAILY WORD" = "DAILY WORD";
 "All Languages" = "All Languages";
+
+// Time Range Options
+"All time" = "All time";
+"Last 7 days" = "Last 7 days";
+"Last 30 days" = "Last 30 days";
+"Last 3 months" = "Last 3 months";

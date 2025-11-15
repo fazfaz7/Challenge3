@@ -12,3 +12,9 @@
 "your language" = "la tua lingua";
 "DAILY WORD" = "PAROLA DEL GIORNO";
 "All Languages" = "Tutte le lingue";
+
+// Time Range Options
+"All time" = "Tutto il tempo";
+"Last 7 days" = "Ultimi 7 giorni";
+"Last 30 days" = "Ultimi 30 giorni";
+"Last 3 months" = "Ultimi 3 mesi";
