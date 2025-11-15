@@ -343,8 +343,8 @@ struct OnboardingPage4: View {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
     @EnvironmentObject var languageStore: LanguageStore
     
-    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
-    
+    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇧🇷", "Spanish 🇪🇸", "Turkish 🇹🇷"]
+
     @State private var appeared = false
     @State private var showLanguageSheet = false
     @State private var tempSelectedLanguage: String = "Italian 🇮🇹"
@@ -539,9 +539,9 @@ struct OnboardingPage4: View {
 struct LanguageSelectionSheet: View {
     @Binding var selectedLanguage: String
     @Environment(\.dismiss) var dismiss
-    
-    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
-    
+
+    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇧🇷", "Spanish 🇪🇸", "Turkish 🇹🇷"]
+
     var body: some View {
         ZStack {
             // Gradient background matching onboarding

@@ -49,7 +49,7 @@ struct LanguageQuery: EntityQuery {
         "German 🇩🇪",
         "Italian 🇮🇹",
         "Japanese 🇯🇵",
-        "Portuguese 🇵🇹",
+        "Portuguese 🇧🇷",
         "Spanish 🇪🇸",
         "Turkish 🇹🇷"
     ]

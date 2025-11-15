@@ -38,6 +38,7 @@ struct ContentView: View {
     @State private var selectedSegment = 0
     @AppStorage("hasInsertedDefaultCategories") private var hasInsertedDefaultCategories: Bool = false
     @AppStorage("hasMigratedLanguages") private var hasMigratedLanguages = false
+    @AppStorage("hasPortugueseFlagMigrated") private var hasPortugueseFlagMigrated = false
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var languageStore: LanguageStore
     
@@ -295,6 +296,42 @@ struct ContentView: View {
                         print("✅ Migration completed")
                     } catch {
                         print("❌ Migration error: \(error)")
+                    }
+                }
+
+                // Migrate Portuguese flag from 🇵🇹 to 🇧🇷
+                if !hasPortugueseFlagMigrated {
+                    let fetchDescriptor = FetchDescriptor<LearnElement>()
+                    do {
+                        let phrases = try modelContext.fetch(fetchDescriptor)
+                        var migratedCount = 0
+                        for phrase in phrases {
+                            if phrase.language == "Portuguese 🇵🇹" {
+                                phrase.language = "Portuguese 🇧🇷"
+                                migratedCount += 1
+                            }
+                        }
+
+                        // Also migrate in user's language store
+                        if let index = languageStore.userLanguages.firstIndex(of: "Portuguese 🇵🇹") {
+                            languageStore.userLanguages[index] = "Portuguese 🇧🇷"
+                            languageStore.saveLanguages()
+                        }
+
+                        // Migrate selected language if needed
+                        if selectedLanguage == "Portuguese 🇵🇹" {
+                            selectedLanguage = "Portuguese 🇧🇷"
+                        }
+
+                        try modelContext.save()
+                        hasPortugueseFlagMigrated = true
+
+                        // Refresh widget to show migrated data
+                        WidgetCenter.shared.reloadAllTimelines()
+
+                        print("✅ Portuguese flag migration completed: \(migratedCount) words migrated")
+                    } catch {
+                        print("❌ Portuguese migration error: \(error)")
                     }
                 }
             }
@@ -565,8 +602,8 @@ struct SectionSettingsView: View {
     @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
     @Environment(\.dismiss) var dismiss
     
-    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"]
-    
+    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇧🇷", "Spanish 🇪🇸", "Turkish 🇹🇷"]
+
     @EnvironmentObject var languageStore: LanguageStore
     @State private var showAddLanguage = false
     @State private var languageToDelete: String?

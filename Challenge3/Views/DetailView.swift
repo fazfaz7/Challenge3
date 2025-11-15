@@ -348,7 +348,7 @@ struct AddLanguageView: View {
     
     let allLanguages = [
         "Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪",
-        "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇵🇹", "Spanish 🇪🇸", "Turkish 🇹🇷"
+        "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇧🇷", "Spanish 🇪🇸", "Turkish 🇹🇷"
     ]
     
     var availableLanguages: [String] {
