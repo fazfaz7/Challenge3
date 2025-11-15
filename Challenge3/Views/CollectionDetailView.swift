@@ -203,17 +203,10 @@ struct EditPhraseView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background gradient
-                LinearGradient(
-                    colors: [
-                        Color(red: 0.96, green: 0.98, blue: 0.99),
-                        Color(red: 0.98, green: 0.99, blue: 1.0)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
-                
+                // Background gradient iOS 18
+                Color(.systemGroupedBackground)
+                    .ignoresSafeArea()
+
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         // Expression field
