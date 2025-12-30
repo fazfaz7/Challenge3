@@ -15,6 +15,8 @@ struct CollectionDetailView: View {
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
     @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
     @State private var isEditing = false
+    @State private var shareImage: UIImage?
+    @State private var showShareSheet = false
     
     var body: some View {
         ZStack {
@@ -172,14 +174,61 @@ struct CollectionDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    generateAndShareImage()
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.accentColor)
+                }
+            }
+        }
         .sheet(isPresented: $isEditing) {
             EditPhraseView(phrase: phrase)
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let shareImage = shareImage {
+                ShareSheet(items: [shareImage])
+            }
+        }
+    }
+
+    // MARK: - Share Image Generation
+    private func generateAndShareImage() {
+        let languageFlag = phrase.language.map { LanguageHelper.flag(from: $0) } ?? "🌍"
+
+        let shareView = ShareImageView(
+            phrase: phrase.userEntry,
+            meaning: phrase.explanation,
+            languageFlag: languageFlag
+        )
+
+        let renderer = ImageRenderer(content: shareView)
+        renderer.scale = 3.0 // High quality for retina displays
+
+        if let uiImage = renderer.uiImage {
+            shareImage = uiImage
+            showShareSheet = true
         }
     }
 }
 
 #Preview {
     CollectionDetailView(phrase: LearnElement(learnType: .newPhrase, userEntry: "Amicizia", explanation: "Friendship", language: "Italian 🇮🇹"))
+}
+
+// MARK: - Share Sheet (UIActivityViewController Wrapper)
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 // MARK: - Edit Phrase View (Modernizado)
