@@ -7,7 +7,6 @@
 
 import SwiftUI
 import SwiftData
-import NaturalLanguage
 import WidgetKit
 
 struct ContentView: View {
@@ -20,22 +19,10 @@ struct ContentView: View {
         allPhrases.filter { !$0.isCompleted && $0.language == selectedLanguage }
     }
     
-    @State var phrases: [String] = ["Mi raccomando", "Lascia perdere?", "In bocca al lupo", "Merluzzo", "Suino/Maiale?", "Stupidino"]
     @Environment(\.modelContext) var modelContext
-    @Query(
-        sort: \Category.dateAdded,
-        animation: .default
-    ) var myCategories: [Category]
-    
-    @State var newPhrasesExpanded: Bool = false
-    @State var howToSayExpanded: Bool = false
     @AppStorage("userName") private var userName: String = "No name set"
     @AppStorage("selectedLanguage") private var selectedLanguage: String = ""
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
-    @State private var isPresenting = true
-    @State private var isPresentingInfo = false
-    @State private var isPresentingSettings = false
-    @State private var selectedSegment = 0
     @AppStorage("hasInsertedDefaultCategories") private var hasInsertedDefaultCategories: Bool = false
     @AppStorage("hasMigratedLanguages") private var hasMigratedLanguages = false
     @AppStorage("hasPortugueseFlagMigrated") private var hasPortugueseFlagMigrated = false
@@ -232,7 +219,6 @@ struct ContentView: View {
                 .sheet(isPresented: $showNewPhrase) {
                     NewPhraseView(newPhraseText: $newPhraseText,
                                   showNewPhrase: $showNewPhrase,
-                                  phrases: $phrases,
                                   newType: $newType)
                     .presentationDetents([.fraction(0.40)])
                     .presentationCornerRadius(28)
@@ -272,14 +258,6 @@ struct ContentView: View {
                 
                 
                 
-            }
-            .onAppear {
-                // Check if both userName and selectedLanguage are set
-                if userName == "No name set" || selectedLanguage == "No language selected" {
-                    isPresenting = true // Show the welcome screen
-                } else {
-                    isPresenting = false // Skip the welcome screen if both are set
-                }
             }
             .onAppear {
                 if !hasMigratedLanguages && !selectedLanguage.isEmpty {
@@ -346,12 +324,6 @@ struct ContentView: View {
             .fullScreenCover(isPresented: $hasSeenOnboarding, onDismiss: didDismiss) {
                 OnboardingView()
             }
-            .sheet(isPresented: $isPresentingInfo) {
-                AboutView()
-            }
-            .sheet(isPresented: $isPresentingSettings) {
-                SectionSettingsView()
-            }
             .onAppear {
                 // Safety: If user is past onboarding but has no language, use first from store
                 if !hasSeenOnboarding && selectedLanguage.isEmpty && !languageStore.userLanguages.isEmpty {
@@ -373,304 +345,6 @@ struct ContentView: View {
     ContentView()
 }
 
-struct WordElementView: View {
-    var phrase: LearnElement
-    var isCollection: Bool = false
-    @Environment(\.modelContext) var modelContext
-
-    private let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
-
-    var body: some View {
-        NavigationLink {
-            if !isCollection { DetailView(phrase: phrase) }
-            else { CollectionDetailView(phrase: phrase) }
-        } label: {
-            HStack {
-                Text(phrase.userEntry)
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.primary)
-                    .lineLimit(1)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.secondary.opacity(0.3))
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
-            // espacio para la rayita
-            .padding(.leading, 16 + 4) // 16 = inset, 4 = ancho de la raya
-            // card
-            .background(.ultraThinMaterial, in: shape)
-            // raya DENTRO de la card
-            .overlay(alignment: .leading) {
-                Capsule()
-                    .fill(LinearGradient(
-                        colors: [
-                            Color(red: 0.08, green: 0.72, blue: 0.65),
-                            Color(red: 0.1, green: 0.7, blue: 0.8)
-                        ],
-                        startPoint: .bottom,
-                        endPoint: .top
-                    ))
-                    .frame(width: 4, height: 28)   // ← pequeña dentro
-                    .padding(.leading, 16)         // ← inset interno
-            }
-            .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
-        }
-        .buttonStyle(.plain)
-        .contextMenu {
-            Button(role: .destructive) {
-                withAnimation {
-                    modelContext.delete(phrase)
-                    try? modelContext.save()
-                }
-            } label: { Label(isCollection ? "Delete from collection" : "Delete pending", systemImage: "trash.fill") }
-        }
-    }
-}
-
-
-
-
-struct NewPhraseView: View {
-    @Binding var newPhraseText: String
-    @Binding var showNewPhrase: Bool
-    @Binding var phrases: [String]
-    @Binding var newType: Int
-
-    @Environment(\.modelContext) var modelContext
-    @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
-
-    @FocusState private var isFocused: Bool
-    let maxCharacters = 50
-
-    private var trimmed: String { newPhraseText.trimmingCharacters(in: .whitespacesAndNewlines) }
-    private var remaining: Int { max(0, maxCharacters - newPhraseText.count) }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-
-            // Title + mini progress
-            HStack(spacing: 10) {
-                Text(LocalizedStringKey(newType == 1 ? "Add New Expression" : "How to say…?"))
-                    .font(.title2).fontWeight(.semibold)
-                ProgressRing(progress: Double(newPhraseText.count)/Double(maxCharacters))
-            }
-
-            Text(LocalizedStringKey(newType == 1
-                 ? "Found a word or phrase you don't understand? Save it to review later."
-                 : "Write what you want to say in the language you're learning."))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .lineLimit(nil)                      // or .lineLimit(2/3)
-                  .fixedSize(horizontal: false, vertical: true)
-                  .multilineTextAlignment(.leading)
-                  .frame(maxWidth: .infinity, alignment: .leading)
-            // COMPACT TEXTFIELD
-            HStack(spacing: 10) {
-                Image(systemName: "text.magnifyingglass")
-                    .foregroundStyle(.secondary)
-
-                TextField(LocalizedStringKey("Type the word or phrase…"), text: $newPhraseText)
-                    .focused($isFocused)
-                    .submitLabel(.done)
-                    .onSubmit { add() }
-                    .onChange(of: newPhraseText) { old, new in
-                        if new.count > maxCharacters { newPhraseText = String(new.prefix(maxCharacters)) }
-                    }
-
-                // clear button
-                if !newPhraseText.isEmpty {
-                    Button {
-                        newPhraseText = ""
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.tertiary)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, 14)
-            .frame(height: 48)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(Color(.separator).opacity(0.6), lineWidth: 0.5)
-            )
-
-            // helper row: counter
-            HStack {
-                Spacer()
-                Text("\(remaining)")
-                    .font(.caption).monospacedDigit()
-                    .foregroundStyle(remaining == 0 ? .red : .secondary)
-            }
-
-            Spacer(minLength: 0)
-        }
-        .padding(20)
-        // bottom primary button (fixed, safe with home indicator)
-        .safeAreaInset(edge: .bottom) {
-            HStack {
-                Button(action: add) {
-                    HStack(spacing: 10) {
-                        Text(LocalizedStringKey("Add"))
-                            .font(.headline)
-                            .fontWeight(.semibold)
-
-                        Image(systemName: "plus")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(
-                        Group {
-                            if trimmed.isEmpty {
-                                Color.gray.opacity(0.4)
-                            } else {
-                                LinearGradient(
-                                    colors: [
-                                        Color(red: 0.08, green: 0.72, blue: 0.65),
-                                        Color(red: 0.1, green: 0.7, blue: 0.8)
-                                    ],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            }
-                        }
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(
-                        color: trimmed.isEmpty ? .clear : .accentColor.opacity(0.3),
-                        radius: 12,
-                        x: 0,
-                        y: 6
-                    )
-                }
-                .disabled(trimmed.isEmpty)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(.thinMaterial)
-        }
-        .onAppear { isFocused = true }
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(LocalizedStringKey("Cancel")) { showNewPhrase = false }
-            }
-        }
-
-    }
-
-    private func add() {
-        let text = trimmed
-        guard !text.isEmpty else { return }
-        let element = LearnElement(
-            learnType: newType == 1 ? .newPhrase : .howToSay,
-            userEntry: text, explanation: "", language: selectedLanguage
-        )
-        withAnimation { modelContext.insert(element) }
-        newPhraseText = ""
-        showNewPhrase = false
-    }
-}
-
-// tiny progress ring (same as antes)
-private struct ProgressRing: View {
-    var progress: Double
-    var body: some View {
-        ZStack {
-            Circle().stroke(Color(.separator).opacity(0.6), lineWidth: 3)
-            Circle()
-                .trim(from: 0, to: min(progress, 1))
-                .stroke(.tint, style: .init(lineWidth: 3, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-        }
-        .frame(width: 14, height: 14)
-        .accessibilityHidden(true)
-    }
-}
-
-
-
-struct SectionSettingsView: View {
-    @AppStorage("userName") var userName: String = ""
-    @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
-    @Environment(\.dismiss) var dismiss
-    
-    let languages = ["Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪", "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇧🇷", "Spanish 🇪🇸", "Turkish 🇹🇷"]
-
-    @EnvironmentObject var languageStore: LanguageStore
-    @State private var showAddLanguage = false
-    @State private var languageToDelete: String?
-    
-    
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section(header: Text(LocalizedStringKey("Nickname"))) {
-                    TextField(LocalizedStringKey("Enter your nickname"), text: $userName)
-                }
-
-
-                Section(header: Text(LocalizedStringKey("Languages you are learning"))) {
-                    ForEach(languageStore.userLanguages, id: \.self) { language in
-                        HStack {
-                            Text(LocalizedStringKey(language))
-                            Spacer()
-                            if language == selectedLanguage {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.accentColor)
-                            }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            selectedLanguage = language
-                        }
-                    }.onDelete { indexSet in
-                        
-                        guard let index = indexSet.first else { return }
-                        languageToDelete = languageStore.userLanguages[index]
-                        
-                        languageStore.removeLanguage(languageToDelete!)
-                        // Reset selected language if needed
-                        if selectedLanguage == languageToDelete {
-                            selectedLanguage = languageStore.userLanguages.first ?? ""
-                        }
-                        
-                        
-                    }
-                }
-                
-                Button {
-                    showAddLanguage = true
-                } label: {
-                    Text(LocalizedStringKey("Add Language"))
-                }
-                
-                
-                
-                
-                
-            }
-            .navigationTitle(LocalizedStringKey("Settings"))
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(LocalizedStringKey("Done")) {
-                        dismiss()
-                    }
-                }
-            }
-            .sheet(isPresented: $showAddLanguage) {
-                        AddLanguageView()
-                    }
-        }
-    }
-}
 
 
 

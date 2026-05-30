@@ -11,9 +11,6 @@ import SwiftData
 @main
 struct Challenge3App: App {
     @StateObject var languageStore = LanguageStore.shared
-    init() {
-           setupContainer()
-       }
 
     var body: some Scene {
         
@@ -35,7 +32,5 @@ struct Challenge3App: App {
             .environmentObject(languageStore)
     }
     
-    func setupContainer() {
-        
-    }
+
 }
