@@ -35,7 +35,7 @@ struct NewPhraseView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 10) {
-                Image(systemName: "text.magnifyingglass")
+                Image(systemName: "pencil")
                     .foregroundStyle(.secondary)
 
                 TextField(LocalizedStringKey("Type the word or phrase…"), text: $newPhraseText)
@@ -71,21 +71,14 @@ struct NewPhraseView: View {
                     .foregroundStyle(remaining == 0 ? .red : .secondary)
             }
 
-            Spacer(minLength: 0)
         }
         .padding(20)
         .safeAreaInset(edge: .bottom) {
             HStack {
                 Button(action: add) {
-                    HStack(spacing: 10) {
-                        Text(LocalizedStringKey("Add"))
-                            .font(.headline)
-                            .fontWeight(.semibold)
-
-                        Image(systemName: "plus")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                    }
+                    Text(LocalizedStringKey("Add"))
+                        .font(.headline)
+                        .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 18)

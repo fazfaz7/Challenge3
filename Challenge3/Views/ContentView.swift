@@ -220,7 +220,7 @@ struct ContentView: View {
                     NewPhraseView(newPhraseText: $newPhraseText,
                                   showNewPhrase: $showNewPhrase,
                                   newType: $newType)
-                    .presentationDetents([.fraction(0.40)])
+                    .presentationDetents([.height(300)])
                     .presentationCornerRadius(28)
                 }
                 .onTapGesture {
