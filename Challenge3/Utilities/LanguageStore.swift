@@ -9,6 +9,15 @@ import Foundation
 
 final class LanguageStore: ObservableObject {
     static let shared = LanguageStore()
+
+    static let knownLanguages = [
+        "Chinese 🇨🇳", "English 🇬🇧", "French 🇫🇷", "German 🇩🇪",
+        "Italian 🇮🇹", "Japanese 🇯🇵", "Portuguese 🇧🇷", "Spanish 🇪🇸", "Turkish 🇹🇷"
+    ]
+
+    static func supportsTextToSpeech(_ language: String) -> Bool {
+        knownLanguages.contains(language)
+    }
     
     @Published var userLanguages: [String] = []
     private let fileURL: URL

@@ -79,8 +79,8 @@ struct DetailView: View {
                                         .shadow(color: .accentColor.opacity(0.3), radius: 8, x: 0, y: 4)
                                 }
                                 
-                                // Botón audio (solo si es newPhrase)
-                                if phrase.learnType == .newPhrase {
+                                // Botón audio (solo si es newPhrase y el idioma tiene soporte TTS)
+                                if phrase.learnType == .newPhrase && LanguageStore.supportsTextToSpeech(phrase.language ?? selectedLanguage) {
                                     Button {
                                         viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
                                     } label: {
