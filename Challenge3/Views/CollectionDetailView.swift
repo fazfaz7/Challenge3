@@ -13,7 +13,7 @@ struct CollectionDetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @AppStorage("selectedLanguage") private var selectedLanguage: String = "Italian 🇮🇹"
-    @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
+    @StateObject private var viewModel = TextToSpeechViewModel()
     @State private var isEditing = false
     
     var body: some View {

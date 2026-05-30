@@ -16,7 +16,7 @@ struct DetailView: View {
     @State var showCategoryView: Bool = false
     @State private var animationsRunning = false
     @State var selectedCategory: Category? = nil
-    @StateObject private var viewModel = TextToSpeechViewModel(textToSpeechService: TextToSpeechService())
+    @StateObject private var viewModel = TextToSpeechViewModel()
     @State var showTranslation = false
     @AppStorage("userName") private var userName: String = "No name set"
     @Environment(\.colorScheme) var colorScheme: ColorScheme
