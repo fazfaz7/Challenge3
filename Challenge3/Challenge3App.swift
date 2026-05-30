@@ -11,6 +11,7 @@ import SwiftData
 @main
 struct Challenge3App: App {
     @StateObject var languageStore = LanguageStore.shared
+    @StateObject var quizStreakStore = QuizStreakStore.shared
 
     var body: some Scene {
         
@@ -28,8 +29,9 @@ struct Challenge3App: App {
                     SettingsView()
                 }
             }
-        }.modelContainer(for: [LearnElement.self, Category.self])
+        }.modelContainer(for: [LearnElement.self, Category.self, QuizRecord.self])
             .environmentObject(languageStore)
+            .environmentObject(quizStreakStore)
     }
     
 

@@ -42,6 +42,14 @@ struct WordElementView: View {
                     .frame(width: 4, height: 28)
                     .padding(.leading, 16)
             }
+            .overlay(alignment: .topTrailing) {
+                if phrase.isMastered {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(Color(red: 0.08, green: 0.72, blue: 0.65))
+                        .padding(8)
+                }
+            }
             .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
         }
         .buttonStyle(.plain)

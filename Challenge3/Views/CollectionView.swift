@@ -191,62 +191,53 @@ struct CollectionView: View {
                     .padding(.bottom, 16)
                     
                     // CONTENT
-                    if isLibraryCompletelyEmpty {
-                        // Empty state
-                        VStack(spacing: 20) {
-                            Spacer()
-                            
-                            Image(systemName: "books.vertical")
-                                .font(.system(size: 60))
-                                .foregroundColor(.secondary.opacity(0.5))
-                            
-                            VStack(spacing: 8) {
-                                Text("Your collection is empty")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.primary)
-                                
-                                Text("Start adding words to build your vocabulary")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .multilineTextAlignment(.center)
-                            }
-                            
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 40)
-                        
-                    } else if isFilteredEmpty {
-                        // No results state
-                        VStack(spacing: 20) {
-                            Spacer()
-                            
-                            Image(systemName: "magnifyingglass.circle")
-                                .font(.system(size: 60))
-                                .foregroundColor(.secondary.opacity(0.5))
-                            
-                            VStack(spacing: 8) {
-                                Text("No results found")
-                                    .font(.title3)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.primary)
-                                
-                                Text("Try searching for something else")
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .multilineTextAlignment(.center)
-                            }
-                            
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, 40)
-                        
-                    } else {
-                        // Lista con palabras
-                        ScrollView {
-                            VStack(spacing: 16) {
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            if isLibraryCompletelyEmpty {
+                                VStack(spacing: 20) {
+                                    Image(systemName: "books.vertical")
+                                        .font(.system(size: 60))
+                                        .foregroundColor(.secondary.opacity(0.5))
+
+                                    VStack(spacing: 8) {
+                                        Text("Your collection is empty")
+                                            .font(.title3)
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.primary)
+
+                                        Text("Start adding words to build your vocabulary")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 40)
+                                .padding(.top, 40)
+
+                            } else if isFilteredEmpty {
+                                VStack(spacing: 20) {
+                                    Image(systemName: "magnifyingglass.circle")
+                                        .font(.system(size: 60))
+                                        .foregroundColor(.secondary.opacity(0.5))
+
+                                    VStack(spacing: 8) {
+                                        Text("No results found")
+                                            .font(.title3)
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.primary)
+
+                                        Text("Try searching for something else")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal, 40)
+                                .padding(.top, 40)
+
+                            } else {
                                 ForEach(groupedPhrases, id: \.title) { group in
                                     VStack(spacing: 12) {
                                         // Section header UNIFICADO (colapsable para todos)
@@ -264,14 +255,14 @@ struct CollectionView: View {
                                                       ? "chevron.down" : "chevron.right")
                                                     .font(.system(size: 14, weight: .semibold))
                                                     .foregroundColor(.accentColor)
-                                                
+
                                                 Text(group.title)
                                                     .font(.headline)
                                                     .fontWeight(.bold)
                                                     .foregroundColor(.primary)
-                                                
+
                                                 Spacer()
-                                                
+
                                                 Text("\(group.phrases.count)")
                                                     .font(.caption)
                                                     .fontWeight(.semibold)
@@ -291,7 +282,7 @@ struct CollectionView: View {
                                         }
                                         .buttonStyle(.plain)
                                         .padding(.horizontal, 24)
-                                        
+
                                         // Words list (solo si está expandido)
                                         if expandedCategories.contains(group.title) {
                                             VStack(spacing: 10) {
@@ -309,9 +300,9 @@ struct CollectionView: View {
                                     }
                                 }
                             }
-                            .padding(.top, 8)
-                            .padding(.bottom, 40)
                         }
+                        .padding(.top, 8)
+                        .padding(.bottom, 40)
                     }
                 }
             }

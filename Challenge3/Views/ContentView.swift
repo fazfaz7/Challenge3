@@ -18,6 +18,10 @@ struct ContentView: View {
     var testPhrases: [LearnElement] {
         allPhrases.filter { !$0.isCompleted && $0.language == selectedLanguage }
     }
+
+    var completedPhrases: [LearnElement] {
+        allPhrases.filter { $0.isCompleted && $0.language == selectedLanguage }
+    }
     
     @Environment(\.modelContext) var modelContext
     @AppStorage("userName") private var userName: String = "No name set"
@@ -168,6 +172,12 @@ struct ContentView: View {
                     .padding(.horizontal, 24)
                     .padding(.top, 12)
                     
+                    // Daily Challenge card
+                    DailyChallengeCard(phrases: completedPhrases, language: selectedLanguage)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 8)
+                        .padding(.bottom, 8)
+
                     // Section Header para la lista
                     VStack(alignment: .leading, spacing: 12) {
                         Text(LocalizedStringKey("All Words to Review"))

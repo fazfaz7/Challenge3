@@ -23,6 +23,9 @@ class LearnElement: ObservableObject {
     var isCompleted: Bool = false
     var category: Category? = nil
     var language: String?
+    var lastReviewedAt: Date? = nil
+    var correctStreak: Int = 0
+    var isMastered: Bool = false
     
     init(learnType: elementType = .newPhrase, userEntry: String = "", explanation: String = "", language: String = "Italian 🇮🇹") {
         self.learnType = learnType

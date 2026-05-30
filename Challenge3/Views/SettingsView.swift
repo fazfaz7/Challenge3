@@ -6,16 +6,23 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     @AppStorage("userName") var userName: String = ""
     @AppStorage("selectedLanguage") var selectedLanguage: String = "Italian 🇮🇹"
     @EnvironmentObject var languageStore: LanguageStore
-    
+    @EnvironmentObject private var streakStore: QuizStreakStore
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \QuizRecord.date, order: .reverse) private var allRecords: [QuizRecord]
+
+    private var currentStreak: Int { streakStore.getStats(for: selectedLanguage).currentStreak }
+
     @State private var showAddLanguage = false
     @State private var showAboutSheet = false
     @State private var languageToDelete: String?
     @State private var showDeleteAlert = false
+    @State private var showResetAlert = false
     
     var body: some View {
         NavigationStack {
@@ -181,6 +188,66 @@ struct SettingsView: View {
                             .padding(.horizontal, 24)
                         }
                         
+                        // QUIZ SECTION
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("DAILY CHALLENGE")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                                .tracking(0.5)
+                                .padding(.horizontal, 24)
+
+                            VStack(spacing: 0) {
+                                HStack(spacing: 16) {
+                                    Image(systemName: "flame.fill")
+                                        .font(.system(size: 22))
+                                        .foregroundStyle(LinearGradient(colors: [.orange, .red], startPoint: .top, endPoint: .bottom))
+                                        .frame(width: 32)
+
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Current streak")
+                                            .font(.body)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.primary)
+                                        Text("\(currentStreak) \(currentStreak == 1 ? "day" : "days")")
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 16)
+
+                                Divider().padding(.leading, 68)
+
+                                Button {
+                                    showResetAlert = true
+                                } label: {
+                                    HStack(spacing: 16) {
+                                        Image(systemName: "arrow.counterclockwise")
+                                            .font(.system(size: 18))
+                                            .foregroundColor(.accentColor)
+                                            .frame(width: 32)
+
+                                        Text("Reset today's quiz")
+                                            .font(.body)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(.accentColor)
+
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 16)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .background(.ultraThinMaterial)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 4)
+                            .padding(.horizontal, 24)
+                        }
+
                         // ABOUT SECTION
                         VStack(alignment: .leading, spacing: 12) {
                             Text(LocalizedStringKey("ABOUT"))
@@ -245,6 +312,14 @@ struct SettingsView: View {
                 AboutSheetView()
                     .presentationDetents([.large])
             }
+            .alert("Reset today's quiz?", isPresented: $showResetAlert) {
+                Button("Reset", role: .destructive) {
+                    resetTodaysQuiz()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This lets you retake today's challenge. Your words and streak are not affected.")
+            }
             .alert(LocalizedStringKey("Delete Language"), isPresented: $showDeleteAlert) {
                 Button(LocalizedStringKey("Delete"), role: .destructive) {
                     if let languageToDelete = languageToDelete {
@@ -263,6 +338,18 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Reset
+
+    private func resetTodaysQuiz() {
+        streakStore.resetToday(for: selectedLanguage)
+        let today = Calendar.current.startOfDay(for: .now)
+        let toDelete = allRecords.filter {
+            $0.language == selectedLanguage && Calendar.current.isDate($0.date, inSameDayAs: today)
+        }
+        toDelete.forEach { modelContext.delete($0) }
+        try? modelContext.save()
     }
 }
 
