@@ -162,7 +162,8 @@ struct CollectionView: View {
                     .padding(.top, 12)
                     .padding(.bottom, 16)
                     
-                    // SEARCH BAR
+                    // SEARCH BAR — only relevant in alphabetical mode
+                    if selectedOrder == .alphabetical {
                     HStack(spacing: 12) {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 16, weight: .medium))
@@ -191,7 +192,8 @@ struct CollectionView: View {
                     .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
                     .padding(.horizontal, 24)
                     .padding(.bottom, 16)
-                    
+                    } // end search bar condition
+
                     // CONTENT
                     ScrollView {
                         VStack(spacing: 16) {
@@ -332,6 +334,7 @@ struct CollectionView: View {
         .onChange(of: selectedOrder) { _, newOrder in
             if newOrder != .byDate { selectedCalendarDate = nil }
             if newOrder != .byCategory { selectedCategoryTitle = nil }
+            if newOrder != .alphabetical { searchText = "" }
         }
     }
     

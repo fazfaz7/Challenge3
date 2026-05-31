@@ -99,6 +99,27 @@ struct CollectionCalendarView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.secondary.opacity(0.12), lineWidth: 1))
         .shadow(color: .black.opacity(0.04), radius: 10, x: 0, y: 4)
+        .gesture(
+            DragGesture(minimumDistance: 40, coordinateSpace: .local)
+                .onEnded { value in
+                    let isHorizontal = abs(value.translation.width) > abs(value.translation.height)
+                    guard isHorizontal else { return }
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                        if value.translation.width < 0 {
+                            // Swipe left → next month
+                            let next = calendar.date(byAdding: .month, value: 1, to: displayedMonth) ?? displayedMonth
+                            if next <= calendar.startOfDay(for: .now) {
+                                displayedMonth = next
+                                selectedDate = nil
+                            }
+                        } else {
+                            // Swipe right → previous month
+                            displayedMonth = calendar.date(byAdding: .month, value: -1, to: displayedMonth) ?? displayedMonth
+                            selectedDate = nil
+                        }
+                    }
+                }
+        )
     }
 
     // MARK: - Month header
@@ -155,11 +176,36 @@ struct CollectionCalendarView: View {
         }
     }
 
+    private var monthHasWords: Bool {
+        guard let range = calendar.range(of: .day, in: .month, for: displayedMonth),
+              let firstDay = calendar.date(from: calendar.dateComponents([.year, .month], from: displayedMonth))
+        else { return false }
+        return range.contains(where: { day in
+            guard let date = calendar.date(byAdding: .day, value: day - 1, to: firstDay) else { return false }
+            return (wordsByDay[date]?.isEmpty == false)
+        })
+    }
+
     // MARK: - Word list
 
     @ViewBuilder
     private var wordList: some View {
-        if let date = selectedDate {
+        if !monthHasWords {
+            VStack(spacing: 8) {
+                Text("No words added in \(monthTitle)")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+
+                Label("Try an earlier month", systemImage: "arrow.left")
+                    .font(.caption)
+                    .foregroundColor(Color(red: 0.08, green: 0.72, blue: 0.65))
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 28)
+            .transition(.opacity)
+
+        } else if let date = selectedDate {
             VStack(alignment: .leading, spacing: 12) {
                 // Date header
                 HStack {
