@@ -171,12 +171,16 @@ struct ContentView: View {
                     }
                     .padding(.horizontal, 24)
                     .padding(.top, 12)
+                    .animation(.easeInOut(duration: 0.2), value: selectedLanguage)
                     
                     // Daily Challenge card
                     DailyChallengeCard(phrases: completedPhrases, language: selectedLanguage)
                         .padding(.horizontal, 24)
                         .padding(.top, 8)
                         .padding(.bottom, 8)
+                        .id(selectedLanguage)
+                        .transition(.opacity)
+                        .animation(.easeInOut(duration: 0.2), value: selectedLanguage)
 
                     // Section Header para la lista
                     VStack(alignment: .leading, spacing: 12) {

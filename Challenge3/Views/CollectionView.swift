@@ -199,17 +199,17 @@ struct CollectionView: View {
                         VStack(spacing: 16) {
                             if isLibraryCompletelyEmpty {
                                 VStack(spacing: 20) {
-                                    Image(systemName: "books.vertical")
-                                        .font(.system(size: 60))
-                                        .foregroundColor(.secondary.opacity(0.5))
+                                    Text(LanguageHelper.flag(from: selectedLanguage))
+                                        .font(.system(size: 52))
 
                                     VStack(spacing: 8) {
-                                        Text("Your collection is empty")
+                                        Text("No \(LanguageHelper.getLocalizedLanguageName(selectedLanguage)) words yet")
                                             .font(.title3)
                                             .fontWeight(.bold)
                                             .foregroundColor(.primary)
+                                            .multilineTextAlignment(.center)
 
-                                        Text("Start adding words to build your vocabulary")
+                                        Text("Words you mark as learned will appear here")
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                             .multilineTextAlignment(.center)

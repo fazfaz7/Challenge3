@@ -82,7 +82,7 @@ struct DetailView: View {
                                 // Botón audio (solo si es newPhrase y el idioma tiene soporte TTS)
                                 if phrase.learnType == .newPhrase && LanguageStore.supportsTextToSpeech(phrase.language ?? selectedLanguage) {
                                     Button {
-                                        viewModel.speak(text: phrase.userEntry, language: selectedLanguage)
+                                        viewModel.speak(text: phrase.userEntry, language: phrase.language ?? selectedLanguage)
                                     } label: {
                                         Image(systemName: "speaker.wave.2.fill")
                                             .font(.system(size: 18, weight: .semibold))
