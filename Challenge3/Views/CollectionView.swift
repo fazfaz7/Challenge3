@@ -45,9 +45,7 @@ struct CollectionView: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State private var selectedOrder: CollectionOrder = .alphabetical
     @State private var showingFilterOptions = false
-    @State private var expandedCategories: Set<String> = []
     @State private var selectedCalendarDate: Date? = nil
-    @State private var selectedCategoryTitle: String? = nil
     
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
@@ -55,48 +53,6 @@ struct CollectionView: View {
                 phrase.userEntry.localizedCaseInsensitiveContains(searchText) ||
                 phrase.explanation.localizedCaseInsensitiveContains(searchText)
             return matchesSearch
-        }
-    }
-    
-    var groupedPhrases: [(title: String, phrases: [LearnElement])] {
-        switch selectedOrder {
-        case .alphabetical:
-            return Dictionary(grouping: filteredPhrases) { phrase in
-                String(phrase.userEntry.prefix(1)).uppercased()
-            }
-            .mapValues { phrases in
-                phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
-            }
-            .sorted { $0.key < $1.key }
-            .map { (title: $0.key, phrases: $0.value) }
-            
-        case .byDate:
-            return Dictionary(grouping: filteredPhrases) { phrase in
-                Calendar.current.startOfDay(for: phrase.dateAdded)
-            }
-            .mapValues { phrases in
-                phrases.sorted { $0.dateAdded > $1.dateAdded }
-            }
-            .sorted { $0.key > $1.key }
-            .map { (title: formatDate($0.key), phrases: $0.value) }
-            
-        case .byCategory:
-            return Dictionary(grouping: filteredPhrases) { phrase in
-                if let category = phrase.category {
-                    "\(category.emoji) \(category.name)"
-                } else {
-                    "📝 No Category"
-                }
-            }
-            .mapValues { phrases in
-                phrases.sorted { $0.userEntry.localizedCaseInsensitiveCompare($1.userEntry) == .orderedAscending }
-            }
-            .sorted { lhs, rhs in
-                if lhs.key.contains("No Category") { return false }
-                if rhs.key.contains("No Category") { return true }
-                return lhs.key < rhs.key
-            }
-            .map { (title: $0.key, phrases: $0.value) }
         }
     }
     
@@ -256,67 +212,8 @@ struct CollectionView: View {
                                 .padding(.top, 8)
 
                             } else {
-                                ForEach(groupedPhrases, id: \.title) { group in
-                                    VStack(spacing: 12) {
-                                        // Section header UNIFICADO (colapsable para todos)
-                                        Button {
-                                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                                if expandedCategories.contains(group.title) {
-                                                    expandedCategories.remove(group.title)
-                                                } else {
-                                                    expandedCategories.insert(group.title)
-                                                }
-                                            }
-                                        } label: {
-                                            HStack(spacing: 12) {
-                                                Image(systemName: expandedCategories.contains(group.title)
-                                                      ? "chevron.down" : "chevron.right")
-                                                    .font(.system(size: 14, weight: .semibold))
-                                                    .foregroundColor(.accentColor)
-
-                                                Text(group.title)
-                                                    .font(.headline)
-                                                    .fontWeight(.bold)
-                                                    .foregroundColor(.primary)
-
-                                                Spacer()
-
-                                                Text("\(group.phrases.count)")
-                                                    .font(.caption)
-                                                    .fontWeight(.semibold)
-                                                    .foregroundColor(.secondary)
-                                                    .padding(.horizontal, 8)
-                                                    .padding(.vertical, 4)
-                                                    .background(
-                                                        Capsule()
-                                                            .fill(Color.secondary.opacity(0.15))
-                                                    )
-                                            }
-                                            .padding(.horizontal, 16)
-                                            .padding(.vertical, 12)
-                                            .background(.ultraThinMaterial)
-                                            .clipShape(RoundedRectangle(cornerRadius: 14))
-                                            .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
-                                        }
-                                        .buttonStyle(.plain)
-                                        .padding(.horizontal, 24)
-
-                                        // Words list (solo si está expandido)
-                                        if expandedCategories.contains(group.title) {
-                                            VStack(spacing: 10) {
-                                                ForEach(group.phrases, id: \.self) { phrase in
-                                                    NavigationLink {
-                                                        CollectionDetailView(phrase: phrase)
-                                                    } label: {
-                                                        WordElementView(phrase: phrase, isCollection: true)
-                                                    }
-                                                    .buttonStyle(.plain)
-                                                }
-                                            }
-                                            .padding(.horizontal, 24)
-                                        }
-                                    }
-                                }
+                                CollectionAlphabeticalGridView(phrases: filteredPhrases)
+                                    .padding(.top, 8)
                             }
                         }
                         .padding(.top, 8)
@@ -333,16 +230,8 @@ struct CollectionView: View {
         }
         .onChange(of: selectedOrder) { _, newOrder in
             if newOrder != .byDate { selectedCalendarDate = nil }
-            if newOrder != .byCategory { selectedCategoryTitle = nil }
             if newOrder != .alphabetical { searchText = "" }
         }
-    }
-    
-    func formatDate(_ date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        return dateFormatter.string(from: date)
     }
 }
 

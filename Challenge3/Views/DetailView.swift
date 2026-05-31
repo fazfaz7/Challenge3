@@ -107,23 +107,21 @@ struct DetailView: View {
                     }
                     
                     // EXPLICACIÓN
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text(String(format: NSLocalizedString(phrase.learnType == .newPhrase ? "pending_message" : "other_message", comment: ""), userName))
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
-                        
-                        // TextField multilínea con glass effect
+
                         ZStack(alignment: .topLeading) {
-                            // Placeholder
-                            if phrase.explanation.isEmpty {
+                            if phrase.explanation.isEmpty && !isTextFieldFocused {
                                 Text("Write your explanation here...")
                                     .foregroundColor(.secondary.opacity(0.5))
+                                    .font(.body)
                                     .padding(.horizontal, 16)
                                     .padding(.vertical, 14)
                             }
-                            
-                            // TextEditor con glass effect
+
                             TextEditor(text: $phrase.explanation)
                                 .font(.body)
                                 .foregroundColor(.primary)
@@ -132,59 +130,55 @@ struct DetailView: View {
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 10)
                                 .focused($isTextFieldFocused)
-                                
-                            
                         }
                         .background(.ultraThinMaterial)
                         .clipShape(RoundedRectangle(cornerRadius: 18))
                         .overlay(
                             RoundedRectangle(cornerRadius: 18)
                                 .stroke(
-                                    isTextFieldFocused ? Color.accentColor : Color.accentColor.opacity(0.3),
-                                    lineWidth: isTextFieldFocused ? 2 : 1.5
+                                    isTextFieldFocused ? Color.accentColor : Color.secondary.opacity(0.15),
+                                    lineWidth: isTextFieldFocused ? 2 : 1
                                 )
                         )
                         .shadow(color: .black.opacity(0.03), radius: 8, x: 0, y: 4)
                     }
-                    
+
                     // CATEGORY SELECTOR
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Category")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                        
-                        Button {
-                            showCategoryView.toggle()
-                        } label: {
-                            HStack(spacing: 12) {
-                                if let selectedCategory = selectedCategory {
-                                    Text(selectedCategory.emoji)
-                                        .font(.title3)
-                                    Text(selectedCategory.name)
-                                        .foregroundColor(.primary)
-                                        .fontWeight(.medium)
-                                } else {
-                                    Text("None")
-                                        .foregroundColor(.secondary)
-                                        .fontWeight(.medium)
-                                }
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.down")
-                                    .font(.caption)
+                    Button {
+                        showCategoryView.toggle()
+                    } label: {
+                        HStack(spacing: 10) {
+                            Image(systemName: "folder")
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(.secondary)
+
+                            if let selectedCategory = selectedCategory {
+                                Text(selectedCategory.emoji)
+                                    .font(.subheadline)
+                                Text(selectedCategory.name)
+                                    .font(.subheadline)
+                                    .foregroundColor(.primary)
+                                    .fontWeight(.medium)
+                            } else {
+                                Text("No category")
+                                    .font(.subheadline)
                                     .foregroundColor(.secondary)
                             }
-                            .padding(16)
-                            .background(.ultraThinMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.02), radius: 4, x: 0, y: 2)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
                         }
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 12)
+                        .background(.ultraThinMaterial)
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color.secondary.opacity(0.15), lineWidth: 1)
+                        )
                     }
                     
                     // BOTÓN MARK COMPLETE
