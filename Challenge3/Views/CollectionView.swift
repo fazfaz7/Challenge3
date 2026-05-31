@@ -46,6 +46,8 @@ struct CollectionView: View {
     @State private var selectedOrder: CollectionOrder = .alphabetical
     @State private var showingFilterOptions = false
     @State private var expandedCategories: Set<String> = []
+    @State private var selectedCalendarDate: Date? = nil
+    @State private var selectedCategoryTitle: String? = nil
     
     var filteredPhrases: [LearnElement] {
         testPhrases.filter { phrase in
@@ -237,6 +239,20 @@ struct CollectionView: View {
                                 .padding(.horizontal, 40)
                                 .padding(.top, 40)
 
+                            } else if selectedOrder == .byDate {
+                                CollectionCalendarView(
+                                    phrases: filteredPhrases,
+                                    selectedDate: $selectedCalendarDate
+                                )
+                                .padding(.top, 8)
+
+                            } else if selectedOrder == .byCategory {
+                                CollectionCategoryGridView(
+                                    phrases: filteredPhrases,
+                                    selectedCategory: .constant(nil)
+                                )
+                                .padding(.top, 8)
+
                             } else {
                                 ForEach(groupedPhrases, id: \.title) { group in
                                     VStack(spacing: 12) {
@@ -308,10 +324,14 @@ struct CollectionView: View {
             }
         }
         .confirmationDialog(LocalizedStringKey("Choose Order"), isPresented: $showingFilterOptions, titleVisibility: .visible) {
-            Button(LocalizedStringKey("Alphabetical")) { selectedOrder = .alphabetical }
+            Button(LocalizedStringKey("Alphabetical")) { selectedOrder = .alphabetical; selectedCalendarDate = nil }
             Button(LocalizedStringKey("By Date")) { selectedOrder = .byDate }
-            Button(LocalizedStringKey("By Category")) { selectedOrder = .byCategory }
+            Button(LocalizedStringKey("By Category")) { selectedOrder = .byCategory; selectedCalendarDate = nil }
             Button(LocalizedStringKey("Cancel"), role: .cancel) { }
+        }
+        .onChange(of: selectedOrder) { _, newOrder in
+            if newOrder != .byDate { selectedCalendarDate = nil }
+            if newOrder != .byCategory { selectedCategoryTitle = nil }
         }
     }
     
