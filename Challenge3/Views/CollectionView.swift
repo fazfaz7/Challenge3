@@ -14,15 +14,15 @@ enum PhraseType: String, CaseIterable {
 }
 
 enum CollectionOrder: String, CaseIterable {
-    case alphabetical = "Alphabetical"
-    case byDate = "By Date"
+    case dateList = "By Date"
     case byCategory = "By Category"
+    case calendar = "Calendar"
 
     var icon: String {
         switch self {
-        case .alphabetical: return "textformat.abc"
-        case .byDate: return "calendar"
+        case .dateList: return "clock"
         case .byCategory: return "folder"
+        case .calendar: return "calendar"
         }
     }
 
@@ -43,8 +43,7 @@ struct CollectionView: View {
     @State private var searchText = ""
     @State private var selectedType: PhraseType = .newPhrase
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @State private var selectedOrder: CollectionOrder = .alphabetical
-    @State private var showingFilterOptions = false
+    @State private var selectedOrder: CollectionOrder = .dateList
     @State private var selectedCalendarDate: Date? = nil
     
     var filteredPhrases: [LearnElement] {
@@ -118,8 +117,8 @@ struct CollectionView: View {
                     .padding(.top, 12)
                     .padding(.bottom, 16)
                     
-                    // SEARCH BAR — only relevant in alphabetical mode
-                    if selectedOrder == .alphabetical {
+                    // SEARCH BAR — hidden in calendar mode
+                    if selectedOrder != .calendar {
                     HStack(spacing: 12) {
                         Image(systemName: "magnifyingglass")
                             .font(.system(size: 16, weight: .medium))
@@ -197,12 +196,9 @@ struct CollectionView: View {
                                 .padding(.horizontal, 40)
                                 .padding(.top, 40)
 
-                            } else if selectedOrder == .byDate {
-                                CollectionCalendarView(
-                                    phrases: filteredPhrases,
-                                    selectedDate: $selectedCalendarDate
-                                )
-                                .padding(.top, 8)
+                            } else if selectedOrder == .dateList {
+                                CollectionDateListView(phrases: filteredPhrases)
+                                    .padding(.top, 8)
 
                             } else if selectedOrder == .byCategory {
                                 CollectionCategoryGridView(
@@ -212,8 +208,11 @@ struct CollectionView: View {
                                 .padding(.top, 8)
 
                             } else {
-                                CollectionAlphabeticalGridView(phrases: filteredPhrases)
-                                    .padding(.top, 8)
+                                CollectionCalendarView(
+                                    phrases: filteredPhrases,
+                                    selectedDate: $selectedCalendarDate
+                                )
+                                .padding(.top, 8)
                             }
                         }
                         .padding(.top, 8)
@@ -222,15 +221,9 @@ struct CollectionView: View {
                 }
             }
         }
-        .confirmationDialog(LocalizedStringKey("Choose Order"), isPresented: $showingFilterOptions, titleVisibility: .visible) {
-            Button(LocalizedStringKey("Alphabetical")) { selectedOrder = .alphabetical; selectedCalendarDate = nil }
-            Button(LocalizedStringKey("By Date")) { selectedOrder = .byDate }
-            Button(LocalizedStringKey("By Category")) { selectedOrder = .byCategory; selectedCalendarDate = nil }
-            Button(LocalizedStringKey("Cancel"), role: .cancel) { }
-        }
         .onChange(of: selectedOrder) { _, newOrder in
-            if newOrder != .byDate { selectedCalendarDate = nil }
-            if newOrder != .alphabetical { searchText = "" }
+            if newOrder != .calendar { selectedCalendarDate = nil }
+            if newOrder == .calendar { searchText = "" }
         }
     }
 }
