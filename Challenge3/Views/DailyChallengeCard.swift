@@ -68,7 +68,7 @@ struct DailyChallengeCard: View {
                         .foregroundColor(.primary)
 
                     HStack(spacing: 6) {
-                        Text("5 questions · \(flag)")
+                        Text(flag)
                             .font(.caption)
                             .foregroundColor(.secondary)
 

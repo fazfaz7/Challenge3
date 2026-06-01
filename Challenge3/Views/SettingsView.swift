@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import StoreKit
 
 struct SettingsView: View {
     @AppStorage("userName") var userName: String = ""
@@ -14,7 +15,6 @@ struct SettingsView: View {
     @EnvironmentObject var languageStore: LanguageStore
     @EnvironmentObject private var streakStore: QuizStreakStore
     @Environment(\.modelContext) private var modelContext
-    @Query(sort: \QuizRecord.date, order: .reverse) private var allRecords: [QuizRecord]
 
     private var currentStreak: Int { streakStore.getStats(for: selectedLanguage).currentStreak }
 
@@ -22,7 +22,6 @@ struct SettingsView: View {
     @State private var showAboutSheet = false
     @State private var languageToDelete: String?
     @State private var showDeleteAlert = false
-    @State private var showResetAlert = false
     
     var body: some View {
         NavigationStack {
@@ -102,13 +101,19 @@ struct SettingsView: View {
                         }
                         
                         // LANGUAGES SECTION
-                        VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 4) {
                             Text(LocalizedStringKey("LANGUAGES YOU'RE LEARNING"))
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
                                 .tracking(0.5)
                                 .padding(.horizontal, 24)
+
+                            Text("Tap to switch active language")
+                                .font(.caption)
+                                .foregroundColor(.secondary.opacity(0.7))
+                                .padding(.horizontal, 24)
+                                .padding(.bottom, 8)
                             
                             VStack(spacing: 0) {
                                 ForEach(Array(languageStore.userLanguages.enumerated()), id: \.element) { index, language in
@@ -219,28 +224,6 @@ struct SettingsView: View {
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 16)
 
-                                Divider().padding(.leading, 68)
-
-                                Button {
-                                    showResetAlert = true
-                                } label: {
-                                    HStack(spacing: 16) {
-                                        Image(systemName: "arrow.counterclockwise")
-                                            .font(.system(size: 18))
-                                            .foregroundColor(.accentColor)
-                                            .frame(width: 32)
-
-                                        Text("Reset today's quiz")
-                                            .font(.body)
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(.accentColor)
-
-                                        Spacer()
-                                    }
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 16)
-                                }
-                                .buttonStyle(.plain)
                             }
                             .background(.ultraThinMaterial)
                             .clipShape(RoundedRectangle(cornerRadius: 20))
@@ -312,14 +295,6 @@ struct SettingsView: View {
                 AboutSheetView()
                     .presentationDetents([.large])
             }
-            .alert("Reset today's quiz?", isPresented: $showResetAlert) {
-                Button("Reset", role: .destructive) {
-                    resetTodaysQuiz()
-                }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("This lets you retake today's challenge. Your words and streak are not affected.")
-            }
             .alert(LocalizedStringKey("Delete Language"), isPresented: $showDeleteAlert) {
                 Button(LocalizedStringKey("Delete"), role: .destructive) {
                     if let languageToDelete = languageToDelete {
@@ -340,22 +315,12 @@ struct SettingsView: View {
         }
     }
 
-    // MARK: - Reset
-
-    private func resetTodaysQuiz() {
-        streakStore.resetToday(for: selectedLanguage)
-        let today = Calendar.current.startOfDay(for: .now)
-        let toDelete = allRecords.filter {
-            $0.language == selectedLanguage && Calendar.current.isDate($0.date, inSameDayAs: today)
-        }
-        toDelete.forEach { modelContext.delete($0) }
-        try? modelContext.save()
-    }
 }
 
 // MARK: - About Sheet View
 struct AboutSheetView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.requestReview) var requestReview
     
     var body: some View {
         NavigationStack {
@@ -413,10 +378,10 @@ struct AboutSheetView: View {
                                 .foregroundColor(.accentColor)
 
                             VStack(alignment: .leading, spacing: 12) {
-                                FeatureRow(icon: "✍️", text: NSLocalizedString("✍️ Save any new words, phrases, or slang you discover.", comment: ""))
-                                FeatureRow(icon: "📚", text: NSLocalizedString("📚 Review your collection as you learn", comment: ""))
-                                FeatureRow(icon: "🤝", text: NSLocalizedString("🤝 Complete your pendings by asking a native speaker or by searching", comment: ""))
-                                FeatureRow(icon: "🧠", text: NSLocalizedString("🧠 Activate the widget to practice your saved words daily.", comment: ""))
+                                FeatureRow(icon: "✍️", text: NSLocalizedString("Save any new words, phrases, or slang you discover.", comment: ""))
+                                FeatureRow(icon: "📚", text: NSLocalizedString("Review your collection as you learn.", comment: ""))
+                                FeatureRow(icon: "🤝", text: NSLocalizedString("Complete your pendings by asking a native speaker or by searching.", comment: ""))
+                                FeatureRow(icon: "🧠", text: NSLocalizedString("Activate the widget to practice your saved words daily.", comment: ""))
                             }
                         }
                         .padding(20)
@@ -425,12 +390,39 @@ struct AboutSheetView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 4)
                         
+                        // Rate button
+                        Button {
+                            requestReview()
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.white)
+                                Text("Rate ItMeans")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                LinearGradient(
+                                    colors: [
+                                        Color(red: 0.08, green: 0.72, blue: 0.65),
+                                        Color(red: 0.1, green: 0.7, blue: 0.8)
+                                    ],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(color: Color(red: 0.08, green: 0.72, blue: 0.65).opacity(0.3), radius: 10, x: 0, y: 4)
+                        }
+
                         // Footer
                         VStack(spacing: 8) {
                             Text("Version 1.3")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            
+
                             Text("© 2025 ItMeans")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
