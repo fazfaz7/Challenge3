@@ -15,12 +15,14 @@ enum PhraseType: String, CaseIterable {
 
 enum CollectionOrder: String, CaseIterable {
     case dateList = "By Date"
+    case alphabetical = "A–Z"
     case byCategory = "By Category"
     case calendar = "Calendar"
 
     var icon: String {
         switch self {
         case .dateList: return "clock"
+        case .alphabetical: return "textformat.abc"
         case .byCategory: return "folder"
         case .calendar: return "calendar"
         }
@@ -198,6 +200,10 @@ struct CollectionView: View {
 
                             } else if selectedOrder == .dateList {
                                 CollectionDateListView(phrases: filteredPhrases)
+                                    .padding(.top, 8)
+
+                            } else if selectedOrder == .alphabetical {
+                                CollectionAlphabeticalGridView(phrases: filteredPhrases)
                                     .padding(.top, 8)
 
                             } else if selectedOrder == .byCategory {

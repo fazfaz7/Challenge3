@@ -11,12 +11,12 @@ struct OnboardingView: View {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = true
     @State private var currentPage = 0
     @State private var progress: CGFloat = 0
-    
+
     var body: some View {
         ZStack {
             // Animated gradient background
             AnimatedGradientBackground(progress: progress)
-            
+
             // Content
             TabView(selection: $currentPage) {
                 OnboardingPage0()
@@ -41,7 +41,7 @@ struct OnboardingView: View {
                     progress = CGFloat(newValue) / 4.0
                 }
             }
-            
+
             // Top controls
             VStack {
                 HStack {
@@ -191,7 +191,6 @@ struct OnboardingPage0: View {
             }
 
             Spacer()
-            Spacer()
         }
         .onAppear {
             // Logo entrance animation
@@ -252,7 +251,6 @@ struct OnboardingPage1: View {
             }
 
             Spacer()
-            Spacer()
         }
         .onAppear {
             withAnimation(.spring(response: 0.8, dampingFraction: 0.7).delay(0.2)) {
@@ -282,7 +280,7 @@ struct OnboardingPage2: View {
                         .foregroundColor(.white)
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
-                    
+
                     Text(LocalizedStringKey("Your Personal Vocabulary"))
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white.opacity(0.9))
@@ -347,7 +345,7 @@ struct FeatureCard: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
-                
+
                 Text(description)
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.8))
@@ -359,7 +357,6 @@ struct FeatureCard: View {
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(.white.opacity(0.15))
-                .blur(radius: 0.5)
         )
         .offset(x: appeared ? 0 : -50)
         .opacity(appeared ? 1 : 0)
@@ -387,7 +384,7 @@ struct OnboardingPage3: View {
                         .foregroundColor(.white)
                         .offset(y: appeared ? 0 : 20)
                         .opacity(appeared ? 1 : 0)
-                    
+
                     Text(LocalizedStringKey("Add the home screen widget to\nreview words throughout the day"))
                         .font(.system(size: 18))
                         .multilineTextAlignment(.center)
@@ -431,7 +428,6 @@ struct OnboardingPage3: View {
                 .opacity(appeared ? 1 : 0)
             }
             
-            Spacer()
             Spacer()
         }
         .onAppear {
